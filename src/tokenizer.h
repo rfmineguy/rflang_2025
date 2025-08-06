@@ -14,10 +14,17 @@ typedef struct {
 } tokenizer;
 
 typedef enum {
+  KEYWORD,
   ID, EQ, COLON,
-  COMMA,
+  COMMA, SQUOT, DQUOT,
   PLUS, MINUS, MUL, DIV, MOD,
   ARROW,
+  LCBRK, RCBRK,
+  LSBRK, RSBRK,
+  LPAR, RPAR,
+  LT, LTEQ,
+  GT, GTEQ,
+  INTLIT, STRLIT,
 } token_type;
 
 typedef struct {
