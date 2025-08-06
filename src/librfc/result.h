@@ -1,6 +1,7 @@
 #ifndef RESULT_H
 #define RESULT_H
 #include <stdbool.h>
+#include <assert.h>
 
 #define join(a, b) a##b
 
@@ -20,6 +21,18 @@
   }\
   else {\
     errblock\
+  }\
+}
+
+#define unwrap(result, result_name, okblock)\
+{\
+  join(result_, result_name) result_ = (result);\
+  if (result_.isok) {\
+    okblock;\
+  }\
+  else {\
+    fprintf(stderr, "Unwrap of err type failed\n");\
+    assert(0 && "");\
   }\
 }
 
