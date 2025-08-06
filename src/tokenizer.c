@@ -1,6 +1,7 @@
 #include "tokenizer.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 static char msgbuf[500];
 
 static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
@@ -17,6 +18,24 @@ static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
   }
 }
 
+static result_test_reg test_reg(regex_t* regex, const char* str) {
+  regmatch_t match[1];
+  if (regexec(regex, str, 1, match, 0) == 0) {
+    if (match[0].rm_so != 0) {
+      return result_err(test_reg, "No matches");
+    }
+    const char* start = str + match[0].rm_so;
+		const char* end = str + match[0].rm_eo;
+		int len = end - start;
+		return result_ok(test_reg, ((token) {.start = start, .len = len}));
+  }
+  return result_err(test_reg, "Failed to exec");
+}
+
+static result_test_reg test_eq(char c, const char* str) {
+  if (*str == c) return result_ok(test_reg, ((token) {.start = str, .len = 1}));
+  return result_err(test_reg, "Char test failed");
+}
 
 static result_read_file ReadFile(const char* filepath) {
   FILE* f = fopen(filepath, "r");
