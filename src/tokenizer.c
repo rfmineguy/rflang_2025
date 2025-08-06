@@ -94,3 +94,11 @@ result_tokenizer_create tokenizer_create(const char *filepath) {
 
   return result_ok(tokenizer_create, t);
 }
+
+void tokenizer_free(tokenizer* tok) {
+  free(tok->fileContents);
+  regfree(&tok->regex_store.id);
+  regfree(&tok->regex_store.intlit);
+  regfree(&tok->regex_store.dbllit);
+  regfree(&tok->regex_store.arrow);
+}
