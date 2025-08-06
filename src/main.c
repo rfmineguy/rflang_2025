@@ -1,4 +1,5 @@
 #include "tokenizer.h"
+#include "parser.h"
 #include <stdio.h>
 
 int main() {
@@ -10,8 +11,15 @@ int main() {
     return -1;
   })
 
-  match(tokenizer_run(&t), tokenizer_run, {}, {
+  match(tokenizer_run(&t), tokenizer_run, {
+    match(parser_run(&t), parser_run, {
+      printf("Parser run successful\n");
+    }, {
+      printf("Parser run fail: %s\n", result_.err);
+    });
+  }, {
     fprintf(stderr, "Error: %s\n", result_.err);
+    tokenizer_free(&t);
     return -2;
   })
 
