@@ -13,26 +13,6 @@ typedef struct {
   } regex_store;
 } tokenizer;
 
-typedef enum {
-  KEYWORD,
-  ID, EQ, COLON,
-  COMMA, SQUOT, DQUOT,
-  PLUS, MINUS, MUL, DIV, MOD,
-  ARROW,
-  LCBRK, RCBRK,
-  LSBRK, RSBRK,
-  LPAR, RPAR,
-  LT, LTEQ,
-  GT, GTEQ,
-  INTLIT, STRLIT,
-} token_type;
-
-typedef struct {
-  token_type type;
-  const char* start;
-  size_t len;
-} token;
-
 define_result(tokenizer_create, tokenizer, const char*)
 define_result(tokenizer_run, void*, const char*)
 define_result(read_file, char*, const char*)
