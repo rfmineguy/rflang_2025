@@ -148,3 +148,38 @@ static int isnewline(const char* cursor) {
          *cursor == '\r' ||
          (*cursor == '\r' && *(cursor + 1) == '\n');
 }
+
+result_tokenizer_run tokenizer_run(tokenizer* tok) {
+  const char* cursor = tok->fileContents;
+  while (*cursor) {
+    // printf("%5s\n", cursor);
+    if (*cursor == ' ') { cursor++; continue; }
+    if (isnewline(cursor)) { cursor ++; continue; }
+    match(test_seq("if",     cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq("else",   cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq("return", cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_strlit(cursor),    test_reg,                    { result_.ok.type = STRLIT;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_reg(&tok->regex_store.id,    cursor), test_reg, { result_.ok.type = ID;      print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_reg(&tok->regex_store.intlit,cursor), test_reg, { result_.ok.type = INTLIT;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_reg(&tok->regex_store.arrow, cursor), test_reg, { result_.ok.type = ARROW;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('=',  cursor), test_reg,                     { result_.ok.type = EQ;     print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('+',  cursor), test_reg,                     { result_.ok.type = PLUS;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('-',  cursor), test_reg,                     { result_.ok.type = MINUS;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('%',  cursor), test_reg,                     { result_.ok.type = MOD;    print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('*',  cursor), test_reg,                     { result_.ok.type = MUL;    print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('/',  cursor), test_reg,                     { result_.ok.type = DIV;    print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq(':',  cursor), test_reg,                     { result_.ok.type = COLON;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq(',',  cursor), test_reg,                     { result_.ok.type = COMMA;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('{',  cursor), test_reg,                     { result_.ok.type = LCBRK;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('}',  cursor), test_reg,                     { result_.ok.type = RCBRK;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('[',  cursor), test_reg,                     { result_.ok.type = LSBRK;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq(']',  cursor), test_reg,                     { result_.ok.type = RSBRK;  print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('(',  cursor), test_reg,                     { result_.ok.type = LPAR;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq(')',  cursor), test_reg,                     { result_.ok.type = RPAR;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq("<=", cursor), test_reg,                     { result_.ok.type = LTEQ;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('<',  cursor), test_reg,                     { result_.ok.type = LT;     print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq(">=", cursor), test_reg,                     { result_.ok.type = GTEQ;   print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq('>',  cursor), test_reg,                     { result_.ok.type = GT;     print_token(result_.ok); cursor += result_.ok.len; }, {});
+  }
+  return result_ok(tokenizer_run, "");
+}
