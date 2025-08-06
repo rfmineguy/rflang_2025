@@ -1,3 +1,4 @@
 out/
 src/dynarray_*
 prebuild_exe
+lib/
