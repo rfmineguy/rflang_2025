@@ -49,9 +49,10 @@ result_tokenizer_create tokenizer_create(const char *filepath) {
   match(ReadFile(filepath), read_file, t.fileContents = result_.ok;, {
       return result_err(tokenizer_create, result_.err);
   });
-  compile_reg(t.regex_store.id,     "[_a-zA-Z][a-zA-Z0-9_]*");
-  compile_reg(t.regex_store.intlit, "[0-9]+");
-  compile_reg(t.regex_store.dbllit, "[1-9]+\\.[0-9]*");
+  match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+  match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+  match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+  match(compile_reg(&t.regex_store.arrow,    "->"),                     compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
 
   return result_ok(tokenizer_create, t);
 }
