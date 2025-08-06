@@ -142,3 +142,9 @@ void tokenizer_free(tokenizer* tok) {
 static void print_token(token t) {
   printf("Token { %s, %.*s }\n", token_type_str(t.type), (int)t.len, t.start);
 }
+
+static int isnewline(const char* cursor) {
+  return *cursor == '\n' ||
+         *cursor == '\r' ||
+         (*cursor == '\r' && *(cursor + 1) == '\n');
+}
