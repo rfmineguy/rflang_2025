@@ -126,7 +126,6 @@ result_tokenizer_create tokenizer_create(const char *filepath) {
   match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
   match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
   match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
-  match(compile_reg(&t.regex_store.arrow,    "->"),                     compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
 
   return result_ok(tokenizer_create, t);
 }
@@ -136,7 +135,6 @@ void tokenizer_free(tokenizer* tok) {
   regfree(&tok->regex_store.id);
   regfree(&tok->regex_store.intlit);
   regfree(&tok->regex_store.dbllit);
-  regfree(&tok->regex_store.arrow);
 }
 
 static void print_token(token t) {
@@ -158,10 +156,10 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_seq("if",     cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("else",   cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("return", cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq("->",     cursor), test_reg,                { result_.ok.type = ARROW; print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_strlit(cursor),    test_reg,                    { result_.ok.type = STRLIT;  print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_reg(&tok->regex_store.id,    cursor), test_reg, { result_.ok.type = ID;      print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_reg(&tok->regex_store.intlit,cursor), test_reg, { result_.ok.type = INTLIT;  print_token(result_.ok); cursor += result_.ok.len; }, {});
-    match(test_reg(&tok->regex_store.arrow, cursor), test_reg, { result_.ok.type = ARROW;   print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('=',  cursor), test_reg,                     { result_.ok.type = EQ;     print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('+',  cursor), test_reg,                     { result_.ok.type = PLUS;   print_token(result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('-',  cursor), test_reg,                     { result_.ok.type = MINUS;  print_token(result_.ok); cursor += result_.ok.len; }, {});
