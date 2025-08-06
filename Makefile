@@ -29,7 +29,7 @@ build: always $(OUT)/lib/librfc.a $(OUT)/rfc
 # MAIN BUILD
 buildexe: always $(OUT)/rfc $(OUT)/lib/librfc.a
 $(OUT)/rfc: $(EXE_SOURCE_FILES)
-	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I $(LIB_SRC) -ggdb
+	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I src/ -ggdb
 
 # LIB BUILD
 buildlib: always $(GENERATED) $(OUT)/lib/librfc.a
