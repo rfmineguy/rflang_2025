@@ -102,3 +102,7 @@ void tokenizer_free(tokenizer* tok) {
   regfree(&tok->regex_store.dbllit);
   regfree(&tok->regex_store.arrow);
 }
+
+static void print_token(token t) {
+  printf("Token { %s, %.*s }\n", token_type_str(t.type), (int)t.len, t.start);
+}
