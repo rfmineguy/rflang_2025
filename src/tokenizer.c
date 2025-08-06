@@ -3,19 +3,20 @@
 #include <stdio.h>
 static char msgbuf[500];
 
-#define compile_reg(target, regstr)\
-{\
-  int r = regcomp(&target, regstr, REG_EXTENDED);\
-  if (r) {\
-    regerror(r, &target, msgbuf, sizeof(msgbuf));\
-    fprintf(stderr, "compile_reg fail: %s\n", msgbuf);\
-    fprintf(stderr, "  %s\n", regstr);\
-    exit(1);\
-  }\
-  else {\
-    printf("[Regex OK] %s\n", regstr);\
-  }\
-};
+static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
+  int r = regcomp(target, regstr, REG_EXTENDED);
+  if (r) {
+    regerror(r, target, msgbuf, sizeof(msgbuf));
+    fprintf(stderr, "compile_reg fail: %s\n", msgbuf);
+    fprintf(stderr, "  %s\n", regstr);
+    return result_err(compile_reg, "compile_reg fail");
+  }
+  else {
+    printf("[Regex OK] %s\n", regstr);
+    return result_ok(compile_reg, "");
+  }
+}
+
 
 static result_read_file ReadFile(const char* filepath) {
   FILE* f = fopen(filepath, "r");
