@@ -1,0 +1,6 @@
+main = argc: int, argv: **char -> int {
+  if argc < 2 {
+    print("Not enough arguments supplied. Supplied: {} Required: 2")
+    return 1
+  }
+}

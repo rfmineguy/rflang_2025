@@ -1,0 +1,51 @@
+main = argc: int, argv: **char -> int {
+  if argc < 2 {
+    print("Not enough arguments supplied. Supplied: {} Required: 2")
+    return 1
+  }
+}
+
+
+========================================
+a = 4 * (5 + 3)
+<id> <eq> <intlit, 5> <mul> <lp> <intlit, 5> <plus> <intlit, 3> <rp>
+
+stack:
+<id>
+<id> <eq>
+<id> <eq> <intlit, 5>
+<id> <eq> <intlit, 5> <mul>
+<id> <eq> <intlit, 5> <mul> <lp>
+<id> <eq> <intlit, 5> <mul> <lp> <intlit, 5>
+<id> <eq> <intlit, 5> <mul> <lp> <intlit, 5> <plus>
+<id> <eq> <intlit, 5> <mul> <lp> <intlit, 5> <plus> <intlit, 3>
+<id> <eq> <intlit, 5> <mul> <lp> <intlit, 5> <plus> <intlit, 3> <rp>
+<id> <eq> <intlit, 5> <mul> <expr>
+<id> <eq> <expr>
+<assign>
+
+
+========================================
+b = 20 + 40 * 5
+<id> <eq> <intlit, 20> <plus> <intlit, 40> <mul> <intlit, 5>
+
+stack:
+<id> ; la = eq
+<id> <eq> ; la = intlit
+<id> <eq> <intlit, 20> ; la = plus
+<id> <eq> <intlit, 20> <plus> ; la = intlit
+<id> <eq> <intlit, 20> <plus> <intlit, 40> ; la = mul 
+<id> <eq> <intlit, 20> <plus> <intlit, 40> <mul> ; la = intlit
+<id> <eq> <intlit, 20> <plus> <intlit, 40> <mul> <intlit, 5>
+<id> <eq> <intlit, 20> <plus> <expr>
+<id> <eq> <expr>
+<assign>
+
+argc: int
+<id> <colon> <id>
+
+stack:
+<id> ;la = <colon>
+<id> <colon> ; la = <id>
+<id> <colon> <id> ; la = null
+<var_decl>
