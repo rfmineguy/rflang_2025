@@ -78,43 +78,6 @@ static result_read_file ReadFile(const char* filepath) {
   return result_ok(read_file, buf);
 }
 
-const char* token_type_str(token_type tt) {
-  switch (tt) {
-    case ID:      return "ID";
-    case EQ:      return "EQ";
-    // Operators
-    case PLUS:    return "PLUS";
-    case MINUS:   return "MINUS";
-    case MUL:     return "MUL";
-    case DIV:     return "DIV";
-    case MOD:     return "MOD";
-    // Separators
-    case COLON:   return "COLON";
-    case COMMA:   return "COMMA";
-    case SQUOT:   return "SQUOT";
-    case DQUOT:   return "DQUOT";
-    case ARROW:   return "ARROW";
-    case KEYWORD: return "KEYWORD";
-
-    case LCBRK:   return "LCBRK";
-    case RCBRK:   return "RCBRK";
-    case LSBRK:   return "LSBRK";
-    case RSBRK:   return "RSBRK";
-    case LPAR:    return "LPAR";
-    case RPAR:    return "RPAR";
-
-    case LT:      return "LT";
-    case LTEQ:    return "LTEQ";
-    case GT:      return "GT";
-    case GTEQ:    return "GTEQ";
-
-    case INTLIT:  return "INTLIT";
-    case STRLIT:  return "STRLIT";
-    default:      printf("id: %d\n", tt); assert(0 && "This type doesn't have a string yet...");
-  }
-  assert(0 && "Unreachable");
-}
-
 result_tokenizer_create tokenizer_create(const char *filepath) {
   tokenizer t = (tokenizer) {
     .filepath = filepath,
@@ -135,10 +98,6 @@ void tokenizer_free(tokenizer* tok) {
   regfree(&tok->regex_store.id);
   regfree(&tok->regex_store.intlit);
   regfree(&tok->regex_store.dbllit);
-}
-
-static void print_token(token t) {
-  printf("Token { '%s', '%.*s' }\n", token_type_str(t.type), (int)t.len, t.start);
 }
 
 static int isnewline(const char* cursor) {
