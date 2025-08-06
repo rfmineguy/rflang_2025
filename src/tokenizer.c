@@ -91,8 +91,26 @@ const char* token_type_str(token_type tt) {
     // Separators
     case COLON:   return "COLON";
     case COMMA:   return "COMMA";
+    case SQUOT:   return "SQUOT";
+    case DQUOT:   return "DQUOT";
     case ARROW:   return "ARROW";
-    default:      assert(0 && "This type doesn't have a string yet...");
+    case KEYWORD: return "KEYWORD";
+
+    case LCBRK:   return "LCBRK";
+    case RCBRK:   return "RCBRK";
+    case LSBRK:   return "LSBRK";
+    case RSBRK:   return "RSBRK";
+    case LPAR:    return "LPAR";
+    case RPAR:    return "RPAR";
+
+    case LT:      return "LT";
+    case LTEQ:    return "LTEQ";
+    case GT:      return "GT";
+    case GTEQ:    return "GTEQ";
+
+    case INTLIT:  return "INTLIT";
+    case STRLIT:  return "STRLIT";
+    default:      printf("id: %d\n", tt); assert(0 && "This type doesn't have a string yet...");
   }
   assert(0 && "Unreachable");
 }
