@@ -14,7 +14,6 @@ static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
     return result_err(compile_reg, "compile_reg fail");
   }
   else {
-    printf("[Regex OK] %s\n", regstr);
     return result_ok(compile_reg, "");
   }
 }
@@ -35,7 +34,9 @@ static result_test_reg test_reg(regex_t* regex, const char* str) {
 
 static result_test_reg test_seq(const char* needle, const char* str) {
   size_t needle_len = strlen(needle);
-  if (strncmp(needle, str, needle_len) == 0) return result_ok(test_reg, ((token) {.start = str, .len = needle_len}));
+  //TODO: Potential lifetime problems
+  if (strncmp(needle, str, needle_len) == 0)
+    return result_ok(test_reg, ((token) {.start = str, .len = needle_len}));
   return result_err(test_reg, "String test failed");
 }
 
@@ -81,7 +82,9 @@ static result_read_file ReadFile(const char* filepath) {
 result_tokenizer_create tokenizer_create(const char *filepath) {
   tokenizer t = (tokenizer) {
     .filepath = filepath,
-    .regex_store = {}
+    .regex_store = {},
+    .tokens = dynarray_token_create(),
+    .fileContents = 0,
   };
   match(ReadFile(filepath), read_file, t.fileContents = result_.ok;, {
       return result_err(tokenizer_create, result_.err);
