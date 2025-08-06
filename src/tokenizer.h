@@ -9,12 +9,30 @@ typedef struct {
 
   struct {
     regex_t id, intlit, dbllit;
+    regex_t arrow;
   } regex_store;
 } tokenizer;
+
+typedef enum {
+  ID, EQ, COLON,
+  COMMA,
+  PLUS, MINUS, MUL, DIV, MOD,
+  ARROW,
+} token_type;
+
+typedef struct {
+  token_type type;
+  const char* start;
+  size_t len;
+} token;
 
 define_result(tokenizer_create, tokenizer, const char*)
 define_result(tokenizer_run, void*, const char*)
 define_result(read_file, char*, const char*)
+define_result(compile_reg, void*, const char*)
+define_result(test_reg, token, const char*)
+
+const char* token_type_str(token_type);
 
 result_tokenizer_create tokenizer_create(const char*);
 void      tokenizer_free(tokenizer*);
