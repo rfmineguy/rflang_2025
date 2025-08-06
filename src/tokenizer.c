@@ -138,7 +138,7 @@ void tokenizer_free(tokenizer* tok) {
 }
 
 static void print_token(token t) {
-  printf("Token { %s, %.*s }\n", token_type_str(t.type), (int)t.len, t.start);
+  printf("Token { '%s', '%.*s' }\n", token_type_str(t.type), (int)t.len, t.start);
 }
 
 static int isnewline(const char* cursor) {
@@ -150,7 +150,6 @@ static int isnewline(const char* cursor) {
 result_tokenizer_run tokenizer_run(tokenizer* tok) {
   const char* cursor = tok->fileContents;
   while (*cursor) {
-    // printf("%5s\n", cursor);
     if (*cursor == ' ') { cursor++; continue; }
     if (isnewline(cursor)) { cursor ++; continue; }
     match(test_seq("if",     cursor), test_reg,                { result_.ok.type = KEYWORD; print_token(result_.ok); cursor += result_.ok.len; }, {});
