@@ -8,7 +8,7 @@ EXE_SOURCE_FILES := $(EXE_SRC)/main.c
 LIB_OBJECT_FILES := $(patsubst $(LIB_SRC)/%.c,$(OUT)/lib/%.o,$(LIB_SOURCE_FILES))
 
 .PHONY: prebuild
-.PHONY: always clean buildlib buildexe
+.PHONY: always clean build buildlib buildexe
 always:
 	mkdir -p $(OUT)
 	mkdir -p $(OUT)/lib
@@ -24,10 +24,12 @@ $(GENERATED): prebuild_exe
 prebuild_exe: gengen.c
 	$(CC) -o $@ $^
 
+build: always $(OUT)/lib/librfc.a $(OUT)/rfc
+
 # MAIN BUILD
 buildexe: always $(OUT)/rfc $(OUT)/lib/librfc.a
 $(OUT)/rfc: $(EXE_SOURCE_FILES)
-	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I $(LIB_SRC)
+	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I $(LIB_SRC) -ggdb
 
 # LIB BUILD
 buildlib: always $(GENERATED) $(OUT)/lib/librfc.a
@@ -35,4 +37,4 @@ $(OUT)/lib/librfc.a: $(LIB_OBJECT_FILES)
 	ar rcs $@ $^
 
 $(OUT)/lib/%.o: $(LIB_SRC)/%.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ -ggdb
