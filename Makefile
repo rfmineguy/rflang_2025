@@ -6,11 +6,11 @@ SOURCE_FILES := $(wildcard $(SRC)/*.c) $(filter %.c, $(GENERATED))
 .PHONY: prebuild
 .PHONY: always clean build
 always:
-	echo "$(GENERATED)"
 	mkdir -p $(OUT)
 clean:
-	-rm -r $(OUT)
-	rm prebuild_exe
+	rm -rf $(OUT)
+	rm -f prebuild_exe
+	rm -f $(GENERATED)
 
 
 # PRE BUILD
