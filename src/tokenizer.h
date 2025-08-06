@@ -2,10 +2,12 @@
 #define TOKENIZER_HPP
 #include <regex.h>
 #include "result.h"
+#include "dynarray_token.h"
 
 typedef struct {
   const char* filepath;
   char* fileContents;
+  dynarray_token tokens;
 
   struct {
     regex_t id, intlit, dbllit;
