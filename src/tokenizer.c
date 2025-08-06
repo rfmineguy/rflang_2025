@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 static char msgbuf[500];
 
 static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
@@ -32,9 +33,26 @@ static result_test_reg test_reg(regex_t* regex, const char* str) {
   return result_err(test_reg, "Failed to exec");
 }
 
-static result_test_reg test_eq(char c, const char* str) {
+static result_test_reg test_seq(const char* needle, const char* str) {
+  size_t needle_len = strlen(needle);
+  if (strncmp(needle, str, needle_len) == 0) return result_ok(test_reg, ((token) {.start = str, .len = needle_len}));
+  return result_err(test_reg, "String test failed");
+}
+
+static result_test_reg test_ceq(char c, const char* str) {
   if (*str == c) return result_ok(test_reg, ((token) {.start = str, .len = 1}));
   return result_err(test_reg, "Char test failed");
+}
+
+static result_test_reg test_strlit(const char* str) {
+  if (!str) return result_err(test_reg, "str is NULL");
+  if (*str != '"') return result_err(test_reg, "strlit does not begin with quote");
+  const char* begin = str;
+  str++;
+  while (*str != '"') str++;
+  str++;
+
+  return result_ok(test_reg, ((token) {.start = begin, .len = str - begin}));
 }
 
 static result_read_file ReadFile(const char* filepath) {
