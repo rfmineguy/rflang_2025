@@ -21,8 +21,6 @@ define_result(read_file, char*, const char*)
 define_result(compile_reg, void*, const char*)
 define_result(test_reg, token, const char*)
 
-const char* token_type_str(token_type);
-
 result_tokenizer_create tokenizer_create(const char*);
 void      tokenizer_free(tokenizer*);
 
