@@ -60,6 +60,25 @@ static result_read_file ReadFile(const char* filepath) {
   return result_ok(read_file, buf);
 }
 
+const char* token_type_str(token_type tt) {
+  switch (tt) {
+    case ID:      return "ID";
+    case EQ:      return "EQ";
+    // Operators
+    case PLUS:    return "PLUS";
+    case MINUS:   return "MINUS";
+    case MUL:     return "MUL";
+    case DIV:     return "DIV";
+    case MOD:     return "MOD";
+    // Separators
+    case COLON:   return "COLON";
+    case COMMA:   return "COMMA";
+    case ARROW:   return "ARROW";
+    default:      assert(0 && "This type doesn't have a string yet...");
+  }
+  assert(0 && "Unreachable");
+}
+
 result_tokenizer_create tokenizer_create(const char *filepath) {
   tokenizer t = (tokenizer) {
     .filepath = filepath,
