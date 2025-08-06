@@ -1,0 +1,20 @@
+#ifndef DYNARRAY_$T_H
+#define DYNARRAY_$T_H
+#include <stddef.h>
+#include "result.h"
+#include "SUPPORT_1"
+
+define_result(dynarray_$T_at, ^T, const char*);
+
+typedef struct {
+  ^T *buffer;
+  size_t size, capacity;
+} dynarray_$T;
+
+void                  dynarray_$T_resize(dynarray_$T*, size_t);
+
+dynarray_$T           dynarray_$T_create();
+void                  dynarray_$T_pushback(dynarray_$T*, ^T);
+result_dynarray_$T_at dynarray_$T_at(dynarray_$T*, int);
+
+#endif

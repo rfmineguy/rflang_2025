@@ -1,0 +1,25 @@
+#include "dynarray_$T.h"
+#include <stdlib.h>
+
+void dynarray_$T_resize(dynarray_$T* da, size_t new) {
+  da->capacity = new;
+  da->buffer = REALLOC(da->buffer, new * sizeof(^T));
+}
+
+dynarray_$T dynarray_$T_create() {
+  dynarray_$T a = (dynarray_$T) {
+    .buffer = 0,
+    .size = 0,
+    .capacity = 10,
+  };
+  a.buffer = CALLOC(a.capacity, sizeof(^T));
+  return a;
+}
+void dynarray_$T_pushback(dynarray_$T* da, ^T val) {
+  if (da->size + 1 >= da->capacity) dynarray_$T_resize(da, da->capacity * 2);
+  da->buffer[da->size++] = val;
+}
+result_dynarray_$T_at dynarray_$T_at(dynarray_$T* da, int index) {
+  if (index > da->size) return result_err(dynarray_$T_at, "index out of range");
+  return result_ok(dynarray_$T_at, da->buffer[index]);
+}
