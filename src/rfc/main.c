@@ -12,6 +12,11 @@ int main() {
   })
 
   match(tokenizer_run(&t), tokenizer_run, {
+    // Print out the token list
+    for (int i = 0; i < t.tokens.size; i++)
+      token_print(t.tokens.buffer[i]);
+
+    // Pass the tokenizer off to the parser
     match(parser_run(&t), parser_run, {
       printf("Parser run successful\n");
     }, {
@@ -23,6 +28,5 @@ int main() {
     return -2;
   })
 
-  printf("%s\n", t.fileContents);
   tokenizer_free(&t);
 }

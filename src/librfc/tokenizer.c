@@ -141,8 +141,5 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_seq(">=", cursor), test_reg,                     { result_.ok.type = GTEQ;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('>',  cursor), test_reg,                     { result_.ok.type = GT;     dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
   }
-  for (int i = 0; i < tok->tokens.size; i++) {
-    token_print(tok->tokens.buffer[i]);
-  }
   return result_ok(tokenizer_run, "");
 }
