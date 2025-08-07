@@ -22,18 +22,20 @@ jobs:
 
       - name: Build rfc
         run: |
-          ls -al
-          ls -al tpl
-          pwd tpl/dynarray.htpl
+          Get-ChildItem -Force
+          Get-ChildItem -Force tpl
+          Resolve-Path tpl/dynarray.htpl
           make build
-        shell: bash
+        shell: pwsh
 
       - name: Build tests
         run: |
-          cd tests
+          Set-Location tests
           make build_tests
+        shell: pwsh
 
       - name: Run tests
         run: |
-          cd tests
+          Set-Location tests
           ./out/test_exe
+        shell: pwsh
