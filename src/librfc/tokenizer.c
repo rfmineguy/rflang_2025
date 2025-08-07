@@ -111,7 +111,7 @@ result_tokenizer_create tokenizer_create_cstr(const char* str) {
 }
 
 void tokenizer_free(tokenizer* tok) {
-  free(tok->fileContents);
+  free((void*)tok->fileContents);
   regfree(&tok->regex_store.id);
   regfree(&tok->regex_store.intlit);
   regfree(&tok->regex_store.dbllit);
