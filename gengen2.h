@@ -758,10 +758,16 @@ void generator_run(generator_settings settings, ctemplate tplt, replacement repl
 	ctx.ll = (long_string_ll){0};
 	for (int i = 0; i < tplt.template_files_count; i++) {
 		// Figure out where to generate the template to
+#ifdef _WIN32
+    assert_(_fullpath(outfilepath_realpath, settings.outdir, _MAX_PATH) != NULL, {
+        continue
+    });
+#else
 		assert_(realpath(settings.outdir, outfilepath_realpath) != NULL, {
 			fprintf(stderr, "Failed to realpath. '%s' doesn't exist\n", settings.outdir);
 			return;
 		});
+#endif
 		strncpy(outfilepath_actual, outfilepath_realpath, PATH_MAX);
 		strncat(outfilepath_actual, "/", PATH_MAX);
 		const char* cursorfp = tplt.template_files[i].outfilename_fmt;
