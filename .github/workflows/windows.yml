@@ -1,0 +1,36 @@
+name: Build Windows
+
+on:
+  push:
+    branches:
+      run-actions
+      main
+  pull_request:
+    branches:
+      main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-rfc:
+    runs-on: windows-2025
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build rfc
+        run: |
+          make build
+        shell: bash
+
+      - name: Build tests
+        run: |
+          cd tests
+          make build_tests
+
+      - name: Run tests
+        run: |
+          cd tests
+          ./out/test_exe
