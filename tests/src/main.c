@@ -8,9 +8,11 @@ void* setup(const MunitParameter params[], void* userdata) {
 void teardown(void* fixture) {}
 
 MunitTest stack_ast_node_tests[] = {
-  { "/create",   stack_ast_node_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/push",     stack_ast_node_push_test1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/push_pop", stack_ast_node_push_pop_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/create",     stack_ast_node_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push",       stack_ast_node_push_test1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push_pop",   stack_ast_node_push_pop_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/top",        stack_ast_node_top_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/top_offset", stack_ast_node_top_offset_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
