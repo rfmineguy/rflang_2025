@@ -67,6 +67,15 @@ static result_test_reg test_id(const char* str) {
   return result_ok(test_reg, ((token) {.start = start, .len = str - start}));
 }
 
+// [0-9]+
+// this function should match this regex
+static result_test_reg test_intlit(const char* str) {
+  if (!isdigit(*str)) return result_err(test_reg, "Intlit doesn't start with digit");
+  const char* start = str;
+  while (isdigit(*str)) str++;
+  return result_ok(test_reg, ((token) {.start = start, .len = str - start}));
+}
+
 static result_read_file ReadFile(const char* filepath) {
   FILE* f = fopen(filepath, "r");
   if (!f) {
