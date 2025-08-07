@@ -760,7 +760,8 @@ void generator_run(generator_settings settings, ctemplate tplt, replacement repl
 		// Figure out where to generate the template to
 #ifdef _WIN32
     assert_(_fullpath(outfilepath_realpath, settings.outdir, _MAX_PATH) != NULL, {
-        continue
+			fprintf(stderr, "Failed to realpath. '%s' doesn't exist\n", settings.outdir);
+			return;
     });
 #else
 		assert_(realpath(settings.outdir, outfilepath_realpath) != NULL, {
