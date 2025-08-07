@@ -14,6 +14,14 @@ MunitTest stack_ast_node_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest dynarray_token_tests[] = {
+  { "/create",        dynarray_token_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push_back",     dynarray_token_pushback_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push_back_grow",dynarray_token_pushback_grow_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/at",            dynarray_token_at_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitTest tokenizer_tests[] = {
   { "/create_invld_path", tokenizer_create_invldpath_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/create_valid_path", tokenizer_create_validpath_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -28,6 +36,7 @@ MunitTest token_tests[] = {
 
 MunitSuite all_tests[] = {
   { "/stack_ast_node", stack_ast_node_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
