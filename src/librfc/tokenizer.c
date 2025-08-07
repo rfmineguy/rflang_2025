@@ -101,6 +101,7 @@ void tokenizer_free(tokenizer* tok) {
   regfree(&tok->regex_store.id);
   regfree(&tok->regex_store.intlit);
   regfree(&tok->regex_store.dbllit);
+  dynarray_token_free(&tok->tokens);
 }
 
 static int isnewline(const char* cursor) {
