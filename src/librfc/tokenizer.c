@@ -1,4 +1,5 @@
 #include "tokenizer.h"
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -50,26 +51,73 @@ static result_test_reg test_intlit(const char* str) {
 }
 
 static result_read_file ReadFile(const char* filepath) {
-  FILE* f = fopen(filepath, "r");
+  FILE* f = fopen(filepath, "rb"); // 'rb' = binary read
   if (!f) {
-    fprintf(stderr, "Failed to open '%s'\n", filepath);
-    return result_err(read_file, "Failed to open file");
+      fprintf(stderr, "Failed to open '%s': %s\n", filepath, strerror(errno));
+      return result_err(read_file, "Failed to open file");
   }
 
-  fseek(f, 0, SEEK_END);
-  size_t len = ftell(f);
-  fseek(f, 0, SEEK_SET);
-
-  char* buf = calloc(len, sizeof(char));
-  size_t read;
-  if ((read = fread(buf, sizeof(char), len, f)) != len) {
-    fprintf(stderr, "Failed to read entire file '%s'. Read %zu/%zu bytes\n", filepath, read, len);
-    fclose(f);
-    free(buf);
-    return result_err(read_file, "Failed to read entire file");
+  // Move to end to get file size
+  if (fseek(f, 0, SEEK_END) != 0) {
+      fprintf(stderr, "fseek failed: %s\n", strerror(errno));
+      fclose(f);
+      return result_err(read_file, "Failed to fseek file");
   }
 
-  return result_ok(read_file, buf);
+  long size = ftell(f);
+  if (size < 0) {
+      fprintf(stderr, "ftell failed: %s\n", strerror(errno));
+      fclose(f);
+      return result_err(read_file, "Failed to ftell file");
+  }
+  rewind(f); // Go back to beginning
+
+  // Allocate buffer
+  char* buffer = (char*)malloc((size_t)size + 1); // +1 for null terminator
+  if (!buffer) {
+      fprintf(stderr, "malloc failed\n");
+      fclose(f);
+      return result_err(read_file, "Failed to malloc");
+  }
+
+  // Read file content
+  size_t read = fread(buffer, 1, (size_t)size, f);
+  if (read != (size_t)size) {
+      if (ferror(f)) {
+          fprintf(stderr, "fread failed: %s\n", strerror(errno));
+      } else if (feof(f)) {
+          fprintf(stderr, "Unexpected EOF while reading '%s'\n", filepath);
+      } else {
+          fprintf(stderr, "Partial read for '%s'\n", filepath);
+      }
+      free(buffer);
+      fclose(f);
+      return result_err(read_file, "Failed to read file");
+  }
+
+  buffer[size] = '\0'; // Null terminate
+  fclose(f);
+  return result_ok(read_file, buffer);
+  // FILE* f = fopen(filepath, "r");
+  // if (!f) {
+  //   fprintf(stderr, "Failed to open '%s'\n", filepath);
+  //   return result_err(read_file, "Failed to open file");
+  // }
+
+  // fseek(f, 0, SEEK_END);
+  // size_t len = ftell(f);
+  // fseek(f, 0, SEEK_SET);
+
+  // char* buf = calloc(len, sizeof(char));
+  // size_t read;
+  // if ((read = fread(buf, sizeof(char), len, f)) != len) {
+  //   fprintf(stderr, "Failed to read entire file '%s'. Read %zu/%zu bytes\n", filepath, read, len);
+  //   fclose(f);
+  //   free(buf);
+  //   return result_err(read_file, "Failed to read entire file");
+  // }
+
+  // return result_ok(read_file, buf);
 }
 
 result_tokenizer_create tokenizer_create_file(const char *filepath) {
