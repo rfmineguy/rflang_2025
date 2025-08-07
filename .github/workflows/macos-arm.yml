@@ -3,11 +3,11 @@ name: Build MacOS (arm)
 on:
   push:
     branches:
-      run-actions
-      main
+      - run-actions
+      - main
   pull_request:
     branches:
-      main
+      - main
   workflow_dispatch:
 
 permissions:
