@@ -5,6 +5,7 @@ MunitResult tokenizer_create_invldpath_test(const MunitParameter *param, void *c
   result_tokenizer_create t = tokenizer_create("");
   munit_assert_true(t.isfail);
   munit_assert_false(t.isok);
+  tokenizer_free(&t.ok);
   return MUNIT_OK;
 }
 
@@ -15,10 +16,14 @@ MunitResult tokenizer_create_validpath_test(const MunitParameter *param, void *c
   return MUNIT_OK;
 }
 
-MunitResult tokenizer_free_test(const MunitParameter *param, void *context){
-  return MUNIT_ERROR;
-}
-
 MunitResult tokenizer_run_test(const MunitParameter *param, void *context){
-  return MUNIT_ERROR;
+  result_tokenizer_create t = tokenizer_create("samples/main.rf");
+  munit_assert_true(t.isok);
+  munit_assert_false(t.isfail);
+
+  result_tokenizer_run r = tokenizer_run(&t.ok);
+  munit_assert_true(t.isok);
+
+  tokenizer_free(&t.ok);
+  return MUNIT_OK;
 }
