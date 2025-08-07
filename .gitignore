@@ -1,5 +1,6 @@
 out/
 src/librfc/dynarray_*
+src/librfc/stack_*
 prebuild_exe
 lib/
 compile_commands.json
