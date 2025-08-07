@@ -76,3 +76,38 @@ MunitResult dynarray_token_pushback_grow_test(const MunitParameter * params, voi
   dynarray_token_free(&da);
   return MUNIT_OK;
 }
+
+MunitResult dynarray_token_at_test(const MunitParameter * params, void *context) {
+  const char* id_content = "hello";
+  const char* strlit_content = "\"this is a string literal\"";
+  dynarray_token da = dynarray_token_create();
+
+  dynarray_token_pushback(&da, (token){.type = ID, .start = id_content, .len = strlen(id_content) });
+  munit_assert_int(da.size, ==, 1);
+
+  result_dynarray_token_at r = dynarray_token_at(&da, 0);
+  munit_assert_true(r.isok);
+  munit_assert_false(r.isfail);
+  munit_assert_int(r.ok.type, ==, ID);
+  munit_assert_int(r.ok.len, ==, strlen(id_content));
+  munit_assert_ptr_equal(r.ok.start, id_content);
+
+  dynarray_token_pushback(&da, (token){.type = STRLIT, .start = strlit_content, .len = strlen(strlit_content) });
+  munit_assert_int(da.size, ==, 2);
+
+  r = dynarray_token_at(&da, 1);
+  munit_assert_true(r.isok);
+  munit_assert_false(r.isfail);
+  munit_assert_int(r.ok.type, ==, STRLIT);
+  munit_assert_int(r.ok.len, ==, strlen(strlit_content));
+  munit_assert_ptr_equal(r.ok.start, strlit_content);
+
+  r = dynarray_token_at(&da, 2);
+  munit_assert_true(r.isfail);
+  munit_assert_false(r.isok);
+  munit_assert_string_equal(r.err, "index out of range");
+
+  dynarray_token_free(&da);
+
+  return MUNIT_OK;
+}
