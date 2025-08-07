@@ -604,9 +604,15 @@ char* find_template_path(generator_settings settings, template_file tf) {
 	for (j = 0; j < settings.path_count; j++) {
 		path[0] = 0;
 		const char* search_path = settings.search_paths[j];
-		assert_(realpath(search_path, path) != NULL, {
-			continue;
-		});
+#ifdef _WIN32
+    assert_(_fullpath(path, search_path, _MAX_PATH) != NULL, {
+      continue;
+    });
+#else
+    assert_(realpath(search_path, path) != NULL, {
+      continue;
+    });
+#endif
 		strncat(path, "/", PATH_MAX);
 		strncat(path, tf.infilename, PATH_MAX);
 		assert_(stat(path, &buffer) == 0, {
