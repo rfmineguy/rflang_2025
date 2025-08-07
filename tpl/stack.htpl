@@ -1,0 +1,23 @@
+#ifndef STACK_$T_H
+#define STACK_$T_H
+#include <stddef.h>
+#include "result.h"
+#include "SUPPORT_1"
+
+define_result(stack_$T_top, ^T, const char*);
+
+typedef struct {
+  ^T *buffer;
+  int size, capacity;
+} stack_$T;
+
+void                 stack_$T_resize(stack_$T*, size_t);
+
+stack_$T             stack_$T_create();
+void                 stack_$T_free(stack_$T*);
+void                 stack_$T_push(stack_$T*, ^T);
+void                 stack_$T_pop(stack_$T*);
+result_stack_$T_top  stack_$T_top(stack_$T*);
+int                  stack_$T_empty(stack_$T*);
+
+#endif
