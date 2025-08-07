@@ -613,7 +613,11 @@ char* find_template_path(generator_settings settings, template_file tf) {
       continue;
     });
 #endif
+#ifdef _WIN32
+		strncat(path, "\\", PATH_MAX);
+#else
 		strncat(path, "/", PATH_MAX);
+#endif
 		strncat(path, tf.infilename, PATH_MAX);
 		assert_(stat(path, &buffer) == 0, {
 			continue;
@@ -770,7 +774,11 @@ void generator_run(generator_settings settings, ctemplate tplt, replacement repl
 		});
 #endif
 		strncpy(outfilepath_actual, outfilepath_realpath, PATH_MAX);
+#ifdef _WIN32
+		strncat(outfilepath_actual, "\\", PATH_MAX);
+#else
 		strncat(outfilepath_actual, "/", PATH_MAX);
+#endif
 		const char* cursorfp = tplt.template_files[i].outfilename_fmt;
 		const replacement_item* found = NULL;
 		while (*cursorfp) {
