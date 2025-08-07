@@ -1,3 +1,5 @@
+![macos-arm status](https://github.com/github/docs/actions/workflows/macos-arm.yml/badge.svg)
+
 # rflang_2025
 I'm beginning again an endeavor to write a more complicated language compiler.
 
