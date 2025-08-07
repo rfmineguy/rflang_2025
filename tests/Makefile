@@ -15,6 +15,7 @@ always:
 	mkdir -p lib
 clean:
 	rm -rf out
+	make -C .. clean
 
 lib/munit.h:
 	curl https://raw.githubusercontent.com/nemequ/munit/refs/heads/master/munit.h >> lib/munit.h
