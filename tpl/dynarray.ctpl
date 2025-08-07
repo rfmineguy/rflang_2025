@@ -23,6 +23,6 @@ void dynarray_$T_pushback(dynarray_$T* da, ^T val) {
   da->buffer[da->size++] = val;
 }
 result_dynarray_$T_at dynarray_$T_at(dynarray_$T* da, int index) {
-  if (index > da->size) return result_err(dynarray_$T_at, "index out of range");
+  if (index >= da->size) return result_err(dynarray_$T_at, "index out of range");
   return result_ok(dynarray_$T_at, da->buffer[index]);
 }
