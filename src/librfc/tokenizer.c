@@ -102,16 +102,12 @@ static result_read_file ReadFile(const char* filepath) {
 result_tokenizer_create tokenizer_create_file(const char *filepath) {
   tokenizer t = (tokenizer) {
     .filepath = filepath,
-    .regex_store = {},
     .tokens = dynarray_token_create(),
     .fileContents = 0,
   };
   match(ReadFile(filepath), read_file, t.fileContents = result_.ok;, {
       return result_err(tokenizer_create, result_.err);
   });
-  match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
-  match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
-  match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
 
   return result_ok(tokenizer_create, t);
 }
@@ -119,22 +115,15 @@ result_tokenizer_create tokenizer_create_file(const char *filepath) {
 result_tokenizer_create tokenizer_create_cstr(const char* str) {
   tokenizer t = (tokenizer) {
     .filepath = NULL,
-    .regex_store = {},
     .tokens = dynarray_token_create(),
     .fileContents = str,
   };
-  match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
-  match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
-  match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
 
   return result_ok(tokenizer_create, t);
 }
 
 void tokenizer_free(tokenizer* tok) {
   free((void*)tok->fileContents);
-  regfree(&tok->regex_store.id);
-  regfree(&tok->regex_store.intlit);
-  regfree(&tok->regex_store.dbllit);
   dynarray_token_free(&tok->tokens);
 }
 
@@ -154,8 +143,8 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_seq("return", cursor), test_reg,                { result_.ok.type = KEYWORD; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("->",     cursor), test_reg,                { result_.ok.type = ARROW;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_strlit(cursor),    test_reg,                    { result_.ok.type = STRLIT;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
-    match(test_reg(&tok->regex_store.id,    cursor), test_reg, { result_.ok.type = ID;      dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
-    match(test_reg(&tok->regex_store.intlit,cursor), test_reg, { result_.ok.type = INTLIT;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
+    match(test_id(cursor),        test_reg,                     { result_.ok.type = ID;     dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len;}, {});
+    match(test_intlit(cursor),    test_reg,                     { result_.ok.type = INTLIT; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len;}, {});
     match(test_ceq('=',  cursor), test_reg,                     { result_.ok.type = EQ;     dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('+',  cursor), test_reg,                     { result_.ok.type = PLUS;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('-',  cursor), test_reg,                     { result_.ok.type = MINUS;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});

@@ -1,6 +1,5 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
-#include <regex.h>
 #include "result.h"
 #include "dynarray_token.h"
 
@@ -8,11 +7,6 @@ typedef struct {
   const char* filepath;
   const char* fileContents;
   dynarray_token tokens;
-
-  struct {
-    regex_t id, intlit, dbllit;
-    regex_t arrow;
-  } regex_store;
 } tokenizer;
 
 define_result(tokenizer_create, tokenizer, const char*)
