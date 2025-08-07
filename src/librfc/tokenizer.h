@@ -6,7 +6,7 @@
 
 typedef struct {
   const char* filepath;
-  char* fileContents;
+  const char* fileContents;
   dynarray_token tokens;
 
   struct {
@@ -21,7 +21,8 @@ define_result(read_file, char*, const char*)
 define_result(compile_reg, void*, const char*)
 define_result(test_reg, token, const char*)
 
-result_tokenizer_create tokenizer_create(const char*);
+result_tokenizer_create tokenizer_create_file(const char*);
+result_tokenizer_create tokenizer_create_cstr(const char*);
 void      tokenizer_free(tokenizer*);
 
 
