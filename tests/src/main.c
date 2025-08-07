@@ -34,11 +34,20 @@ MunitTest token_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest result_tests[] = {
+  { "/err",               result_err_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/ok",                result_ok_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/match_err",         result_match_err_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/match_ok",          result_match_ok_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitSuite all_tests[] = {
   { "/stack_ast_node", stack_ast_node_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/result",         result_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 

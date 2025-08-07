@@ -17,4 +17,9 @@ MunitResult dynarray_token_at_test(const MunitParameter *, void *);
 
 MunitResult token_type_str_test(const MunitParameter *, void *);
 
+MunitResult result_err_test(const MunitParameter *, void *);
+MunitResult result_ok_test(const MunitParameter *, void *);
+MunitResult result_match_err_test(const MunitParameter *, void *);
+MunitResult result_match_ok_test(const MunitParameter *, void *);
+
 #endif
