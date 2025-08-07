@@ -1,7 +1,8 @@
 OUT := out
 LIB_SRC := src/librfc
 EXE_SRC := src/rfc
-LIB_GENERATED := $(LIB_SRC)/dynarray_token.c $(LIB_SRC)/dynarray_token.h
+LIB_GENERATED := $(LIB_SRC)/dynarray_token.c $(LIB_SRC)/dynarray_token.h\
+                 $(LIB_SRC)/stack_ast_node.c $(LIB_SRC)/stack_ast_node.h
 LIB_SOURCE_FILES := $(wildcard $(LIB_SRC)/*.c) $(filter %.c, $(LIB_GENERATED))
 EXE_SOURCE_FILES := $(EXE_SRC)/main.c
 
