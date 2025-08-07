@@ -2,3 +2,5 @@ out/
 src/librfc/dynarray_*
 prebuild_exe
 lib/
+compile_commands.json
+.cache/
