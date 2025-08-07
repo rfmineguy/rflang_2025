@@ -10,6 +10,11 @@ MunitResult stack_ast_node_create_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_test1(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_pop_test(const MunitParameter *, void *);
 
+MunitResult dynarray_token_create_test(const MunitParameter *, void *);
+MunitResult dynarray_token_pushback_test(const MunitParameter *, void *);
+MunitResult dynarray_token_pushback_grow_test(const MunitParameter *, void *);
+MunitResult dynarray_token_at_test(const MunitParameter *, void *);
+
 MunitResult token_type_str_test(const MunitParameter *, void *);
 
 #endif
