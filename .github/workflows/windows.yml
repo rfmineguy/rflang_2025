@@ -23,6 +23,7 @@ jobs:
       - name: Build rfc
         run: |
           ls -al
+          ls -al tpl
           make build
         shell: bash
 
