@@ -15,6 +15,9 @@ dynarray_$T dynarray_$T_create() {
   a.buffer = CALLOC(a.capacity, sizeof(^T));
   return a;
 }
+void dynarray_$T_free(dynarray_$T* da) {
+  free(da->buffer);
+}
 void dynarray_$T_pushback(dynarray_$T* da, ^T val) {
   if (da->size + 1 >= da->capacity) dynarray_$T_resize(da, da->capacity * 2);
   da->buffer[da->size++] = val;

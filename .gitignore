@@ -1,4 +1,4 @@
 out/
-src/dynarray_*
+src/librfc/dynarray_*
 prebuild_exe
 lib/
