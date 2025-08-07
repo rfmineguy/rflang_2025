@@ -6,7 +6,7 @@ int main() {
   tokenizer t;
 
   // Create the tokenizer
-  match(tokenizer_create("samples/main.rf"), tokenizer_create, t = result_.ok;,{
+  match(tokenizer_create_file("samples/main.rf"), tokenizer_create, t = result_.ok;,{
     fprintf(stderr, "Error: %s\n", result_.err);
     return -1;
   })
