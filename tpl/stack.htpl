@@ -18,6 +18,7 @@ void                 stack_$T_free(stack_$T*);
 void                 stack_$T_push(stack_$T*, ^T);
 void                 stack_$T_pop(stack_$T*);
 result_stack_$T_top  stack_$T_top(stack_$T*);
+result_stack_$T_top  stack_$T_top_offset(stack_$T*, int);
 int                  stack_$T_empty(stack_$T*);
 
 #endif
