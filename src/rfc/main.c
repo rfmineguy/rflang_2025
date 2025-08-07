@@ -1,5 +1,5 @@
-#include "tokenizer.h"
-#include "parser.h"
+#include "librfc/tokenizer.h"
+#include "librfc/parser.h"
 #include <stdio.h>
 
 int main() {
