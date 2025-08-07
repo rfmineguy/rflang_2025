@@ -14,9 +14,9 @@ int main() {
   replacement dynarray_repl = replacement_create();
   replacement_add(&dynarray_repl, "$T", "token");
   replacement_add(&dynarray_repl, "^T", "token");
-  replacement_add(&dynarray_repl, "SUPPORT_1", "tokenizer.h");
+  replacement_add(&dynarray_repl, "SUPPORT_1", "token.h");
   replacement_add(&dynarray_repl, "REALLOC", "realloc");
   replacement_add(&dynarray_repl, "CALLOC", "calloc");
 
-  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src"), dynarray, dynarray_repl);
+  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src/librfc"), dynarray, dynarray_repl);
 }
