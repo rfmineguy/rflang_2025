@@ -1,6 +1,8 @@
 LIB_SOURCES := lib/munit.c
 TEST_SOURCES := $(wildcard src/*.c)
 
+LIBRFC_DIR := ../out/lib
+
 .PHONY: getmunit
 .PHONY: always clean
 .PHONY: build_tests run_tests
@@ -17,7 +19,8 @@ lib/munit.c:
 
 build_tests: always lib/munit.h lib/munit.c out/test_exe
 out/test_exe: $(LIB_SOURCES) $(TEST_SOURCES)
-	$(CC) -std=c17 $^ -o $@
+	make -C .. buildlib
+	$(CC) -std=c17 $^ -o $@ -L$(LIBRFC_DIR) -lrfc
 
 run_tests: build_tests
 	./out/test_exe
