@@ -21,9 +21,15 @@ MunitTest tokenizer_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest token_tests[] = {
+  { "/type_str",               tokenizer_run_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitSuite all_tests[] = {
   { "/stack_ast_node", stack_ast_node_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 

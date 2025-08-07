@@ -10,4 +10,6 @@ MunitResult stack_ast_node_create_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_test1(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_pop_test(const MunitParameter *, void *);
 
+MunitResult token_type_str_test(const MunitParameter *, void *);
+
 #endif
