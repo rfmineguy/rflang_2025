@@ -492,33 +492,83 @@ void forward_table_forward(forward_table* fwd_table, forward_item fwd_item) {
 
 /* Private function */
 static char* read_file(const char* filepath) {
-	FILE* f = fopen(filepath, "r");
-	assert_(f, {
-		fprintf(stderr, "Failed to open '%s'\n", filepath);
-	});
-	fseek(f, 0, SEEK_END);
-	long size = ftell(f);
-	assert_(size != -1, {
-		fprintf(stderr, "Failed to ftell file '%s'. Reason: %s\n", filepath, strerror(errno));
-	})
-	fseek(f, 0, SEEK_SET);
+    FILE* f = fopen(filepath, "rb"); // 'rb' = binary read
+    if (!f) {
+        fprintf(stderr, "Failed to open '%s': %s\n", filepath, strerror(errno));
+        return NULL;
+    }
 
-	char* buf = (char*)malloc((size_t)size + 1);
-	assert_(buf != NULL, {
-		fclose(f);
-		fprintf(stderr, "Malloc failed\n");
-	});
-	assert_(fread(buf, 1, (unsigned long)size, f) == size, { 
-		fclose(f);
-		free(buf);
-		fprintf(stderr, "Failed to read '%s'\n", filepath); 
-    fprintf(stderr, "Reason (errno=%d, '%s')\n", errno, strerror(errno));
-	});
-	buf[size] = 0;
+    // Move to end to get file size
+    if (fseek(f, 0, SEEK_END) != 0) {
+        fprintf(stderr, "fseek failed: %s\n", strerror(errno));
+        fclose(f);
+        return NULL;
+    }
 
-	fclose(f);
-	return buf;
+    long size = ftell(f);
+    if (size < 0) {
+        fprintf(stderr, "ftell failed: %s\n", strerror(errno));
+        fclose(f);
+        return NULL;
+    }
+    rewind(f); // Go back to beginning
+
+    // Allocate buffer
+    char* buffer = (char*)malloc((size_t)size + 1); // +1 for null terminator
+    if (!buffer) {
+        fprintf(stderr, "malloc failed\n");
+        fclose(f);
+        return NULL;
+    }
+
+    // Read file content
+    size_t read = fread(buffer, 1, (size_t)size, f);
+    if (read != (size_t)size) {
+        if (ferror(f)) {
+            fprintf(stderr, "fread failed: %s\n", strerror(errno));
+        } else if (feof(f)) {
+            fprintf(stderr, "Unexpected EOF while reading '%s'\n", filepath);
+        } else {
+            fprintf(stderr, "Partial read for '%s'\n", filepath);
+        }
+        free(buffer);
+        fclose(f);
+        return NULL;
+    }
+
+    buffer[size] = '\0'; // Null terminate
+    fclose(f);
+    return buffer;
 }
+
+// static char* read_file(const char* filepath) {
+// 	FILE* f = fopen(filepath, "r");
+// 	assert_(f, {
+// 		fprintf(stderr, "Failed to open '%s'\n", filepath);
+// 	});
+// 	fseek(f, 0, SEEK_END);
+// 	long size = ftell(f);
+// 	assert_(size != -1, {
+// 		fprintf(stderr, "Failed to ftell file '%s'. Reason: %s\n", filepath, strerror(errno));
+// 	})
+// 	fseek(f, 0, SEEK_SET);
+// 
+// 	char* buf = (char*)malloc((size_t)size + 1);
+// 	assert_(buf != NULL, {
+// 		fclose(f);
+// 		fprintf(stderr, "Malloc failed\n");
+// 	});
+// 	assert_(fread(buf, 1, (unsigned long)size, f) == size, { 
+// 		fclose(f);
+// 		free(buf);
+// 		fprintf(stderr, "Failed to read '%s'\n", filepath); 
+//     fprintf(stderr, "Reason (errno=%d, '%s')\n", errno, strerror(errno));
+// 	});
+// 	buf[size] = 0;
+// 
+// 	fclose(f);
+// 	return buf;
+// }
 
 void ll_long_string_pushback(long_string_ll* ll, const char* s, size_t len) {
 	assert(s && "s cannot be NULL");
