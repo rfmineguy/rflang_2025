@@ -38,7 +38,7 @@ const char* token_type_str(token_type tt) {
 
     case INTLIT:  return "INTLIT";
     case STRLIT:  return "STRLIT";
-    default:      printf("id: %d\n", tt); assert(0 && "This type doesn't have a string yet...");
+    default:      return "<UNDEFINED TOKEN TYPE>";
   }
   assert(0 && "Unreachable");
 }
