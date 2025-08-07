@@ -512,6 +512,7 @@ static char* read_file(const char* filepath) {
 		fclose(f);
 		free(buf);
 		fprintf(stderr, "Failed to read '%s'\n", filepath); 
+    fprintf(stderr, "Reason (errno=%d, '%s')\n", errno, strerror(errno));
 	});
 	buf[size] = 0;
 
