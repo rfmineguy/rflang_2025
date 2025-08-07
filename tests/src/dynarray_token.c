@@ -31,3 +31,48 @@ MunitResult dynarray_token_pushback_test(const MunitParameter * params, void *co
   dynarray_token_free(&da);
   return MUNIT_OK;
 }
+
+MunitResult dynarray_token_pushback_grow_test(const MunitParameter * params, void *context) {
+  const char* ids[20] = {
+    "ear",
+    "volcano",
+    "witch",
+    "clique",
+    "contract",
+    "student",
+    "decline",
+    "concentration",
+    "wriggle",
+    "apathy",
+    "transaction",
+    "is",
+    "multimedia",
+    "shrink",
+    "shed",
+    "observer",
+    "contempt",
+    "produce",
+    "ritual",
+    "leash",
+  };
+
+  dynarray_token da = dynarray_token_create();
+  munit_assert_int(da.size, ==, 0);
+  munit_assert_int(da.capacity, ==, 10);
+
+  // test if growing works properly
+  for (int i = 0; i < 20; i++) dynarray_token_pushback(&da, (token){.type = ID, .start = ids[i], .len = strlen(ids[i])});
+  munit_assert_int(da.size, ==, 20);
+  munit_assert_int(da.capacity, ==, 40);
+
+  // test if the elements are correct
+  for (int i = 0; i < 20; i++) {
+    result_dynarray_token_at r = dynarray_token_at(&da, i);
+    munit_assert_true(r.isok);
+
+    munit_assert_string_equal(ids[i], r.ok.start);
+  }
+
+  dynarray_token_free(&da);
+  return MUNIT_OK;
+}
