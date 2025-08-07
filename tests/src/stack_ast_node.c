@@ -107,3 +107,14 @@ MunitResult stack_ast_node_top_test(const MunitParameter *param, void *context) 
   stack_ast_node_free(&stack);
   return MUNIT_OK;
 }
+
+MunitResult stack_ast_node_empty_test(const MunitParameter *param, void *context) {
+  stack_ast_node stack = stack_ast_node_create();
+  munit_assert_true(stack_ast_node_empty(&stack));
+
+  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  munit_assert_false(stack_ast_node_empty(&stack));
+
+  stack_ast_node_free(&stack);
+  return MUNIT_OK;
+}

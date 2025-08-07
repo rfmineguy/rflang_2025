@@ -13,6 +13,7 @@ MunitTest stack_ast_node_tests[] = {
   { "/push_pop",   stack_ast_node_push_pop_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/top",        stack_ast_node_top_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/top_offset", stack_ast_node_top_offset_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/empty",      stack_ast_node_empty_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 

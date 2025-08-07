@@ -11,6 +11,7 @@ MunitResult stack_ast_node_push_test1(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_pop_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_top_offset_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_top_test(const MunitParameter *, void *);
+MunitResult stack_ast_node_empty_test(const MunitParameter *, void *);
 
 MunitResult dynarray_token_create_test(const MunitParameter *, void *);
 MunitResult dynarray_token_pushback_test(const MunitParameter *, void *);
