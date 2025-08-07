@@ -1,9 +1,9 @@
 #include "dynarray_$T.h"
 #include <stdlib.h>
 
-void dynarray_$T_resize(dynarray_$T* da, size_t new) {
-  da->capacity = new;
-  da->buffer = REALLOC(da->buffer, new * sizeof(^T));
+void dynarray_$T_resize(dynarray_$T* da, size_t newsize) {
+  da->capacity = newsize;
+  da->buffer = REALLOC(da->buffer, newsize * sizeof(^T));
 }
 
 dynarray_$T dynarray_$T_create() {
@@ -12,7 +12,7 @@ dynarray_$T dynarray_$T_create() {
     .size = 0,
     .capacity = 10,
   };
-  a.buffer = CALLOC(a.capacity, sizeof(^T));
+  dynarray_$T_resize(&a, a.capacity);
   return a;
 }
 void dynarray_$T_free(dynarray_$T* da) {
