@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <ctype.h>
 static char msgbuf[500];
 
 static result_compile_reg compile_reg(regex_t* target, const char* regstr) {
@@ -54,6 +55,16 @@ static result_test_reg test_strlit(const char* str) {
   str++;
 
   return result_ok(test_reg, ((token) {.start = begin, .len = str - begin}));
+}
+
+// [a-zA-Z_][a-zA-Z0-9_]*
+// this function should match this regex, but without regex
+static result_test_reg test_id(const char* str) {
+  // [a-zA-Z_]
+  if (!isalpha(*str) && *str != '_') return result_err(test_reg, "Id doesn't start with alpha or _");
+  const char* start = str++;
+  while (isalnum(*str) || *str == '_') str++;
+  return result_ok(test_reg, ((token) {.start = start, .len = str - start}));
 }
 
 static result_read_file ReadFile(const char* filepath) {
