@@ -79,7 +79,7 @@ static result_read_file ReadFile(const char* filepath) {
   return result_ok(read_file, buf);
 }
 
-result_tokenizer_create tokenizer_create(const char *filepath) {
+result_tokenizer_create tokenizer_create_file(const char *filepath) {
   tokenizer t = (tokenizer) {
     .filepath = filepath,
     .regex_store = {},
@@ -89,6 +89,20 @@ result_tokenizer_create tokenizer_create(const char *filepath) {
   match(ReadFile(filepath), read_file, t.fileContents = result_.ok;, {
       return result_err(tokenizer_create, result_.err);
   });
+  match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+  match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+  match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
+
+  return result_ok(tokenizer_create, t);
+}
+
+result_tokenizer_create tokenizer_create_cstr(const char* str) {
+  tokenizer t = (tokenizer) {
+    .filepath = NULL,
+    .regex_store = {},
+    .tokens = dynarray_token_create(),
+    .fileContents = str,
+  };
   match(compile_reg(&t.regex_store.id,       "[_a-zA-Z][a-zA-Z0-9_]*"), compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
   match(compile_reg(&t.regex_store.intlit,   "[0-9]+"),                 compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
   match(compile_reg(&t.regex_store.dbllit,   "[1-9]+\\.[0-9]*"),        compile_reg, {}, { return result_err(tokenizer_create, result_.err); });
