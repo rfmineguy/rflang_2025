@@ -9,6 +9,10 @@ MunitResult parser_stack_check_test_1(const MunitParameter *param, void *context
 
   match(stack_check(&stack, check_seq({token(ID), token(EQ), token(EQ)})), stack_check, {
     munit_logf(1, "OK Count: %d", result_.ok.count);
+    munit_assert_int(result_.ok.count, ==, 3);
+    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
+    munit_assert_int(result_.ok.nodes[1].type, ==, AST_TOKEN);
+    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
   }, {
     munit_logf(1, "%s", result_.err);
     munit_assert(false);
@@ -26,6 +30,10 @@ MunitResult parser_stack_check_test_2(const MunitParameter *param, void *context
 
   match(stack_check(&stack, check_seq({token(ID), ast(AST_VAR), token(EQ)})), stack_check, {
     munit_assert(true);
+    munit_assert_int(result_.ok.count, ==, 3);
+    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
+    munit_assert_int(result_.ok.nodes[1].type, ==, AST_VAR);
+    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
   }, {
     munit_assert(false);
   });
@@ -60,7 +68,10 @@ MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *par
 
   match(stack_check(&stack, check_seq({token(ID), ast(AST_VAR), token(EQ)})), stack_check, {
     munit_logf(2, "ok: %d", result_.ok.count);
-    munit_assert(true);
+    munit_assert_int(result_.ok.count, ==, 3);
+    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
+    munit_assert_int(result_.ok.nodes[1].type, ==, AST_VAR);
+    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
   }, {
     munit_logf(2, "err: %s", result_.err);
     munit_assert(false);
