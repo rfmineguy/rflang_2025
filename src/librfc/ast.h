@@ -1,16 +1,17 @@
 #ifndef AST_H
 #define AST_H
+#include "token.h"
 
 typedef enum {
-  AST_IDENT, AST_INTLIT,
+  AST_TOKEN, AST_VAR
 } ast_node_type;
 
 typedef struct {
   ast_node_type type;
 
   union {
-    struct { const char* s; int len; } ident;
-    struct { int val; } intlit;
+    struct { token t; } token;
+    struct { int placeholder; } var;
   };
 } ast_node;
 
