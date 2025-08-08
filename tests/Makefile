@@ -2,6 +2,7 @@ LIB_SOURCES := lib/munit.c
 TEST_SOURCES := $(wildcard src/*.c)
 
 LIBRFC_SOURCE_DIR := ../src/librfc
+LIBRFC_THIRDPARTY_DIR := ../src/thirdparty
 LIBRFC_SOURCE_FILES := $(wildcard $(LIBRFC_SOURCE_DIR)/*.c)
 LIBRFC_FILES := $(LIBRFC_SOURCE_FILES)
 
@@ -25,7 +26,7 @@ lib/munit.c:
 build_tests: always lib/munit.h lib/munit.c out/test_exe
 out/test_exe: $(LIB_SOURCES) $(TEST_SOURCES) $(LIBRFC_FILES)
 	make -C .. buildlib
-	$(CC) -std=c17 $(LIB_SOURCES) $(TEST_SOURCES) $(LIBRFC_FILES) -o $@ -L$(LIBRFC_LIB_DIR) -lrfc
+	$(CC) -std=c17 $(LIB_SOURCES) $(TEST_SOURCES) $(LIBRFC_FILES) -o $@ -L$(LIBRFC_LIB_DIR) -lrfc -I$(LIBRFC_THIRDPARTY_DIR)
 
 run_tests: build_tests
 	./out/test_exe

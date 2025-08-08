@@ -9,6 +9,7 @@ MunitResult tokenizer_run_test(const MunitParameter*, void*);
 MunitResult stack_ast_node_create_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_test1(const MunitParameter *, void *);
 MunitResult stack_ast_node_push_pop_test(const MunitParameter *, void *);
+MunitResult stack_ast_node_push_pop_n_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_top_offset_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_top_test(const MunitParameter *, void *);
 MunitResult stack_ast_node_empty_test(const MunitParameter *, void *);
