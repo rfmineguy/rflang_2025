@@ -5,3 +5,4 @@ prebuild_exe
 lib/
 compile_commands.json
 .cache/
+rfc.spall
