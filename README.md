@@ -1,4 +1,5 @@
 ![macos-arm status](https://github.com/rfmineguy/rflang_2025/actions/workflows/macos-arm.yml/badge.svg?branch=main&label=MacOS%20ARM%20Build)
+![linux-x64 status](https://github.com/rfmineguy/rflang_2025/actions/workflows/linux-x64.yml/badge.svg?branch=main&label=MacOS%20ARM%20Build)
 ![windows status](https://github.com/rfmineguy/rflang_2025/actions/workflows/windows.yml/badge.svg?branch=main&label=MacOS%20ARM%20Build)
 
 # rflang_2025
