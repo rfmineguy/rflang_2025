@@ -25,9 +25,15 @@ void stack_$T_push(stack_$T* stack, ^T val) {
   if (stack->size + 1 >= stack->capacity) stack_$T_resize(stack, stack->capacity * 2);
   stack->buffer[stack->size++] = val;
 }
-void stack_$T_pop(stack_$T* stack) {
-  if (stack->size == 0) return;
+result_stack_$T_pop stack_$T_pop(stack_$T* stack) {
+  if (stack->size == 0) return result_err(stack_$T_pop, "not enough elements");
   stack->size--;
+  return result_ok(stack_$T_pop, "");
+}
+result_stack_$T_pop_n stack_$T_pop_n(stack_$T* stack, int n) {
+  if (n > stack->size) return result_err(stack_$T_pop_n, "not enough elements");
+  stack->size-=n;
+  return result_ok(stack_$T_pop_n, "");
 }
 result_stack_$T_top stack_$T_top(stack_$T* stack) {
   if (stack->size == 0) return result_err(stack_$T_top, "stack empty");

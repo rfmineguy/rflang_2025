@@ -5,20 +5,23 @@
 #include "SUPPORT_1"
 
 define_result(stack_$T_top, ^T, const char*);
+define_result(stack_$T_pop, void*, const char*);
+define_result(stack_$T_pop_n, void*, const char*);
 
 typedef struct {
   ^T *buffer;
   int size, capacity;
 } stack_$T;
 
-void                 stack_$T_resize(stack_$T*, size_t);
+void                   stack_$T_resize(stack_$T*, size_t);
 
-stack_$T             stack_$T_create();
-void                 stack_$T_free(stack_$T*);
-void                 stack_$T_push(stack_$T*, ^T);
-void                 stack_$T_pop(stack_$T*);
-result_stack_$T_top  stack_$T_top(stack_$T*);
-result_stack_$T_top  stack_$T_top_offset(stack_$T*, int);
-int                  stack_$T_empty(stack_$T*);
+stack_$T               stack_$T_create();
+void                   stack_$T_free(stack_$T*);
+void                   stack_$T_push(stack_$T*, ^T);
+result_stack_$T_pop    stack_$T_pop(stack_$T*);
+result_stack_$T_pop_n  stack_$T_pop_n(stack_$T*, int);
+result_stack_$T_top    stack_$T_top(stack_$T*);
+result_stack_$T_top    stack_$T_top_offset(stack_$T*, int);
+int                    stack_$T_empty(stack_$T*);
 
 #endif
