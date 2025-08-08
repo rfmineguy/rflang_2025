@@ -25,4 +25,9 @@ MunitResult result_ok_test(const MunitParameter *, void *);
 MunitResult result_match_err_test(const MunitParameter *, void *);
 MunitResult result_match_ok_test(const MunitParameter *, void *);
 
+MunitResult parser_stack_check_test_1(const MunitParameter *, void *);
+MunitResult parser_stack_check_test_2(const MunitParameter *, void *);
+MunitResult parser_stack_check_passed_limit_test(const MunitParameter *, void *);
+MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *, void *);
+
 #endif
