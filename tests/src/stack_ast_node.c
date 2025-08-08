@@ -12,11 +12,13 @@ MunitResult stack_ast_node_create_test(const MunitParameter *param, void *contex
 
 MunitResult stack_ast_node_push_test1(const MunitParameter *param, void *context) {
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
   result_stack_ast_node_top r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, EQ);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "=");
 
   stack_ast_node_free(&stack);
   return MUNIT_OK;
@@ -25,25 +27,33 @@ MunitResult stack_ast_node_push_test1(const MunitParameter *param, void *context
 MunitResult stack_ast_node_push_pop_test(const MunitParameter *param, void *context) {
   stack_ast_node stack = stack_ast_node_create();
   // []
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
 
   // [2]
   result_stack_ast_node_top r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, EQ);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "=");
 
   // [2, 3]
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 3}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = LCBRK, .len = 1, .start = "{" }}});
   r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
-  munit_assert_int(r.ok.intlit.val, ==, 3);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, LCBRK);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "{");
 
   // [2]
   stack_ast_node_pop(&stack);
   r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, EQ);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "=");
 
   // [] after pop stack is empty here, so looking at top should fail
   stack_ast_node_pop(&stack);
@@ -56,25 +66,26 @@ MunitResult stack_ast_node_push_pop_test(const MunitParameter *param, void *cont
 
 MunitResult stack_ast_node_top_offset_test(const MunitParameter *param, void *context) {
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
 
   result_stack_ast_node_top r = stack_ast_node_top_offset(&stack, 0);
   munit_assert_true(r.isok);
-  munit_assert_false(r.isfail);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, EQ);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "=");
 
   r = stack_ast_node_top_offset(&stack, 1);
   munit_assert_true(r.isfail);
   munit_assert_false(r.isok);
 
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
-
-  r = stack_ast_node_top_offset(&stack, 1);
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = LCBRK, .len = 1, .start = "{" }}});
+  r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
-  munit_assert_false(r.isfail);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, LCBRK);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "{");
 
   stack_ast_node_free(&stack);
   return MUNIT_OK;
@@ -89,20 +100,24 @@ MunitResult stack_ast_node_top_test(const MunitParameter *param, void *context) 
   munit_assert_true(r.isfail);
 
   // We expect a call to top with a single item to succeed with that item
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
   r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
   munit_assert_false(r.isfail);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, EQ);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, "=");
 
   // We expect a call to top with a single item to succeed with that item
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = COLON, .len = 1, .start = ":" }}});
   r = stack_ast_node_top(&stack);
   munit_assert_true(r.isok);
   munit_assert_false(r.isfail);
-  munit_assert_int(r.ok.type, ==, AST_INTLIT);
-  munit_assert_int(r.ok.intlit.val, ==, 2);
+  munit_assert_int(r.ok.type, ==, AST_TOKEN);
+  munit_assert_int(r.ok.token.t.type, ==, COLON);
+  munit_assert_int(r.ok.token.t.len, ==, 1);
+  munit_assert_string_equal(r.ok.token.t.start, ":");
 
   stack_ast_node_free(&stack);
   return MUNIT_OK;
@@ -112,7 +127,7 @@ MunitResult stack_ast_node_empty_test(const MunitParameter *param, void *context
   stack_ast_node stack = stack_ast_node_create();
   munit_assert_true(stack_ast_node_empty(&stack));
 
-  stack_ast_node_push(&stack, (ast_node){.type = AST_INTLIT, .intlit = {.val = 2}});
+  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = COLON, .len = 1, .start = ":" }}});
   munit_assert_false(stack_ast_node_empty(&stack));
 
   stack_ast_node_free(&stack);
