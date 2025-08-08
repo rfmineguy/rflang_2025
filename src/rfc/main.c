@@ -1,8 +1,10 @@
 #include "librfc/tokenizer.h"
 #include "librfc/parser.h"
+#include "spall_util.h"
 #include <stdio.h>
 
 int main() {
+  SPALL_INIT
   tokenizer t;
 
   // Create the tokenizer
@@ -29,4 +31,5 @@ int main() {
   })
 
   tokenizer_free(&t);
+  SPALL_QUIT
 }
