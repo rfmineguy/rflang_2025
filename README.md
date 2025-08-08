@@ -9,7 +9,7 @@ I'm beginning again an endeavor to write a more complicated language compiler.
 # Building Compiler
 When in the root folder...
 ```sh
-make build
+make clean build PROFILING={ON/OFF, default OFF}
 ```
 
 
