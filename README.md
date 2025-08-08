@@ -18,3 +18,7 @@ When in the tests/ folder...
 ```sh
 make clean build_tests run_tests
 ```
+
+
+# Profiling
+Courtesy of [spall-web](https://github.com/colrdavidson/spall-web/tree/master) this repo can automatically generate performance traces. This is controlled via the `PROFILING` flag demoed in [Building Compiler](#building-compiler)
