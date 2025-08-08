@@ -15,6 +15,5 @@ make build
 # Building/Running Tests
 When in the tests/ folder...
 ```sh
-make clean
-make run_tests
+make clean build_tests run_tests
 ```
