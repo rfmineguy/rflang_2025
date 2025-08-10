@@ -7,14 +7,14 @@ void* setup(const MunitParameter params[], void* userdata) {
 
 void teardown(void* fixture) {}
 
-MunitTest stack_ast_node_tests[] = {
-  { "/create",     stack_ast_node_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/push",       stack_ast_node_push_test1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/push_pop",   stack_ast_node_push_pop_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/push_popn",  stack_ast_node_push_pop_n_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/top",        stack_ast_node_top_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/top_offset", stack_ast_node_top_offset_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/empty",      stack_ast_node_empty_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+MunitTest stack_test_type_tests[] = {
+  { "/create",     stack_test_type_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push",       stack_test_type_push_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push_pop",   stack_test_type_push_pop_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/push_popn",  stack_test_type_push_pop_n_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/top",        stack_test_type_top_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/top_offset", stack_test_type_top_offset_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/empty",      stack_test_type_empty_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
@@ -55,7 +55,7 @@ MunitTest parser_tests[] = {
 };
 
 MunitSuite all_tests[] = {
-  { "/stack_ast_node", stack_ast_node_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/stack_test_type",stack_test_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
