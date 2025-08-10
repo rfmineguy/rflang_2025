@@ -4,22 +4,24 @@
 #include "result.h"
 #include "ast.h"
 #include "stack_ast_node.h"
+#include "arena.h"
 
 typedef struct {
-  ast_node root;
+  variant_ast_node root;
   stack_ast_node ast_stack;
   int token_index;
+  Arena ast_arena;
 } parser_ctx;
 
 typedef struct {
-  ast_node nodes[10];
+  variant_ast_node nodes[10];
   int count;
 } check_result;
 typedef struct {
   int checktype; // 1 is token, 2 is ast
   union {
     token_type tokentype;
-    ast_node_type astnodetype;
+    variant_ast_node_type astnodetype;
   };
 } check;
 

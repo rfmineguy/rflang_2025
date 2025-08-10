@@ -1,18 +1,42 @@
 #include "tests.h"
 #include "../../src/librfc/parser.h"
+#include "../../src/librfc/variant.h"
 
+/*
+ * Test to make sure that the elements returned from `stack_check` match those that are checked
+ */
 MunitResult parser_stack_check_test_1(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = ID, .len = 1, .start = "x" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 2, .start = "42" }}});
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "=" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
 
   match(stack_check(&stack, check_seq({token(ID), token(EQ), token(EQ)})), stack_check, {
-    munit_logf(1, "OK Count: %d", result_.ok.count);
     munit_assert_int(result_.ok.count, ==, 3);
-    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
-    munit_assert_int(result_.ok.nodes[1].type, ==, AST_TOKEN);
-    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
+    match_variant(result_.ok.nodes[0], ast_node, {
+      variant_case(ast_node, Token, {
+        munit_assert_int(v.Token.t.type, ==, EQ);
+        munit_assert_int(v.Token.t.len, ==, 1);
+        munit_assert_string_equal(v.Token.t.start, "42");
+      })
+      variant_default({ munit_assert(false); })
+    })
+    match_variant(result_.ok.nodes[1], ast_node, {
+      variant_case(ast_node, Token, { 
+        munit_assert_int(v.Token.t.type, ==, EQ);
+        munit_assert_int(v.Token.t.len, ==, 1);
+        munit_assert_string_equal(v.Token.t.start, "=");
+      })
+      variant_default({ munit_assert(false); })
+    })
+    match_variant(result_.ok.nodes[2], ast_node, {
+      variant_case(ast_node, Token, {
+        munit_assert_int(v.Token.t.type, ==, ID);
+        munit_assert_int(v.Token.t.len, ==, 1);
+        munit_assert_string_equal(v.Token.t.start, "x");
+      })
+      variant_default({ munit_assert(false); })
+    })
   }, {
     munit_logf(1, "%s", result_.err);
     munit_assert(false);
@@ -24,17 +48,38 @@ MunitResult parser_stack_check_test_1(const MunitParameter *param, void *context
 
 MunitResult parser_stack_check_test_2(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = ID, .len = 1, .start = "x" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_VAR,   .var   = {.placeholder = 3 }});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 2, .start = "42" }}});
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Var,   ((ast_vardecl) { .type = (token) { .type = ID, .len = 3, .start = "boo" }, .id = (token) { .type = ID, .len = 5, .start = "" } })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
 
-  match(stack_check(&stack, check_seq({token(ID), ast(AST_VAR), token(EQ)})), stack_check, {
-    munit_assert(true);
+  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_Var), token(EQ)})), stack_check, {
     munit_assert_int(result_.ok.count, ==, 3);
-    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
-    munit_assert_int(result_.ok.nodes[1].type, ==, AST_VAR);
-    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
+    match_variant(result_.ok.nodes[0], ast_node, {
+      variant_case(ast_node, Token, {
+        munit_assert_int(v.Token.t.type, ==, EQ);
+        munit_assert_int(v.Token.t.len, ==, 1);
+        munit_assert_string_equal(v.Token.t.start, "42");
+      })
+      variant_default({ munit_assert(false); })
+    })
+    match_variant(result_.ok.nodes[1], ast_node, {
+      variant_case(ast_node, Var, { 
+        munit_assert_int(v.Var.type.type, ==, ID);
+        munit_assert_int(v.Var.type.len, ==, 3);
+        munit_assert_string_equal(v.Var.type.start, "boo");
+      })
+      variant_default({ munit_assert(false); })
+    })
+    match_variant(result_.ok.nodes[2], ast_node, {
+      variant_case(ast_node, Token, {
+        munit_assert_int(v.Token.t.type, ==, ID);
+        munit_assert_int(v.Token.t.len, ==, 1);
+        munit_assert_string_equal(v.Token.t.start, "x");
+      })
+      variant_default({ munit_assert(false); })
+    })
   }, {
+    munit_logf(1, "%s", result_.err);
     munit_assert(false);
   });
 
@@ -44,14 +89,13 @@ MunitResult parser_stack_check_test_2(const MunitParameter *param, void *context
 
 MunitResult parser_stack_check_passed_limit_test(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = ID, .len = 1, .start = "x" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_VAR,   .var   = {.placeholder = 3 }});
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) {.type = ID, .len = 1, .start = "x" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) {.type = EQ, .len = 1, .start = "=" })));
 
-  // because the stack we are checking has only 2 items on it, but we are checking for 3
-  //   we should expect this check to fail
-  match(stack_check(&stack, check_seq({token(ID), ast(AST_VAR), token(EQ)})), stack_check, {
+  // We expect this check to fail given the stack only has 2 items, but we check for 3
+  match(stack_check(&stack, check_seq({token(ID), token(EQ), token(INTLIT)})), stack_check, {
     munit_assert(false);
-  }, {
+  },{
     munit_assert(true);
   });
 
@@ -61,19 +105,32 @@ MunitResult parser_stack_check_passed_limit_test(const MunitParameter *param, vo
 
 MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = LCBRK, .len = 1, .start = "{" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = ID, .len = 1, .start = "x" }}});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_VAR,   .var =   {.placeholder = 4 }});
-  stack_ast_node_push(&stack, (ast_node){.type = AST_TOKEN, .token = {.t = { .type = EQ, .len = 1, .start = "=" }}});
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Var,   ((ast_vardecl) { .type = (token) {}, .id = (token) {} })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
 
-  match(stack_check(&stack, check_seq({token(ID), ast(AST_VAR), token(EQ)})), stack_check, {
-    munit_logf(2, "ok: %d", result_.ok.count);
-    munit_assert_int(result_.ok.count, ==, 3);
-    munit_assert_int(result_.ok.nodes[0].type, ==, AST_TOKEN);
-    munit_assert_int(result_.ok.nodes[1].type, ==, AST_VAR);
-    munit_assert_int(result_.ok.nodes[2].type, ==, AST_TOKEN);
+  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_Var), token(EQ)})), stack_check, {
+    munit_assert(true);
   }, {
-    munit_logf(2, "err: %s", result_.err);
+    munit_assert(false);
+  });
+
+  stack_ast_node_free(&stack);
+  return MUNIT_OK;
+}
+
+MunitResult parser_stack_check_reduce_to_var(const MunitParameter *param, void *context){
+  stack_ast_node stack = stack_ast_node_create();
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x"  })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "="  })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+
+  match(stack_check(&stack, check_seq({token(ID), token(EQ), token(EQ)})), stack_check, {
+    variant_ast_node v = make_variant(ast_node, Var, ((ast_vardecl){.type = result_.ok.nodes[0].Token.t, .id = result_.ok.nodes[1].Token.t}));
+    munit_assert(true);
+  }, {
     munit_assert(false);
   });
 
