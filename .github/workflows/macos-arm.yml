@@ -1,4 +1,4 @@
-name: Build MacOS (arm)
+name: Build/Test MacOS (arm)
 
 on:
   push:
