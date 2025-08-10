@@ -1,5 +1,5 @@
 #include "tests.h"
-#include "generated/stack_test_type.h"
+#include "stack_test_type.h"
 
 MunitResult stack_test_type_create_test(const MunitParameter *param, void *context) {
   stack_test_type stack = stack_test_type_create();
