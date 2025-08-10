@@ -38,7 +38,7 @@ int main() {
   
   replacement parser_stack_repl = replacement_create();
   replacement_add(&parser_stack_repl, "$T", "ast_node");
-  replacement_add(&parser_stack_repl, "^T", "ast_node");
+  replacement_add(&parser_stack_repl, "^T", "variant_ast_node");
   replacement_add(&parser_stack_repl, "SUPPORT_1", "ast.h");
   replacement_add(&parser_stack_repl, "REALLOC", "realloc");
   replacement_add(&parser_stack_repl, "CALLOC", "calloc");
