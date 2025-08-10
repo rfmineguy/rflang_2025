@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - run-actions
+      - devel
       - main
   pull_request:
     branches:
