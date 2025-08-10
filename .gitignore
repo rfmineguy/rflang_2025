@@ -3,7 +3,6 @@ src/librfc/dynarray_*
 tests/generated
 src/librfc/stack_*
 prebuild_exe
-lib/
 tests/lib/munit.h
 tests/lib/munit.c
 compile_commands.json
