@@ -2,17 +2,44 @@
 #include "../../src/librfc/tokenizer.h"
 
 MunitResult tokenizer_create_invldpath_test(const MunitParameter *param, void *context){
-  result_tokenizer_create t = tokenizer_create_file("");
-  munit_assert_true(t.isfail);
-  munit_assert_false(t.isok);
-  tokenizer_free(&t.ok);
+#define INVALID_FILEPATHS_COUNT 3
+
+  // Array of invalid filepaths to test
+  const char* invalid_filepaths[INVALID_FILEPATHS_COUNT] = {
+    "thisisafile.rf",
+    "por/adsf.rf",
+    "ads.rf",
+  };
+
+  // Make sure that the array length is correct
+  munit_assert_int(sizeof(invalid_filepaths) / sizeof(const char*), ==, INVALID_FILEPATHS_COUNT);
+  for (int i = 0; i < INVALID_FILEPATHS_COUNT; i++) {
+    result_tokenizer_create t = tokenizer_create_file(invalid_filepaths[i]);
+    munit_assert_true(t.isfail);
+    munit_assert_false(t.isok);
+    tokenizer_free(&t.ok);
+  }
+
   return MUNIT_OK;
 }
 
 MunitResult tokenizer_create_validpath_test(const MunitParameter *param, void *context){
-  result_tokenizer_create t = tokenizer_create_file("samples/main.rf");
-  munit_assert_true(t.isok);
-  munit_assert_false(t.isfail);
+#define VALID_FILEPATHS_COUNT 2
+
+  // Array of invalid filepaths to test
+  const char* valid_filepaths[VALID_FILEPATHS_COUNT] = {
+    "samples/main.rf",
+    "samples/tokenizer_test.rf",
+  };
+
+  // Make sure that the array length is correct
+  munit_assert_int(sizeof(valid_filepaths) / sizeof(const char*), ==, VALID_FILEPATHS_COUNT);
+  for (int i = 0; i < VALID_FILEPATHS_COUNT; i++) {
+    result_tokenizer_create t = tokenizer_create_file(valid_filepaths[i]);
+    munit_assert_true(t.isok);
+    munit_assert_false(t.isfail);
+    tokenizer_free(&t.ok);
+  }
   return MUNIT_OK;
 }
 
