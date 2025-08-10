@@ -1,6 +1,9 @@
 #include "tests.h"
 #include "../../src/librfc/tokenizer.h"
 
+#define token_(type_, len_, content_)\
+  (token) {.type = type_, .len = len_, .start = content_}
+
 MunitResult tokenizer_create_invldpath_test(const MunitParameter *param, void *context){
 #define INVALID_FILEPATHS_COUNT 3
 
@@ -44,6 +47,21 @@ MunitResult tokenizer_create_validpath_test(const MunitParameter *param, void *c
 }
 
 MunitResult tokenizer_run_test(const MunitParameter *param, void *context){
+  token expected_tokens[] = {
+    token_(ID     , 4, "main"),
+    token_(EQ     , 1, "="),
+    token_(COLON  , 1, ":"),
+    token_(COMMA  , 1, ","),
+    token_(MUL    , 1, "*"),
+    token_(ARROW  , 2, "->"),
+    token_(ID     , 3, "int"),
+    token_(LCBRK  , 1, "{"),
+    token_(KEYWORD, 2, "if"),
+    token_(LT     , 1, "<"),
+    token_(GT     , 1, ">"),
+    token_(INTLIT , 1, "1"),
+    token_(KEYWORD, 2, "if"),
+  };
   result_tokenizer_create t = tokenizer_create_file("samples/tokenizer_test.rf");
   munit_assert_true(t.isok);
   munit_assert_false(t.isfail);
@@ -51,20 +69,15 @@ MunitResult tokenizer_run_test(const MunitParameter *param, void *context){
   result_tokenizer_run r = tokenizer_run(&t.ok);
   munit_assert_true(t.isok);
 
-  munit_assert_int(t.ok.tokens.size, ==, 13);
-  munit_assert_int(t.ok.tokens.buffer[0].type , ==, ID);
-  munit_assert_int(t.ok.tokens.buffer[1].type , ==, EQ);
-  munit_assert_int(t.ok.tokens.buffer[2].type , ==, COLON);
-  munit_assert_int(t.ok.tokens.buffer[3].type , ==, COMMA);
-  munit_assert_int(t.ok.tokens.buffer[4].type , ==, MUL);
-  munit_assert_int(t.ok.tokens.buffer[5].type , ==, ARROW);
-  munit_assert_int(t.ok.tokens.buffer[6].type , ==, ID);
-  munit_assert_int(t.ok.tokens.buffer[7].type , ==, LCBRK);
-  munit_assert_int(t.ok.tokens.buffer[8].type , ==, KEYWORD);
-  munit_assert_int(t.ok.tokens.buffer[9].type , ==, LT);
-  munit_assert_int(t.ok.tokens.buffer[10].type, ==, GT);
-  munit_assert_int(t.ok.tokens.buffer[11].type, ==, INTLIT);
-  munit_assert_int(t.ok.tokens.buffer[12].type, ==, KEYWORD);
+  for (int i = 0; i < t.ok.tokens.size; i++) {
+    token actual = t.ok.tokens.buffer[i];
+    token expected = expected_tokens[i];
+
+    // assert each field of the token
+    munit_assert_int(actual.type, ==, expected.type);
+    munit_assert_int(actual.len, ==, expected.len);
+    munit_assert_string_n_equal(actual.start, expected.start, actual.len);
+  }
 
   tokenizer_free(&t.ok);
   return MUNIT_OK;
