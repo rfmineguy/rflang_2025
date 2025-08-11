@@ -35,15 +35,15 @@ result_stack_$T_pop_n stack_$T_pop_n(stack_$T* stack, int n) {
   stack->size-=n;
   return result_ok(stack_$T_pop_n, "");
 }
-result_stack_$T_top stack_$T_top(stack_$T* stack) {
+result_stack_$T_top stack_$T_top(const stack_$T* stack) {
   if (stack->size == 0) return result_err(stack_$T_top, "stack empty");
   return result_ok(stack_$T_top, stack->buffer[stack->size - 1]);
 }
-result_stack_$T_top stack_$T_top_offset(stack_$T* stack, int offset) {
+result_stack_$T_top stack_$T_top_offset(const stack_$T* stack, int offset) {
   if (stack->size == 0) return result_err(stack_$T_top, "stack empty");
   if (stack->size <= offset) return result_err(stack_$T_top, "not enough elements");
   return result_ok(stack_$T_top, stack->buffer[stack->size - offset - 1]);
 }
-int stack_$T_empty(stack_$T* stack) {
+int stack_$T_empty(const stack_$T* stack) {
   return stack->size == 0;
 }

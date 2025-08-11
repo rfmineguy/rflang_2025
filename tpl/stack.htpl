@@ -20,8 +20,8 @@ void                   stack_$T_free(stack_$T*);
 void                   stack_$T_push(stack_$T*, ^T);
 result_stack_$T_pop    stack_$T_pop(stack_$T*);
 result_stack_$T_pop_n  stack_$T_pop_n(stack_$T*, int);
-result_stack_$T_top    stack_$T_top(stack_$T*);
-result_stack_$T_top    stack_$T_top_offset(stack_$T*, int);
-int                    stack_$T_empty(stack_$T*);
+result_stack_$T_top    stack_$T_top(const stack_$T*);
+result_stack_$T_top    stack_$T_top_offset(const stack_$T*, int);
+int                    stack_$T_empty(const stack_$T*);
 
 #endif
