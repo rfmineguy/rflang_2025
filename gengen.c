@@ -47,6 +47,6 @@ int main() {
   /*
    * GENERATORS
    */
-  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src/librfc"), dynarray, token_dynarray_repl);
-  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src/librfc"), stack,    parser_stack_repl);
+  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src/librfc", .verbose = false), dynarray, token_dynarray_repl);
+  generator_run(gen_settings(.search_paths=paths("tpl"), .outdir="src/librfc", .verbose = false), stack,    parser_stack_repl);
 }

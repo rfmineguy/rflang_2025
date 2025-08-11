@@ -690,7 +690,8 @@ void generator_run_embed(generator_settings settings, ctemplate tplt, template_f
 		return;
 	}
 
-	replacement_print(&repl_);
+  if (settings.verbose)
+    replacement_print(&repl_);
 	char* path = find_template_path(settings, tf);
 	if (path == NULL) {
 		verbose_fprintf(stdout, "\033[33mWarn: Ignoring template file '%s'. Not found.\n\033[0m", tf.infilename);
