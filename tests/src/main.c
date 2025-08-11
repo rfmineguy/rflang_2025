@@ -34,7 +34,15 @@ MunitTest tokenizer_tests[] = {
 };
 
 MunitTest token_tests[] = {
-  { "/type_str",               tokenizer_run_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/type_str",               token_type_str_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
+MunitTest variant_tests[] = {
+  { "/datatype",          variant_datatype_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/datatype_Int",      variant_datatype_Int_match_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/datatype_Float",    variant_datatype_Float_match_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/datatype_String",   variant_datatype_String_match_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
@@ -59,6 +67,7 @@ MunitSuite all_tests[] = {
   { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/variant",        variant_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/result",         result_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/parser",         parser_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},

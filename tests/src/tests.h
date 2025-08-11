@@ -27,6 +27,11 @@ MunitResult result_ok_test(const MunitParameter *, void *);
 MunitResult result_match_err_test(const MunitParameter *, void *);
 MunitResult result_match_ok_test(const MunitParameter *, void *);
 
+MunitResult variant_datatype_test(const MunitParameter *, void *);
+MunitResult variant_datatype_Int_match_test(const MunitParameter *, void *);
+MunitResult variant_datatype_Float_match_test(const MunitParameter *, void *);
+MunitResult variant_datatype_String_match_test(const MunitParameter *, void *);
+
 MunitResult parser_stack_check_test_1(const MunitParameter *, void *);
 MunitResult parser_stack_check_test_2(const MunitParameter *, void *);
 MunitResult parser_stack_check_passed_limit_test(const MunitParameter *, void *);
