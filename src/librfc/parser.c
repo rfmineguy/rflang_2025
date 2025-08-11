@@ -5,7 +5,7 @@
 
 // see samples/main.g for the grammar
 
-result_stack_check stack_check(stack_ast_node* stack, check c[], int n) {
+result_stack_check stack_check(const stack_ast_node* stack, check c[], int n) {
   variant_ast_node ns;
   check_result result = {0};
   if (n > stack->size) return result_err(stack_check, "stack not big enough for this check");
