@@ -120,6 +120,27 @@ MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *par
   return MUNIT_OK;
 }
 
+MunitResult parser_stack_check_incorrect_ast_node(const MunitParameter *param, void *context) {
+  stack_ast_node stack = stack_ast_node_create();
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Var,   ((ast_vardecl) { .type = (token) {}, .id = (token) {} })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+
+  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_Var), token(EQ)})), stack_check, {
+    munit_assert(true);
+  }, {
+    munit_assert(false);
+  });
+
+  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_Expr), token(EQ)})), stack_check, {
+    munit_assert(false);
+  }, {
+    munit_assert(true);
+  });
+  return MUNIT_OK;
+}
+
 MunitResult parser_reduce_stack_vardecl(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
   stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 2, .start = "hi" })));

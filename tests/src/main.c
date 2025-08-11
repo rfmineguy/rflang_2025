@@ -55,11 +55,12 @@ MunitTest result_tests[] = {
 };
 
 MunitTest parser_tests[] = {
-  { "/stack_check_1",                      parser_stack_check_test_1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/stack_check_2",                      parser_stack_check_test_2, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/stack_check_pass_limit",             parser_stack_check_passed_limit_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/stack_check_stack_larger_than_check",parser_stack_check_stack_larger_than_check, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/reduce_stack_var_decl",              parser_reduce_stack_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/stack_check_1",                        parser_stack_check_test_1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/stack_check_2",                        parser_stack_check_test_2, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/stack_check_pass_limit",               parser_stack_check_passed_limit_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/stack_check_stack_larger_than_check",  parser_stack_check_stack_larger_than_check, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/parser_stack_check_incorrect_ast_node",parser_stack_check_incorrect_ast_node, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/reduce_stack_var_decl",                parser_reduce_stack_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 

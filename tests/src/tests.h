@@ -36,6 +36,7 @@ MunitResult parser_stack_check_test_1(const MunitParameter *, void *);
 MunitResult parser_stack_check_test_2(const MunitParameter *, void *);
 MunitResult parser_stack_check_passed_limit_test(const MunitParameter *, void *);
 MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *, void *);
+MunitResult parser_stack_check_incorrect_ast_node(const MunitParameter *, void *);
 MunitResult parser_reduce_stack_vardecl(const MunitParameter *, void *);
 
 #endif
