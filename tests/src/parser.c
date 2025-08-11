@@ -120,16 +120,36 @@ MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *par
   return MUNIT_OK;
 }
 
-MunitResult parser_stack_check_reduce_to_var(const MunitParameter *param, void *context){
+MunitResult parser_reduce_stack_vardecl(const MunitParameter *param, void *context){
   stack_ast_node stack = stack_ast_node_create();
-  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
-  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 1, .start = "x"  })));
-  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "="  })));
-  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = EQ, .len = 1, .start = "42" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 2, .start = "hi" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = COLON, .len = 1, .start = ":" })));
+  stack_ast_node_push(&stack, make_variant(ast_node, Token, ((token) { .type = ID, .len = 3, .start = "bool" })));
 
-  match(stack_check(&stack, check_seq({token(ID), token(EQ), token(EQ)})), stack_check, {
-    variant_ast_node v = make_variant(ast_node, Var, ((ast_vardecl){.type = result_.ok.nodes[0].Token.t, .id = result_.ok.nodes[1].Token.t}));
-    munit_assert(true);
+  match(stack_check(&stack, check_seq({token(ID), token(COLON), token(ID)})), stack_check, {
+    // pop of our old ast_nodes
+    stack_ast_node_pop_n(&stack, 3);
+    munit_assert_int(stack.size, ==, 0);
+
+    // construct a new ast_node from the ones we checked
+    variant_ast_node v = make_variant(ast_node, Var, ((ast_vardecl) {.id = result_.ok.nodes[2].Token.t, .type = result_.ok.nodes[0].Token.t }));
+    stack_ast_node_push(&stack, v);
+
+    // ensure that the stack has the correct contents after reduction
+    match(stack_ast_node_top(&stack), stack_ast_node_top, {
+      match_variant(result_.ok, ast_node,
+        variant_case(ast_node, Var, {
+          munit_assert_int(v.Var.id.type, ==, ID);
+          munit_assert_string_equal(v.Var.id.start, "hi");
+
+          munit_assert_int(v.Var.type.type, ==, ID);
+          munit_assert_string_equal(v.Var.type.start, "bool");
+        })
+        variant_default({ munit_assert(false); })
+      );
+    },{
+      munit_assert(false);
+    })
   }, {
     munit_assert(false);
   });
