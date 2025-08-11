@@ -23,9 +23,6 @@ jobs:
 
       - name: Build rfc
         run: |
-          Get-ChildItem -Force
-          Get-ChildItem -Force tpl
-          Resolve-Path tpl/dynarray.htpl
           make build
         shell: pwsh
 
