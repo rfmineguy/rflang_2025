@@ -20,6 +20,9 @@
     };\
   } join2(variant_, variant_name);
 
+#define forward_dec_variant(variant_name)\
+  struct join2(variant_, variant_name)
+
 #define make_variant(variant_name, variant_type_name, val)\
   (join2(variant_, variant_name)){.variant_type_name = val, .type = gen_enum_name(variant_type_name, variant_name, variant_type)}
 
