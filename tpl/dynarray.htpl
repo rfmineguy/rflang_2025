@@ -16,6 +16,6 @@ void                  dynarray_$T_resize(dynarray_$T*, size_t);
 dynarray_$T           dynarray_$T_create();
 void                  dynarray_$T_free(dynarray_$T*);
 void                  dynarray_$T_pushback(dynarray_$T*, ^T);
-result_dynarray_$T_at dynarray_$T_at(dynarray_$T*, int);
+result_dynarray_$T_at dynarray_$T_at(const dynarray_$T*, int);
 
 #endif

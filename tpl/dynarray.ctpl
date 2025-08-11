@@ -22,7 +22,7 @@ void dynarray_$T_pushback(dynarray_$T* da, ^T val) {
   if (da->size + 1 >= da->capacity) dynarray_$T_resize(da, da->capacity * 2);
   da->buffer[da->size++] = val;
 }
-result_dynarray_$T_at dynarray_$T_at(dynarray_$T* da, int index) {
+result_dynarray_$T_at dynarray_$T_at(const dynarray_$T* da, int index) {
   if (index >= da->size) return result_err(dynarray_$T_at, "index out of range");
   return result_ok(dynarray_$T_at, da->buffer[index]);
 }
