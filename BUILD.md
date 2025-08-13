@@ -4,7 +4,9 @@ It additionally has a `normal` build and `debug` build
 
 ## Normal Build
 ```sh
-make clean build PROFILING={ON/OFF, default OFF} DEBUG={ON/OFF, default ON}
+make clean build\
+    PROFILING={ON/OFF, default OFF}\
+    DEBUG={ON/OFF, default ON}
 ```
 
 1. Compile source files into objects
@@ -13,7 +15,9 @@ make clean build PROFILING={ON/OFF, default OFF} DEBUG={ON/OFF, default ON}
 
 ## Debug Build
 ```sh
-make clean_preprocess build_preprocess PROFILING={ON/OFF, default OFF}
+make clean_preprocess build_preprocess\
+    PROFILING={ON/OFF, default OFF}\
+    DEBUG={ON/OFF, default ON}
 ```
 
 This build is slightly different, but allows for easier debugging of the macros within the application
