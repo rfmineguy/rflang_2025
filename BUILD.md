@@ -1,6 +1,6 @@
 # Build
 The program is split in to multiple parts, the library and the exe
-It additionally has a `normal` build and `debug` build
+It additionally has a `normal` build and `preprocessed` build
 
 ## Normal Build
 ```sh
@@ -13,7 +13,7 @@ make clean build\
 2. Link the objects into a static lib
 3. Builds a driver executable
 
-## Debug Build
+## Preprocessed Build
 ```sh
 make clean_preprocess build_preprocess\
     PROFILING={ON/OFF, default OFF}\
