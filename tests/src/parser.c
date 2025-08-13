@@ -133,7 +133,7 @@ MunitResult parser_stack_check_incorrect_ast_node(const MunitParameter *param, v
     munit_assert(false);
   });
 
-  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_Expr), token(EQ)})), stack_check, {
+  match(stack_check(&stack, check_seq({token(ID), ast(variant_ast_node_type_VariantExpr), token(EQ)})), stack_check, {
     munit_assert(false);
   }, {
     munit_assert(true);
