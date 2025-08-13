@@ -7,6 +7,7 @@
   X(String, datatype, const char*)\
   X(Float,  datatype, float)\
 
+forward_dec_variant(datatype);
 define_variant(datatype, datatype_variant);
 
 MunitResult variant_datatype_test(const MunitParameter *params, void *context) {
