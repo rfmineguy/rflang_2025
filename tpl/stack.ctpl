@@ -1,5 +1,6 @@
 #include "stack_$T.h"
 #include <stdlib.h>
+#include "stack_$T_spec.c"
 
 void stack_$T_resize(stack_$T* stack, size_t newsize) {
   stack->capacity = newsize;
@@ -43,6 +44,11 @@ result_stack_$T_top stack_$T_top_offset(const stack_$T* stack, int offset) {
   if (stack->size == 0) return result_err(stack_$T_top, "stack empty");
   if (stack->size <= offset) return result_err(stack_$T_top, "not enough elements");
   return result_ok(stack_$T_top, stack->buffer[stack->size - offset - 1]);
+}
+void stack_$T_print(const stack_$T* stack) {
+  for (int i = 0; i < stack->size; i++) {
+    stack_$T_print_$T(stack->buffer[i]);
+  }
 }
 int stack_$T_empty(const stack_$T* stack) {
   return stack->size == 0;
