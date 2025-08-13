@@ -11,3 +11,14 @@ void ast_token_print(ast_token t, int depth) {
 void ast_var_print(ast_vardecl v, int depth) {
   printf(INDENT_FMT "Var{type: %.*s, id: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.type), TOKEN_ARGS(v.id));
 }
+
+void ast_node_print(variant_ast_node n, int depth) {
+  printf("AST\n");
+  match_variant(n, ast_node, {
+    variant_case(ast_node, Token, { ast_token_print(n.Token, depth + 1); })
+    variant_case(ast_node, Var, { ast_var_print(n.Var, depth + 1); })
+    variant_default({
+      printf(INDENT_FMT "Unknown ast_node variant\n", INDENT_ARGS);
+    })
+  })
+}
