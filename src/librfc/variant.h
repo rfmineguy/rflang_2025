@@ -13,18 +13,21 @@
   typedef enum {\
     variant_types(gen_enum)\
   } join3(variant_, variant_name, _type);\
-  typedef struct {\
+  struct join2(variant_, variant_name) {\
     join3(variant_, variant_name, _type) type;\
     union {\
       variant_types(gen_var)\
     };\
-  } join2(variant_, variant_name);
+  };
 
 #define forward_dec_variant(variant_name)\
-  struct join2(variant_, variant_name)
+  typedef struct join2(variant_, variant_name) join2(variant_, variant_name)
 
 #define make_variant(variant_name, variant_type_name, val)\
   (join2(variant_, variant_name)){.variant_type_name = val, .type = gen_enum_name(variant_type_name, variant_name, variant_type)}
+
+#define make_variant_alloc(variant_name, variant_type_name, alloc)\
+  (join2(variant_, variant_name)*) alloc(sizeof(join2(variant_, variant_name)))\
 
 // #define match_variant(variant, variant_type)\
 //   if (variant.type == gen_enum_name(variant_type, variant_name)) {}
