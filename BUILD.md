@@ -4,7 +4,7 @@ It additionally has a `normal` build and `debug` build
 
 ## Normal Build
 ```sh
-make clean build PROFILING={ON/OFF, default OFF}
+make clean build PROFILING={ON/OFF, default OFF} DEBUG={ON/OFF, default ON}
 ```
 
 1. Compile source files into objects

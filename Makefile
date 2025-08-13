@@ -38,9 +38,13 @@ THIRD_PARTY_PREPROCESS_OBJECT_FILES := $(patsubst $(OUT_PREPROCESS)/lib/thirdpar
 
 # == 2 (Conditional compilation) ==
 PROFILING ?= OFF
+DEBUG ?= ON
 CFLAGS :=
 ifeq ($(PROFILING),ON)
 	CFLAGS += -DENABLE_SPALL -finstrument-functions
+endif
+ifeq ($(DEBUG),ON)
+	CFLAGS += -ggdb
 endif
 
 # ===============================================================
@@ -82,7 +86,7 @@ $(OUT)/lib/thirdparty/%.o: $(THIRDPARTY_SRC)/%.c
 # == 3bi (Build exe)
 buildexe: always $(OUT)/rfc $(LIB_GENERATED)
 $(OUT)/rfc: $(EXE_SOURCE_FILES) $(OUT)/lib/librfc.a
-	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I src/ -I src/tpl_support/ -I $(THIRDPARTY_SRC) -ggdb $(CFLAGS)
+	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I src/ -I src/tpl_support/ -I $(THIRDPARTY_SRC) $(CFLAGS)
 
 
 # ===============================================================
@@ -110,13 +114,13 @@ $(OUT_PREPROCESS)/lib/librfc.a: $(LIB_PREPROCESS_OBJECT_FILES) $(THIRD_PARTY_PRE
 	ar rcs $@ $^
 
 $(OUT_PREPROCESS)/lib/objects/%.o: $(OUT_PREPROCESS)/lib/%.i
-	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
+	$(CC) -c $< -o $@ -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
 $(OUT_PREPROCESS)/lib/thirdparty/objects/%.o: $(OUT_PREPROCESS)/lib/thirdparty/%.i
-	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
+	$(CC) -c $< -o $@ -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
 $(OUT_PREPROCESS)/lib/thirdparty/%.i: $(THIRDPARTY_SRC)/%.c
-	$(CC) -E -P $< -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS) | clang-format > $@
+	$(CC) -E -P $< -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS) | clang-format > $@
 $(OUT_PREPROCESS)/lib/%.i:  $(LIB_SRC)/%.c $(EXE_SOURCE_FILES)
-	$(CC) -E -P $< -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS) | clang-format > $@
+	$(CC) -E -P $< -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS) | clang-format > $@
 
 # == 3b (rfc Build)
 # == 3bi (Build exe)
