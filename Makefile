@@ -43,7 +43,7 @@ build: always $(LIB_GENERATED) $(OUT)/lib/librfc.a $(OUT)/rfc
 # MAIN BUILD
 buildexe: always $(OUT)/rfc $(LIB_GENERATED) $(OUT)/lib/librfc.a
 $(OUT)/rfc: $(EXE_SOURCE_FILES)
-	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I src/ -I $(THIRDPARTY_SRC) -ggdb $(CFLAGS)
+	$(CC) -o $@ $^ -L$(OUT)/lib -lrfc -I src/ -I src/tpl_support/ -I $(THIRDPARTY_SRC) -ggdb $(CFLAGS)
 
 # LIB BUILD
 buildlib: always $(LIB_GENERATED) $(OUT)/lib/librfc.a
@@ -51,7 +51,7 @@ $(OUT)/lib/librfc.a: $(LIB_OBJECT_FILES) $(THIRD_PARTY_OBJECT_FILES)
 	ar rcs $@ $^
 
 $(OUT)/lib/%.o: $(LIB_SRC)/%.c
-	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) $(CFLAGS)
+	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
 
 $(OUT)/lib/thirdparty/%.o: $(THIRDPARTY_SRC)/%.c
-	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) $(CFLAGS)
+	$(CC) -c $< -o $@ -ggdb -I $(THIRDPARTY_SRC) -Isrc/librfc -Isrc/tpl_support/ $(CFLAGS)
