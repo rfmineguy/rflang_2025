@@ -23,14 +23,11 @@ void ast_lit_print(const variant_ast_lit* v, int depth) {
 void ast_expr_print(const variant_ast_expr* v, int depth) {
   const variant_ast_expr v2 = *v;
   match_variant(v2, ast_expr, {
-    variant_case(ast_expr, LitExpr, {
+    variant_case(ast_expr, Disj, {
         printf(INDENT_FMT "Expr {\n", INDENT_ARGS);
-        ast_lit_print(v2.LitExpr.lit, depth + 1);
+        ast_log_conj_print(v2.Disj.conj, depth + 1);
         printf(INDENT_FMT "}\n", INDENT_ARGS);
     })
-    variant_case(ast_expr, ParenExpr,    { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
-    variant_case(ast_expr, LitPlusExpr,  { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
-    variant_case(ast_expr, LitMinusExpr, { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
   })
 }
 
