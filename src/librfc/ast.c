@@ -66,6 +66,16 @@ void ast_rel_print(const variant_ast_rel* v, int depth) {
     variant_case(ast_relation, ME, {})
   })
 }
+void ast_log_factor_print(const variant_ast_factor* v, int depth) {
+  printf(INDENT_FMT "Factor {\n", INDENT_ARGS);
+  const variant_ast_factor v2 = (*v);
+  match_variant(v2, ast_factor, {
+    variant_case(ast_factor, ExprParen, { ast_expr_print(v2.ExprParen.expr, depth + 1); })
+    variant_case(ast_factor, Lit, { ast_lit_print(v2.Lit.lit, depth + 1); })
+  })
+  printf(INDENT_FMT "}\n", INDENT_ARGS);
+}
+
 void ast_node_print(variant_ast_node n, int depth) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,       { ast_token_print(n.Token, depth + 1); })
