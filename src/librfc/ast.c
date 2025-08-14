@@ -59,6 +59,13 @@ void ast_log_conj_print(const variant_ast_log_conj* v, int depth) {
   })
   printf(INDENT_FMT "}\n", INDENT_ARGS);
 }
+void ast_log_rel_print(const variant_ast_rel* v, int depth) {
+  const variant_ast_rel v2 = *v;
+  match_variant(v2, ast_rel, {
+    variant_case(ast_relation, RelME, {})
+    variant_case(ast_relation, ME, {})
+  })
+}
 void ast_node_print(variant_ast_node n, int depth) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,       { ast_token_print(n.Token, depth + 1); })
