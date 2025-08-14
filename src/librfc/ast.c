@@ -15,8 +15,8 @@ void ast_var_print(ast_vardecl v, int depth) {
 void ast_lit_print(const variant_ast_lit* v, int depth) {
   const variant_ast_lit v2 = *v;
   match_variant(v2, ast_lit, {
-    variant_case(ast_lit, Int,    { printf(INDENT_FMT "Lit{int: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int)); })
-    variant_case(ast_lit, Double, { printf(INDENT_FMT "Lit{dbl: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int)); })
+    variant_case(ast_lit, Int,    { printf(INDENT_FMT "Lit{int: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int.v)); })
+    variant_case(ast_lit, Double, { printf(INDENT_FMT "Lit{dbl: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int.v)); })
   })
 }
 
