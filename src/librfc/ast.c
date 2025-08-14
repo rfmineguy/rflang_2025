@@ -1,7 +1,8 @@
 #include "ast.h"
 #include <stdio.h>
 #define INDENT_FMT "%*.s"
-#define INDENT_ARGS depth * 2, " "
+#define INDENT_ARGSN(offset) (depth + offset) * 2, " "
+#define INDENT_ARGS INDENT_ARGSN(0)
 #define TOKEN_ARGS(sv) (int) sv.len, sv.start
 
 void ast_token_print(ast_token t, int depth) {
