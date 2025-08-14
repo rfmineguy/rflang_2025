@@ -12,6 +12,14 @@ void ast_var_print(ast_vardecl v, int depth) {
   printf(INDENT_FMT "Var{type: %.*s, id: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.type), TOKEN_ARGS(v.id));
 }
 
+void ast_lit_print(const variant_ast_lit* v, int depth) {
+  const variant_ast_lit v2 = *v;
+  match_variant(v2, ast_lit, {
+    variant_case(ast_lit, Int,    { printf(INDENT_FMT "Lit{int: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int)); })
+    variant_case(ast_lit, Double, { printf(INDENT_FMT "Lit{dbl: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.Int)); })
+  })
+}
+
 void ast_node_print(variant_ast_node n, int depth) {
   printf("AST\n");
   match_variant(n, ast_node, {
