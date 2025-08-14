@@ -35,12 +35,10 @@ void ast_expr_print(const variant_ast_expr* v, int depth) {
 }
 
 void ast_node_print(variant_ast_node n, int depth) {
-  printf("AST\n");
   match_variant(n, ast_node, {
-    variant_case(ast_node, Token, { ast_token_print(n.Token, depth + 1); })
-    variant_case(ast_node, Var, { ast_var_print(n.Var, depth + 1); })
-    variant_default({
-      printf(INDENT_FMT "Unknown ast_node variant\n", INDENT_ARGS);
-    })
+    variant_case(ast_node, Token,       { ast_token_print(n.Token, depth + 1); })
+    variant_case(ast_node, Var,         { ast_var_print(n.Var, depth + 1); })
+    variant_case(ast_node, VariantLit,  { ast_lit_print(n.VariantLit, depth + 1); })
+    variant_case(ast_node, VariantExpr, { ast_expr_print(n.VariantExpr, depth + 1); })
   })
 }
