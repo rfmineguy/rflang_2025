@@ -20,6 +20,20 @@ void ast_lit_print(const variant_ast_lit* v, int depth) {
   })
 }
 
+void ast_expr_print(const variant_ast_expr* v, int depth) {
+  const variant_ast_expr v2 = *v;
+  match_variant(v2, ast_expr, {
+    variant_case(ast_expr, LitExpr, {
+        printf(INDENT_FMT "Expr {\n", INDENT_ARGS);
+        ast_lit_print(v2.LitExpr.lit, depth + 1);
+        printf(INDENT_FMT "}\n", INDENT_ARGS);
+    })
+    variant_case(ast_expr, ParenExpr,    { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
+    variant_case(ast_expr, LitPlusExpr,  { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
+    variant_case(ast_expr, LitMinusExpr, { printf(INDENT_FMT "ParenExpr unimplemented\n", INDENT_ARGS); })
+  })
+}
+
 void ast_node_print(variant_ast_node n, int depth) {
   printf("AST\n");
   match_variant(n, ast_node, {
