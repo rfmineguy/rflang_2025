@@ -115,8 +115,8 @@ void ast_lit_print(const variant_ast_lit* n, int depth);
 void ast_expr_print(const variant_ast_expr* n, int depth);
 void ast_log_disj_print(const variant_ast_log_disj*, int depth);
 void ast_log_conj_print(const variant_ast_log_conj*, int depth);
-void ast_log_rel_print(const variant_ast_rel*, int depth);
-void ast_log_math_expr_print(const variant_ast_math_expr*, int depth);
-void ast_log_term_print(const variant_ast_term*, int depth);
-void ast_log_factor_print(const variant_ast_factor*, int depth);
+void ast_rel_print(const variant_ast_rel*, int depth);
+void ast_math_expr_print(const variant_ast_math_expr*, int depth);
+void ast_term_print(const variant_ast_term*, int depth);
+void ast_factor_print(const variant_ast_factor*, int depth);
 #endif

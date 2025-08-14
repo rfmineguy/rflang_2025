@@ -51,15 +51,15 @@ void ast_log_conj_print(const variant_ast_log_conj* v, int depth) {
   match_variant(v2, ast_log_conj, {
     variant_case(ast_log_conj, ConjRel, {
       ast_log_conj_print(v2.ConjRel.conj, depth + 1);
-      ast_log_rel_print(v2.ConjRel.rel, depth + 1);
+      ast_rel_print(v2.ConjRel.rel, depth + 1);
     })
     variant_case(ast_log_conj, Rel, {
-      ast_log_rel_print(v2.Rel.conj, depth + 1);
+      ast_rel_print(v2.Rel.conj, depth + 1);
     })
   })
   printf(INDENT_FMT "}\n", INDENT_ARGS);
 }
-void ast_log_rel_print(const variant_ast_rel* v, int depth) {
+void ast_rel_print(const variant_ast_rel* v, int depth) {
   const variant_ast_rel v2 = *v;
   match_variant(v2, ast_rel, {
     variant_case(ast_relation, RelME, {})
