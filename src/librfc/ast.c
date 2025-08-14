@@ -31,6 +31,20 @@ void ast_expr_print(const variant_ast_expr* v, int depth) {
   })
 }
 
+void ast_log_disj_print(const variant_ast_log_disj* v, int depth) {
+  printf(INDENT_FMT "Disj {\n", INDENT_ARGS);
+  const variant_ast_log_disj v2 = *v;
+  match_variant(v2, ast_log_disj, {
+    variant_case(ast_log_disj, DisjConj, {
+      ast_log_disj_print(v2.DisjConj.disj, depth + 1);
+      ast_log_conj_print(v2.DisjConj.conj, depth + 1);
+    });
+    variant_case(ast_log_disj, Conj, {
+      ast_log_conj_print(v2.Conj.conj, depth + 1);
+    });
+  })
+  printf(INDENT_FMT "}\n", INDENT_ARGS);
+}
 void ast_node_print(variant_ast_node n, int depth) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,       { ast_token_print(n.Token, depth + 1); })
