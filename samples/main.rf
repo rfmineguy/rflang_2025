@@ -1,5 +1,5 @@
 main = argc: int, argv: **char -> int {
-  x: int = argc
+  x: int = argc + 3 - 3 * 2
   if argc < 2 {
     print("Not enough arguments supplied. Supplied: {} Required: 2", argc)
     return 1
