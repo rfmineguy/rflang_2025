@@ -38,7 +38,12 @@ const char* token_type_str(token_type tt) {
 
     case INTLIT:  return "INTLIT";
     case STRLIT:  return "STRLIT";
-    default:      return "<UNDEFINED TOKEN TYPE>";
+    case EOF_:    return "EOF_";
+
+    case DEQ:     return "DEQ";
+    case DAND:    return "DAND";
+    case DOR:     return "DOR";
+    // default:      return "<UNDEFINED TOKEN TYPE>";
   }
   assert(0 && "Unreachable");
 }

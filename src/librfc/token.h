@@ -3,7 +3,7 @@
 #include <stddef.h>
 
 typedef enum {
-  KEYWORD,
+  KEYWORD, EOF_,
   ID, EQ, COLON,
   COMMA, SQUOT, DQUOT,
   PLUS, MINUS, MUL, DIV, MOD,
@@ -13,6 +13,8 @@ typedef enum {
   LPAR, RPAR,
   LT, LTEQ,
   GT, GTEQ,
+  DEQ,
+  DAND, DOR,
   INTLIT, STRLIT,
 } token_type;
 

@@ -9,7 +9,7 @@ static char msgbuf[500];
 
 static result_test_reg test_seq(const char* needle, const char* str) {
   size_t needle_len = strlen(needle);
-  //TODO: Potential lifetime problems
+  // TODO: Potential lifetime problems
   if (strncmp(needle, str, needle_len) == 0)
     return result_ok(test_reg, ((token) {.start = str, .len = needle_len}));
   return result_err(test_reg, "String test failed");
@@ -185,5 +185,6 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_seq(">=", cursor), test_reg,                     { result_.ok.type = GTEQ;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('>',  cursor), test_reg,                     { result_.ok.type = GT;     dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
   }
+  dynarray_token_pushback(&tok->tokens, (token) {.type = EOF_});
   return result_ok(tokenizer_run, "");
 }
