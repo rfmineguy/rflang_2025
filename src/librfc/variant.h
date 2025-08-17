@@ -26,7 +26,7 @@
 #define make_variant(variant_name, variant_type_name, val)\
   (join2(variant_, variant_name)){.variant_type_name = val, .type = gen_enum_name(variant_type_name, variant_name, variant_type)}
 
-#define make_variant_alloc(variant_name, variant_type_name, alloc)\
+#define make_variant_alloc(variant_name, alloc)\
   (join2(variant_, variant_name)*) alloc(sizeof(join2(variant_, variant_name)))\
 
 // #define match_variant(variant, variant_type)\
