@@ -5,6 +5,7 @@ src/librfc/stack_*
 prebuild_exe
 tests/lib/munit.h
 tests/lib/munit.c
+tests/file.tmp
 compile_commands.json
 .cache/
 rfc.spall
