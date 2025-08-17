@@ -181,6 +181,19 @@ result_parser_run parser_run(tokenizer* t) {
         printf("Reduced: (?) -> MathExprTerm\n");
         number_reduced++;
       }, {})
+
+      /* Try to reduce a math_expression to a relational
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && (lookahead->type == LT || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == GTEQ || lookahead->type == DEQ || lookahead->type == PLUS || lookahead->type == MINUS)) continue;
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc);
+        *rel = make_variant(ast_rel, MathExpr, ((rel_math_expr) {.conj = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        printf("Reduced: (?) -> Relational\n");
+        number_reduced++;
+      },{})
     } while (number_reduced != 0);
 
 
