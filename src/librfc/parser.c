@@ -52,7 +52,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc);
         *lit = make_variant(ast_lit, Int, {.v = result_.ok.nodes[0].Token.t});
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
-        printf("Reduced: (intlit)\n");
         number_reduced++;
       }, {});
 
@@ -67,7 +66,6 @@ result_parser_run parser_run(tokenizer* t) {
           // NOTE: This is incorrect. Do not make an Int variant, it should be an Id variant
           *lit = make_variant(ast_lit, Int, {.v = result_.ok.nodes[0].Token.t});
           stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
-          printf("Reduced: (intlit)\n");
           number_reduced++;
         }
         else {}
@@ -82,7 +80,6 @@ result_parser_run parser_run(tokenizer* t) {
         *factor = make_variant(ast_factor, Lit, {.lit = result_.ok.nodes[0].VariantLit});
 
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantFactor, factor));
-        printf("Reduced: (literal) -> Factor\n");
         number_reduced++;
       }, {});
 
@@ -95,7 +92,6 @@ result_parser_run parser_run(tokenizer* t) {
         *factor = make_variant(ast_factor, ExprParen, (factor_expr_paren){.expr = result_.ok.nodes[1].VariantExpr});
 
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantFactor, factor));
-        printf("Reduced: (literal) -> Factor\n");
         number_reduced++;
       }, {});
 
@@ -109,7 +105,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
         *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
-        printf("Reduced: (?) -> TermOpFactor\n");
         number_reduced++;
       }, {})
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm), token(DIV), ast(variant_ast_node_type_VariantFactor)})), stack_check, {
@@ -117,7 +112,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
         *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
-        printf("Reduced: (?) -> TermOpFactor\n");
         number_reduced++;
       }, {})
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm), token(MOD), ast(variant_ast_node_type_VariantFactor)})), stack_check, {
@@ -125,7 +119,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
         *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
-        printf("Reduced: (?) -> TermOpFactor\n");
         number_reduced++;
       }, {})
 
@@ -138,7 +131,6 @@ result_parser_run parser_run(tokenizer* t) {
         *term = make_variant(ast_term, TermFactor, result_.ok.nodes[0].VariantFactor);
 
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
-        printf("Reduced: (?) -> TermFactor\n");
         number_reduced++;
       }, {})
 
@@ -154,18 +146,16 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
         *mathexpr = make_variant(ast_math_expr, METerm, ((math_expr_me_term){.math_expr = result_.ok.nodes[2].VariantMathExpr, .term = result_.ok.nodes[0].VariantTerm, .operator = result_.ok.nodes[1].Token.t}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
-        printf("Reduced: (?) -> MathExprTerm\n");
         number_reduced++;
       }, {});
 
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr), token(MINUS), ast(variant_ast_node_type_VariantTerm)})), stack_check, {
-        if (lookahead && (lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD)) continue;
+        if (lookahead && (lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD || lookahead->type == EOF_)) continue;
 
         stack_ast_node_pop_n(&ctx.ast_stack, 3);
         variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
         *mathexpr = make_variant(ast_math_expr, METerm, ((math_expr_me_term){.math_expr = result_.ok.nodes[2].VariantMathExpr, .term = result_.ok.nodes[0].VariantTerm, .operator = result_.ok.nodes[1].Token.t}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
-        printf("Reduced: (?) -> MathExprTerm\n");
         number_reduced++;
       }, {});
 
@@ -173,12 +163,11 @@ result_parser_run parser_run(tokenizer* t) {
        *  math_expr := <term>
        */
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm)})), stack_check, {
-        if (lookahead && !(lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == RPAR)) continue;
+        if (lookahead && !(lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == RPAR || lookahead->type == EOF_)) continue;
         stack_ast_node_pop_n(&ctx.ast_stack, 1);
         variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
         *mathexpr = make_variant(ast_math_expr, Term, ((math_expr_term){.term = result_.ok.nodes[0].VariantTerm}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
-        printf("Reduced: (?) -> MathExprTerm\n");
         number_reduced++;
       }, {})
 
@@ -191,7 +180,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc);
         *rel = make_variant(ast_rel, MathExpr, ((rel_math_expr) {.conj = result_.ok.nodes[0].VariantMathExpr}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
-        printf("Reduced: (?) -> Relational\n");
         number_reduced++;
       },{})
 
@@ -204,7 +192,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_log_conj* conj = make_variant_alloc(ast_log_conj, arena_alloc);
         *conj = make_variant(ast_log_conj, Rel, ((log_conj_rel) {.conj = result_.ok.nodes[0].VariantRelation}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLogConj, conj));
-        printf("Reduced: (?) -> LogConj\n");
         number_reduced++;
       },{})
 
@@ -217,7 +204,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_log_disj* disj = make_variant_alloc(ast_log_disj, arena_alloc);
         *disj = make_variant(ast_log_disj, Conj, ((log_disj_conj) {.conj = result_.ok.nodes[0].VariantLogConj}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLogDisj, disj));
-        printf("Reduced: (?) -> LogDisj\n");
         number_reduced++;
       },{})
 
@@ -228,7 +214,6 @@ result_parser_run parser_run(tokenizer* t) {
         variant_ast_expr* expr = make_variant_alloc(ast_expr, arena_alloc);
         *expr = make_variant(ast_expr, Disj, ((expr_log_disj) {.disj = result_.ok.nodes[0].VariantLogDisj}));
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantExpr, expr));
-        printf("Reduced: (?) -> LogDisj\n");
         number_reduced++;
       },{})
     } while (number_reduced != 0);
