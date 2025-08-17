@@ -41,5 +41,7 @@ MunitResult parser_reduce_stack_vardecl(const MunitParameter *, void *);
 
 MunitResult parser_run_expr_single_number(const MunitParameter *, void *);
 MunitResult parser_run_expr_simple_addition(const MunitParameter *, void *);
+MunitResult parser_run_expr_add_and_mul(const MunitParameter *, void *);
+MunitResult parser_run_expr_with_parens(const MunitParameter *, void *);
 
 #endif
