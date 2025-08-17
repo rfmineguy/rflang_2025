@@ -1,5 +1,7 @@
 #include "../lib/munit.h"
+
 #include "tests.h"
+
 
 void* setup(const MunitParameter params[], void* userdata) {
   return NULL;
@@ -54,7 +56,7 @@ MunitTest result_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
-MunitTest parser_tests[] = {
+MunitTest parser_stack_tests[] = {
   { "/stack_check_1",                        parser_stack_check_test_1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/stack_check_2",                        parser_stack_check_test_2, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/stack_check_pass_limit",               parser_stack_check_passed_limit_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -64,6 +66,18 @@ MunitTest parser_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest parser_run_tests[] = {
+  { "/expr_single_number", parser_run_expr_single_number, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_simple_addition", parser_run_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
+MunitSuite parser_suite[] = {
+  { "/parse_stack",    parser_stack_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/run",            parser_run_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
+};
+
 MunitSuite all_tests[] = {
   { "/stack_test_type",stack_test_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
@@ -71,7 +85,7 @@ MunitSuite all_tests[] = {
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/variant",        variant_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/result",         result_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
-  { "/parser",         parser_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/parser",         NULL, parser_suite, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
