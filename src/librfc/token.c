@@ -43,7 +43,7 @@ const char* token_type_str(token_type tt) {
     case DEQ:     return "DEQ";
     case DAND:    return "DAND";
     case DOR:     return "DOR";
-    // default:      return "<UNDEFINED TOKEN TYPE>";
+    default:      return "<UNDEFINED TOKEN TYPE>";
   }
   assert(0 && "Unreachable");
 }

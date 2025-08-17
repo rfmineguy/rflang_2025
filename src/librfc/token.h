@@ -16,6 +16,7 @@ typedef enum {
   DEQ,
   DAND, DOR,
   INTLIT, STRLIT,
+  TOKEN_TYPE_LAST,
 } token_type;
 
 typedef struct {
