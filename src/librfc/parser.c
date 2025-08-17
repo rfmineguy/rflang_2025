@@ -194,6 +194,19 @@ result_parser_run parser_run(tokenizer* t) {
         printf("Reduced: (?) -> Relational\n");
         number_reduced++;
       },{})
+
+      /* Try to reduce a relational to a logical conj
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation)})), stack_check, {
+        if (lookahead && (lookahead->type == DAND)) continue;
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_log_conj* conj = make_variant_alloc(ast_log_conj, arena_alloc);
+        *conj = make_variant(ast_log_conj, Rel, ((log_conj_rel) {.conj = result_.ok.nodes[0].VariantRelation}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLogConj, conj));
+        printf("Reduced: (?) -> LogConj\n");
+        number_reduced++;
+      },{})
     } while (number_reduced != 0);
 
 
