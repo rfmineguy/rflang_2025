@@ -35,3 +35,25 @@
   } while (0) \
   MUNIT_POP_DISABLE_MSVC_C4127_
 
+
+/*
+ * 
+ */
+#define munit_assert_file_contents_equal(filename, contents) \
+  do {\
+    FILE* f = fopen(filename, "r");\
+    if (!f) munit_errorf("assertion failed: filename '%s' couldn't be opened", filename);\
+    fseek(f, 0, SEEK_END);\
+    size_t file_size = ftell(f);\
+    fseek(f, 0, SEEK_SET);\
+    char* content = (char*)malloc(file_size + 1);\
+    if (!content) {\
+      fclose(f);\
+      munit_errorf("assertion failed: failed to alloc memory for file read%s", "");\
+    }\
+    fread(content, 1, file_size, f);\
+    content[file_size] = 0;\
+    munit_assert_string_equal(content, contents);\
+    MUNIT_PUSH_DISABLE_MSVC_C4127_ \
+  } while (0)\
+  MUNIT_POP_DISABLE_MSVC_C4127_
