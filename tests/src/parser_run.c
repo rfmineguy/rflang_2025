@@ -1,7 +1,7 @@
 #include "tests.h"
 #include "../../src/librfc/parser.h"
-#include "lib/test_util.h"
-#include "lib/munit_ext.h"
+#include "../lib/test_util.h"
+#include "../lib/munit_ext.h"
 #define TEMP_FILE "file.tmp"
 
 MunitResult parser_run_expr_single_number(const MunitParameter *param, void *context) {
