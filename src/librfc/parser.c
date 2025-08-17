@@ -37,6 +37,19 @@ result_parser_run parser_run(tokenizer* t) {
 
   for (int i = 0; i < t->tokens.size; i++) {
     // 1. Put new token on stack
+    token tok = t->tokens.buffer[i];
+    token* lookahead = i < t->tokens.size - 1 ? &t->tokens.buffer[i+1] : NULL;
+    stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, Token, tok));
 
+    int number_reduced = 0;
+    do {
+      number_reduced = 0;
+    } while (number_reduced != 0);
+
+
+    // TODO: Hello
+  }
+  // stack_ast_node_free(&ctx.ast_stack);
+  return result_ok(parser_run, ctx);
   return result_err(parser_run, "Parser unimplemented");
 }
