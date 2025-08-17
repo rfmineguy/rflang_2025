@@ -12,3 +12,10 @@ I'm beginning again an endeavor to write a more complicated language compiler.
 
 # Profiling
 Courtesy of [spall-web](https://github.com/colrdavidson/spall-web/tree/master) this repo can automatically generate performance traces. This is controlled via the `PROFILING` flag demoed in [Building Compiler](#building-compiler)
+
+
+# Libraries Used
+All thirdparty libraries are located in `src/thirdparty`
+
+- [Arena @Tsdoing](https://github.com/tsoding/arena)
+- [Spall](https://github.com/colrdavidson/spall-web)
