@@ -72,6 +72,32 @@ result_parser_run parser_run(tokenizer* t) {
         }
         else {}
       }, {});
+
+      /* Try to reduce a integer literal in the form
+       *    factor := <literal>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantLit)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_factor* factor = make_variant_alloc(ast_factor, arena_alloc);
+        *factor = make_variant(ast_factor, Lit, {.lit = result_.ok.nodes[0].VariantLit});
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantFactor, factor));
+        printf("Reduced: (literal) -> Factor\n");
+        number_reduced++;
+      }, {});
+
+      /* Try to reduce an expression to factor
+       *    factor := '(' <expression> ')'
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({token(LPAR), ast(variant_ast_node_type_VariantExpr), token(RPAR)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_factor* factor = make_variant_alloc(ast_factor, arena_alloc);
+        *factor = make_variant(ast_factor, ExprParen, (factor_expr_paren){.expr = result_.ok.nodes[1].VariantExpr});
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantFactor, factor));
+        printf("Reduced: (literal) -> Factor\n");
+        number_reduced++;
+      }, {});
     } while (number_reduced != 0);
 
 
