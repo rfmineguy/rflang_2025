@@ -207,6 +207,19 @@ result_parser_run parser_run(tokenizer* t) {
         printf("Reduced: (?) -> LogConj\n");
         number_reduced++;
       },{})
+
+      /* Try to reduce a logical conj to a logical disj
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantLogConj)})), stack_check, {
+        if (lookahead && (lookahead->type == DOR)) continue;
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_log_disj* disj = make_variant_alloc(ast_log_disj, arena_alloc);
+        *disj = make_variant(ast_log_disj, Conj, ((log_disj_conj) {.conj = result_.ok.nodes[0].VariantLogConj}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLogDisj, disj));
+        printf("Reduced: (?) -> LogDisj\n");
+        number_reduced++;
+      },{})
     } while (number_reduced != 0);
 
 
