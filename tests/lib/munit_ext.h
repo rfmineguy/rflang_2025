@@ -28,7 +28,7 @@
     const char* munit_tmp_a_ = a;\
     const char* munit_tmp_b_ = b;\
     if (MUNIT_UNLIKELY(strncmp(munit_tmp_a, munit_tmp_b_, n) == 0)) {\
-      munit_errorf("assertion failed: string %s != %s (\"%s\" == \"%s\")", \
+      munit_errorf("assertion failed: string \n\'%s\' != \'%s\' (\"%s\" == \"%s\")", \
                    #a, #b, munit_tmp_a_, munit_tmp_b_); \
     } \
     MUNIT_PUSH_DISABLE_MSVC_C4127_ \
