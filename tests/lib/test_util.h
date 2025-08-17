@@ -29,16 +29,18 @@
 #define dup2 _dup2
 #define STDOUT_FILENO _fileno(stdout)
 #define flush_fd(fd) _commit(fd)
+#define OPEN_FLAGS O_WRONLY | O_CREAT | O_TRUNC | O_BINARY
 #else
 #include <unistd.h>
 #define flush_fd(fd) fsync(fd)
+#define OPEN_FLAGS O_WRONLY | O_CREAT | O_TRUNC
 #endif
 
 // Begin redirect macro
 #define redirect_begin(fd_from, filename_to)                     \
     int __redirect_orig_##__LINE__ = dup(fd_from);               \
     int __redirect_fd_##__LINE__ = open(filename_to,            \
-        O_WRONLY | O_CREAT | O_TRUNC, 0644);                    \
+        OPEN_FLAGS, 0644);                    \
     dup2(__redirect_fd_##__LINE__, fd_from);                     \
     close(__redirect_fd_##__LINE__);
 
