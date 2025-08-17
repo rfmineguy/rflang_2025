@@ -39,4 +39,7 @@ MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *, v
 MunitResult parser_stack_check_incorrect_ast_node(const MunitParameter *, void *);
 MunitResult parser_reduce_stack_vardecl(const MunitParameter *, void *);
 
+MunitResult parser_run_expr_single_number(const MunitParameter *, void *);
+MunitResult parser_run_expr_simple_addition(const MunitParameter *, void *);
+
 #endif
