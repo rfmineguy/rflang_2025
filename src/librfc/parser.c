@@ -44,6 +44,34 @@ result_parser_run parser_run(tokenizer* t) {
     int number_reduced = 0;
     do {
       number_reduced = 0;
+      /* Try to reduce to literal
+       *    literal := <intlit>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({token(INTLIT)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc);
+        *lit = make_variant(ast_lit, Int, {.v = result_.ok.nodes[0].Token.t});
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
+        printf("Reduced: (intlit)\n");
+        number_reduced++;
+      }, {});
+
+      /* Try to reduce to literal
+       *    literal := <id>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({token(ID)})), stack_check, {
+        if (!lookahead || (lookahead && (lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD))) {
+          stack_ast_node_pop_n(&ctx.ast_stack, 1);
+          variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc);
+
+          // NOTE: This is incorrect. Do not make an Int variant, it should be an Id variant
+          *lit = make_variant(ast_lit, Int, {.v = result_.ok.nodes[0].Token.t});
+          stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
+          printf("Reduced: (intlit)\n");
+          number_reduced++;
+        }
+        else {}
+      }, {});
     } while (number_reduced != 0);
 
 
