@@ -20,27 +20,33 @@
  */
 #ifndef TEST_UTIL_H
 #define TEST_UTIL_H
-
+#include <stdio.h>
 #include <fcntl.h>
+
 #ifdef _WIN32
 #include <io.h>
 #define dup _dup
 #define dup2 _dup2
 #define STDOUT_FILENO _fileno(stdout)
+#define flush_fd(fd) _commit(fd)
 #else
 #include <unistd.h>
+#define flush_fd(fd) fsync(fd)
 #endif
 
-#define redirect_begin(fd_from, filename_to)\
-  int orig = dup(fd_from);\
-  const char* fn = filename_to;\
-  int fd = open(filename_to, O_WRONLY | O_CREAT | O_TRUNC, 0644);\
-  dup2(fd, fd_from);\
-  close(fd);\
+// Begin redirect macro
+#define redirect_begin(fd_from, filename_to)                     \
+    int __redirect_orig_##__LINE__ = dup(fd_from);               \
+    int __redirect_fd_##__LINE__ = open(filename_to,            \
+        O_WRONLY | O_CREAT | O_TRUNC, 0644);                    \
+    dup2(__redirect_fd_##__LINE__, fd_from);                     \
+    close(__redirect_fd_##__LINE__);
 
-#define redirect_end(fd_from)\
-  dup2(orig, fd_from);\
-  close(orig);\
-
+// End redirect macro
+#define redirect_end(fd_from)                                    \
+    fflush(stdout);                                              \
+    flush_fd(fd_from);                                           \
+    dup2(__redirect_orig_##__LINE__, fd_from);                   \
+    close(__redirect_orig_##__LINE__);
 
 #endif
