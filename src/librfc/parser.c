@@ -98,6 +98,49 @@ result_parser_run parser_run(tokenizer* t) {
         printf("Reduced: (literal) -> Factor\n");
         number_reduced++;
       }, {});
+
+      /* Try to reduce a term
+       *  term := <term> * <factor>
+       *        | <term> / <factor>
+       *        | <term> % <factor>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm), token(MUL), ast(variant_ast_node_type_VariantFactor)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
+        *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
+        printf("Reduced: (?) -> TermOpFactor\n");
+        number_reduced++;
+      }, {})
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm), token(DIV), ast(variant_ast_node_type_VariantFactor)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
+        *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
+        printf("Reduced: (?) -> TermOpFactor\n");
+        number_reduced++;
+      }, {})
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm), token(MOD), ast(variant_ast_node_type_VariantFactor)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
+        *term = make_variant(ast_term, TermOpFactor, ((term_op_factor){.term = result_.ok.nodes[2].VariantTerm, .factor = result_.ok.nodes[0].VariantFactor, .operator = result_.ok.nodes[1].Token.t}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
+        printf("Reduced: (?) -> TermOpFactor\n");
+        number_reduced++;
+      }, {})
+
+      /* Try to reduce a factor into a term IF the factor has '*', '/', or '%' after
+       *  <term> := <factor>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantFactor)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_term* term = make_variant_alloc(ast_term, arena_alloc);
+        *term = make_variant(ast_term, TermFactor, result_.ok.nodes[0].VariantFactor);
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantTerm, term));
+        printf("Reduced: (?) -> TermFactor\n");
+        number_reduced++;
+      }, {})
     } while (number_reduced != 0);
 
 
