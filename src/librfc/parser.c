@@ -37,26 +37,6 @@ result_parser_run parser_run(tokenizer* t) {
 
   for (int i = 0; i < t->tokens.size; i++) {
     // 1. Put new token on stack
-    // token tok = t->tokens.buffer[i];
-    // stack_ast_node_push(&ctx.ast_stack, ast_tok(tok));
 
-    // match(stack_check(&ctx.ast_stack, check_seq({token(ID), token(COLON), token(ID)})), stack_check, {
-    //   ast_node* node = arena_alloc(&ctx.ast_arena, sizeof(ast_node));
-    //   *node = ast_var("");
-    //   printf("Found vardec\n");
-    // }, {});
-    // // Just for testing
-    // match(stack_check(&ctx.ast_stack, check_seq({token(ID)})), stack_check, {
-    //   printf("Test OK\n");
-    // }, continue;);
-
-    // // 2. Try to reduce the stack with this new token
-    // // vardec := <id> <eq> <id>
-    // match(stack_check(&ctx.ast_stack, check_seq({token(ID), token(EQ), token(ID)})), stack_check, {
-    //   printf("OK\n");
-    // }, continue;);
-  }
-
-  stack_ast_node_free(&ctx.ast_stack);
   return result_err(parser_run, "Parser unimplemented");
 }
