@@ -31,6 +31,7 @@ result_stack_check stack_check(const stack_ast_node* stack, check c[], int n) {
 
 #define res_top_off stack_ast_node_top
 result_parser_run parser_run(tokenizer* t) {
+#define arena_alloc(size) arena_alloc(&ctx.ast_arena, size)
   parser_ctx ctx = (parser_ctx){0};
   ctx.ast_stack = stack_ast_node_create();
 
