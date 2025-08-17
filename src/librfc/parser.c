@@ -141,6 +141,46 @@ result_parser_run parser_run(tokenizer* t) {
         printf("Reduced: (?) -> TermFactor\n");
         number_reduced++;
       }, {})
+
+      /* Try to reduce a math_expression
+       *  math_expr := <math_expr> + <term>
+       *               <math_expr> - <term>
+       * Note: If the lookahead is any operator that has higher precedence than '+' and '-' we ignore this reductio
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr), token(PLUS), ast(variant_ast_node_type_VariantTerm)})), stack_check, {
+        if (lookahead && (lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD)) continue;
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
+        *mathexpr = make_variant(ast_math_expr, METerm, ((math_expr_me_term){.math_expr = result_.ok.nodes[2].VariantMathExpr, .term = result_.ok.nodes[0].VariantTerm, .operator = result_.ok.nodes[1].Token.t}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
+        printf("Reduced: (?) -> MathExprTerm\n");
+        number_reduced++;
+      }, {});
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr), token(MINUS), ast(variant_ast_node_type_VariantTerm)})), stack_check, {
+        if (lookahead && (lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD)) continue;
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
+        *mathexpr = make_variant(ast_math_expr, METerm, ((math_expr_me_term){.math_expr = result_.ok.nodes[2].VariantMathExpr, .term = result_.ok.nodes[0].VariantTerm, .operator = result_.ok.nodes[1].Token.t}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
+        printf("Reduced: (?) -> MathExprTerm\n");
+        number_reduced++;
+      }, {});
+
+      /* Try to reduce a term into math_expression IF the term has '+', or '-' after
+       *  math_expr := <term>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm)})), stack_check, {
+        if (lookahead && !(lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT || lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == RPAR)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc);
+        *mathexpr = make_variant(ast_math_expr, Term, ((math_expr_term){.term = result_.ok.nodes[0].VariantTerm}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
+        printf("Reduced: (?) -> MathExprTerm\n");
+        number_reduced++;
+      }, {})
     } while (number_reduced != 0);
 
 
