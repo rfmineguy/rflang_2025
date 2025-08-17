@@ -31,6 +31,8 @@ MunitResult token_type_str_test(const MunitParameter *params, void *context) {
   munit_assert_string_equal(token_type_str(INTLIT), "INTLIT");
   munit_assert_string_equal(token_type_str(STRLIT), "STRLIT");
 
+  munit_assert_string_equal(token_type_str(EOF_), "EOF_");
+
   for (int i = STRLIT + 1; i < STRLIT + 50; i++)
     munit_assert_string_equal(token_type_str(i), "<UNDEFINED TOKEN TYPE>");
 
