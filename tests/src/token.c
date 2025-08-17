@@ -37,7 +37,7 @@ MunitResult token_type_str_test(const MunitParameter *params, void *context) {
   munit_assert_string_equal(token_type_str(DAND),"DAND");
   munit_assert_string_equal(token_type_str(DOR), "DOR");
 
-  for (int i = STRLIT + 1; i < STRLIT + 50; i++)
+  for (int i = TOKEN_TYPE_LAST; i < TOKEN_TYPE_LAST + 50; i++)
     munit_assert_string_equal(token_type_str(i), "<UNDEFINED TOKEN TYPE>");
 
   return MUNIT_OK;
