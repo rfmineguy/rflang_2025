@@ -37,18 +37,23 @@
 #endif
 
 // Begin redirect macro
-#define redirect_begin(fd_from, filename_to)                     \
-    int __redirect_orig_##__LINE__ = dup(fd_from);               \
-    int __redirect_fd_##__LINE__ = open(filename_to,            \
-        OPEN_FLAGS, 0644);                    \
-    dup2(__redirect_fd_##__LINE__, fd_from);                     \
-    close(__redirect_fd_##__LINE__);
+#define redirect_begin(fd_from, filename_to, handle)         \
+  int handle = dup(fd_from);                                 \
+  do {                                                       \
+    fflush(stdout);                                          \
+    flush_fd(fd_from);                                       \
+    int __redirect_fd = open(filename_to, OPEN_FLAGS, 0644); \
+    dup2(__redirect_fd, fd_from);                            \
+    close(__redirect_fd);                                    \
+  } while (0)
 
 // End redirect macro
-#define redirect_end(fd_from)                                    \
-    fflush(stdout);                                              \
-    flush_fd(fd_from);                                           \
-    dup2(__redirect_orig_##__LINE__, fd_from);                   \
-    close(__redirect_orig_##__LINE__);
+#define redirect_end(fd_from, handle)    \
+  do {                                   \
+    fflush(stdout);                      \
+    flush_fd(fd_from);                   \
+    dup2(handle, fd_from);      \
+    close(fd_from);              \
+  } while(0)
 
 #endif
