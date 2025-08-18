@@ -159,3 +159,34 @@ MunitResult parser_run_expr_with_parens(const MunitParameter *param, void *conte
   
   return MUNIT_OK;
 }
+
+MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a: int");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 4);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+#undef actual
+#define actual \
+  "Var{type: a, id: int}\n"\
+
+  // Test if the parsed output is correct
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVar);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  return MUNIT_OK;
+}
