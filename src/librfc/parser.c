@@ -44,6 +44,18 @@ result_parser_run parser_run(tokenizer* t) {
     int number_reduced = 0;
     do {
       number_reduced = 0;
+      /* Try to reduce to vardecl
+       *    vardecl := <id> <colon> <id>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({token(ID), token(COLON), token(ID)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_vardecl* vardecl_ = make_variant_alloc(ast_vardecl, arena_alloc_);
+        *vardecl_ = make_variant(ast_vardecl, Main, ((vardecl){.id = result_.ok.nodes[0].Token.t, .type = result_.ok.nodes[2].Token.t}));
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantVar, vardecl_));
+        number_reduced++;
+      },{})
+
       /* Try to reduce to literal
        *    literal := <intlit>
        */
