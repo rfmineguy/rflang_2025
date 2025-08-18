@@ -27,14 +27,7 @@ jobs:
           cmake --build build
         shell: pwsh
 
-      #- name: Build tests
-      #  run: |
-      #    Set-Location tests
-      #    make build_tests
-      #  shell: pwsh
-
-      #- name: Run tests
-      #  run: |
-      #    Set-Location tests
-      #    ./out/test_exe
-      #  shell: pwsh
+      - name: Run tests
+        run: |
+          ctest --test-dir build/tests -VV
+        shell: pwsh
