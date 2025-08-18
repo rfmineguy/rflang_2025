@@ -1,4 +1,4 @@
-#include "../lib/munit.h"
+#include "munit.h"
 
 #include "tests.h"
 

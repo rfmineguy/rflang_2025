@@ -1,7 +1,7 @@
 #ifndef TESTS_H
 #define TESTS_H
-#include "../lib/munit.h"
-#include "../lib/munit_ext.h"
+#include "munit.h"
+#include "munit_ext.h"
 
 MunitResult tokenizer_create_invldpath_test(const MunitParameter*, void*);
 MunitResult tokenizer_create_validpath_test(const MunitParameter*, void*);
