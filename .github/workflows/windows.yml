@@ -23,17 +23,11 @@ jobs:
 
       - name: Build rfc
         run: |
-          make build
-        shell: pwsh
-
-      - name: Build tests
-        run: |
-          Set-Location tests
-          make build_tests
+          cmake -B build -G Ninja .
+          cmake --build build
         shell: pwsh
 
       - name: Run tests
         run: |
-          Set-Location tests
-          ./out/test_exe
+          ctest --test-dir build/tests -VV
         shell: pwsh
