@@ -93,3 +93,5 @@ target_include_directories(rfc PUBLIC
   "${LIBRFC_THIRDPARTY_DIR}"
   "${LIBRFC_TPL_SUPPORT_DIR}"
 )
+
+add_subdirectory(tests)
