@@ -171,9 +171,6 @@ MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
   result_parser_run r3 = parser_run(&r.ok);
   munit_assert_true(r3.isok);
 
-  printf("Stack: size=%d\n", r3.ok.ast_stack.size);
-  stack_ast_node_print(&r3.ok.ast_stack);
-
 #undef actual
 #define actual \
   "Var{type: a, id: int}\n"\

@@ -36,7 +36,10 @@ lib/munit.c:
 build_tests: always $(TEST_GENERATED) lib/munit.h lib/munit.c out/test_exe
 out/test_exe: $(LIB_SOURCES) $(TEST_SOURCES) $(LIBRFC_FILES) $(TEST_GENERATED)
 	make -C .. buildlib
-	$(CC) -std=c17 $(LIB_SOURCES) $(TEST_SOURCES) $(TEST_GENERATED) -o $@ -L$(LIBRFC_LIB_DIR) -lrfc -I$(LIBRFC_THIRDPARTY_DIR) -I$(LIBRFC_SOURCE_DIR) -Igenerated -I$(LIBRFC_TPL_SUPPORT_DIR) -I. -Isupport/tpl -Isupport -DMUNIT_TEST_NAME_LEN=80
+	$(CC) -std=c17 $(LIB_SOURCES) $(TEST_SOURCES) $(TEST_GENERATED) -o $@ -L$(LIBRFC_LIB_DIR)\
+		-lrfc -I$(LIBRFC_THIRDPARTY_DIR) -I$(LIBRFC_SOURCE_DIR)\
+		-Igenerated -I$(LIBRFC_TPL_SUPPORT_DIR) -I. -Isupport/tpl\
+		-Isupport -DMUNIT_TEST_NAME_LEN=80
 
 run_tests: build_tests
 	./out/test_exe
