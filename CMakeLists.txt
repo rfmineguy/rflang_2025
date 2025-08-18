@@ -41,9 +41,20 @@ prebuild_setup(
 )
 
 # ==================================
+# If profiling is requested add a few things to the build
+# ==================================
+set(RFC_COMPILE_OPTIONS "")
+if (PROFILING)
+  message("Profiling enabled")
+  set(RFC_C_FLAGS -finstrument-functions -DENABLE_SPALL)
+  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/instrument.c")
+  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/spall_util.c")
+endif()
+
+# ==================================
 # Setup the files to be compiled
 # ==================================
-set(LIBRFC_THIRDPARTY_FILES
+list(APPEND LIBRFC_THIRDPARTY_FILES
   "${LIBRFC_THIRDPARTY_DIR}/arena_impl.c"
 )
 
@@ -59,17 +70,6 @@ set(LIBRFC_SOURCE_FILES
 set(EXERFC_SOURCE_FILES
   "${EXERFC_SOURCE_DIR}/main.c"
 )
-
-# ==================================
-# If profiling is requested add a few things to the build
-# ==================================
-set(RFC_COMPILE_OPTIONS "")
-if (PROFILING)
-  message("Profiling enabled")
-  set(RFC_C_FLAGS -finstrument-functions -DENABLE_SPALL)
-  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/instrument.c")
-  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/spall_util.c")
-endif()
 
 # ==================================
 # Setup librfc
