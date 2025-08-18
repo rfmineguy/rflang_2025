@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(librfc-test LANGUAGES C)
 include(CTest)
+include(FetchContent)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+FetchContent_Declare(munit GIT_REPOSITORY https://github.com/nemequ/munit.git GIT_SHALLOW 1)
+FetchContent_MakeAvailable(munit)
 
 # ================
 # Setup variables for commonly used
@@ -52,13 +57,15 @@ set(TEST_FILES
 )
 
 set(LIB_FILES
-  "${LIB_SOURCE_DIR}/munit.c"
+  "${munit_SOURCE_DIR}/munit.c"
 )
+
+message("${munit_SOURCE_DIR}")
 
 add_executable(librfc-test ${TEST_FILES} ${LIB_FILES})
 target_link_libraries(librfc-test PRIVATE librfc)
 add_dependencies(librfc-test prebuildexe2)
-target_include_directories(librfc-test PUBLIC support support/tpl generated)
+target_include_directories(librfc-test PUBLIC support support/tpl lib/ generated ${munit_SOURCE_DIR})
 target_compile_options(librfc-test PUBLIC "-DMUNIT_TEST_NAME_LEN=80")
 
 add_test(

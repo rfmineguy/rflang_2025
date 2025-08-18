@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(rfc LANGUAGES C)
 project(prebuild LANGUAGES C)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(PROFILING    "Turn on or off profiling" OFF)
 
@@ -13,6 +14,7 @@ set(EXERFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/rfc")
 set(LIBRFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/librfc")
 set(LIBRFC_THIRDPARTY_DIR "${MAIN_SOURCE_DIR}/thirdparty")
 set(LIBRFC_TPL_SUPPORT_DIR "${MAIN_SOURCE_DIR}/tpl_support")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/generated")
 
 # ================
 # Setup prebuild
