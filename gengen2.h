@@ -11,6 +11,10 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <assert.h>
+#ifdef _WIN32
+#include <windows.h>
+#define PATH_MAX MAX_PATH
+#endif
 
 typedef struct {
 	union {
