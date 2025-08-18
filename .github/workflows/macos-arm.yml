@@ -23,15 +23,10 @@ jobs:
 
       - name: Build rfc
         run: |
-          make build
+          cmake -B build -G Ninja .
+          cmake --build build
         shell: bash
-
-      - name: Build tests
-        run: |
-          cd tests
-          make build_tests
 
       - name: Run tests
         run: |
-          cd tests
-          ./out/test_exe
+          ctest --test-dir build/tests -VV
