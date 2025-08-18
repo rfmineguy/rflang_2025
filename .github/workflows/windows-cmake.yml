@@ -23,8 +23,8 @@ jobs:
 
       - name: Build rfc
         run: |
-          cmake -B build .
-          cmake --build build -G Ninja
+          cmake -B build -G Ninja .
+          cmake --build build
         shell: pwsh
 
       - name: Run tests
