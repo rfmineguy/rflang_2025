@@ -24,7 +24,7 @@ jobs:
       - name: Build rfc
         run: |
           cmake -B build .
-          cmake --build build
+          cmake --build build -G Ninja
         shell: pwsh
 
       - name: Run tests
