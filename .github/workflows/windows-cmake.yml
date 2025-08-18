@@ -1,0 +1,40 @@
+name: Build/Test Windows
+
+on:
+  push:
+    branches:
+      - run-actions
+      - devel
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-rfc:
+    runs-on: windows-2025
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build rfc
+        run: |
+          cmake -B build .
+          cmake --build build
+        shell: pwsh
+
+      #- name: Build tests
+      #  run: |
+      #    Set-Location tests
+      #    make build_tests
+      #  shell: pwsh
+
+      #- name: Run tests
+      #  run: |
+      #    Set-Location tests
+      #    ./out/test_exe
+      #  shell: pwsh
