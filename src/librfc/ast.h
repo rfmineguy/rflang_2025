@@ -52,10 +52,14 @@ forward_dec_variant(ast_vardecl);
 #define ast_lit_variant(X)\
   X(Int, ast_lit, lit_int)\
   X(Double, ast_lit, lit_double)\
+  X(Id, ast_lit, lit_id)\
+
+#define ast_vardecl_variant(X)\
+  X(Main, ast_vardecl, vardecl)\
 
 #define ast_node_variant(X)\
   X(Token, ast_node, ast_token)\
-  X(Var,   ast_node, ast_vardecl)\
+  X(VariantVar,   ast_node, variant_ast_vardecl*)\
   X(VariantLit,      ast_node, variant_ast_lit*)\
   X(VariantExpr,     ast_node, variant_ast_expr*)\
   X(VariantLogDisj,  ast_node, variant_ast_log_disj*)\
@@ -66,7 +70,7 @@ forward_dec_variant(ast_vardecl);
   X(VariantFactor,   ast_node, variant_ast_factor*)\
  
 typedef struct { token t; } ast_token;
-typedef struct { token id; token type; } ast_vardecl;
+typedef struct { token id; token type; } vardecl;
 
 typedef struct { variant_ast_log_disj* disj; } expr_log_disj;
 
@@ -97,6 +101,7 @@ typedef struct { variant_ast_lit* lit; } factor_lit;
 // Lit
 typedef struct { token v; } lit_int;
 typedef struct { token id; } lit_double;
+typedef struct { token id; } lit_id;
 
 define_variant(ast_expr, ast_expr_variant);
 define_variant(ast_log_disj, ast_log_disj_variant)
@@ -106,6 +111,7 @@ define_variant(ast_math_expr, ast_math_expr_variant)
 define_variant(ast_term, ast_term_variant)
 define_variant(ast_factor, ast_factor_variant)
 define_variant(ast_lit, ast_lit_variant)
+define_variant(ast_vardecl, ast_vardecl_variant)
 define_variant(ast_node, ast_node_variant)
 
 // define_variant(ast_expr, ast_expr_variant)

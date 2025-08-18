@@ -10,17 +10,21 @@ void ast_token_print(ast_token t, int depth) {
   printf(INDENT_FMT "Token(%s), '%.*s'\n", INDENT_ARGS, token_type_str(t.t.type), TOKEN_ARGS(t.t));
 }
 
-void ast_var_print(ast_vardecl v, int depth) {
-  bool sameline = false;
-  printf(INDENT_FMT "Var{type: %.*s, id: %.*s}\n", INDENT_ARGS, TOKEN_ARGS(v.type), TOKEN_ARGS(v.id));
+void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline) {
+  const variant_ast_vardecl v2 = *v;
+  if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
+  match_variant(v2, ast_vardecl, {
+    variant_case(ast_vardecl, Main, { printf("Var{type: %.*s, id: %.*s}\n", TOKEN_ARGS(v.Main.type), TOKEN_ARGS(v.Main.id)); })
+  })
 }
 
 void ast_lit_print(const variant_ast_lit* v, int depth, bool sameline) {
   const variant_ast_lit v2 = *v;
   if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
   match_variant(v2, ast_lit, {
-    variant_case(ast_lit, Int,    { printf("Lit{int: %.*s}\n", TOKEN_ARGS(v.Int.v)); })
-    variant_case(ast_lit, Double, { printf("Lit{dbl: %.*s}\n", TOKEN_ARGS(v.Int.v)); })
+    variant_case(ast_lit, Int, { printf("Lit{int: %.*s}\n", TOKEN_ARGS(v.Int.v)); })
+    variant_case(ast_lit, Id,  { printf("Lit{id: %.*s}\n", TOKEN_ARGS(v.Id.id)); })
+    variant_case(ast_lit, Double, { printf("Lit{double: %.*s}\n", TOKEN_ARGS(v.Double.id)); })
   })
 }
 
@@ -137,7 +141,7 @@ void ast_factor_print(const variant_ast_factor* v, int depth, bool sameline) {
 void ast_node_print(variant_ast_node n, int depth) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,           { ast_token_print(n.Token, depth); })
-    variant_case(ast_node, Var,             { ast_var_print(n.Var, depth); })
+    variant_case(ast_node, VariantVar,      { ast_var_print(n.VariantVar, depth, false); })
     variant_case(ast_node, VariantLit,      { ast_lit_print(n.VariantLit, depth, false); })
     variant_case(ast_node, VariantLogDisj,  { ast_log_disj_print(n.VariantLogDisj, depth, false); })
     variant_case(ast_node, VariantLogConj,  { ast_log_conj_print(n.VariantLogConj, depth, false); })
