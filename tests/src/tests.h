@@ -45,4 +45,9 @@ MunitResult parser_run_expr_add_and_mul(const MunitParameter *, void *);
 MunitResult parser_run_expr_with_parens(const MunitParameter *, void *);
 MunitResult parser_run_vardecl(const MunitParameter *, void *);
 
+MunitResult redirect_empty(const MunitParameter *, void *);
+MunitResult redirect_oneline_newline(const MunitParameter *, void *);
+MunitResult redirect_oneline_no_newline(const MunitParameter *, void *);
+MunitResult redirect_twice(const MunitParameter *, void *);
+
 #endif
