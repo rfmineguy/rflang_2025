@@ -5,7 +5,8 @@
 
 MunitResult tokenizer_create_invldpath_test(const MunitParameter*, void*);
 MunitResult tokenizer_create_validpath_test(const MunitParameter*, void*);
-MunitResult tokenizer_run_test(const MunitParameter*, void*);
+MunitResult tokenizer_run_file_test(const MunitParameter*, void*);
+MunitResult tokenizer_run_cstr_test(const MunitParameter*, void*);
 
 MunitResult stack_test_type_create_test(const MunitParameter *, void *);
 MunitResult stack_test_type_push_test(const MunitParameter *, void *);

@@ -46,7 +46,7 @@ MunitResult tokenizer_create_validpath_test(const MunitParameter *param, void *c
   return MUNIT_OK;
 }
 
-MunitResult tokenizer_run_test(const MunitParameter *param, void *context){
+MunitResult tokenizer_run_file_test(const MunitParameter *param, void *context){
 #define EXPECTED_TOKENS_COUNT 14
   token expected_tokens[EXPECTED_TOKENS_COUNT] = {
     token_(ID     , 4, "main"),
@@ -86,5 +86,53 @@ MunitResult tokenizer_run_test(const MunitParameter *param, void *context){
   }
 
   tokenizer_free(&t.ok);
+  return MUNIT_OK;
+}
+
+MunitResult tokenizer_run_cstr_test(const MunitParameter *param, void *context){
+#define EXPECTED_TOKENS_COUNT 14
+  token expected_tokens[EXPECTED_TOKENS_COUNT] = {
+    token_(ID     , 4, "main"),
+    token_(EQ     , 1, "="),
+    token_(COLON  , 1, ":"),
+    token_(COMMA  , 1, ","),
+    token_(MUL    , 1, "*"),
+    token_(ARROW  , 2, "->"),
+    token_(ID     , 3, "int"),
+    token_(LCBRK  , 1, "{"),
+    token_(KEYWORD, 2, "if"),
+    token_(LT     , 1, "<"),
+    token_(GT     , 1, ">"),
+    token_(INTLIT , 1, "1"),
+    token_(KEYWORD, 2, "if"),
+    token_(EOF_   , 0, ""),
+  };
+  munit_assert_int(sizeof(expected_tokens) / sizeof(token), ==, EXPECTED_TOKENS_COUNT);
+
+  const char* content = "main =:,*->int{if<>1if";
+  result_tokenizer_create t = tokenizer_create_cstr(content);
+  munit_assert_true(t.isok);
+  munit_assert_false(t.isfail);
+  munit_logf(MUNIT_LOG_INFO, "Created tokenizer%s\n", "");
+
+  result_tokenizer_run r = tokenizer_run(&t.ok);
+  munit_logf(MUNIT_LOG_INFO, "Ran tokenizer%s\n", "");
+  munit_assert_true(t.isok);
+
+  munit_assert_int(EXPECTED_TOKENS_COUNT, ==, t.ok.tokens.size);
+
+  for (int i = 0; i < t.ok.tokens.size; i++) {
+    token actual = t.ok.tokens.buffer[i];
+    token expected = expected_tokens[i];
+
+    // assert each field of the token
+    munit_assert_int(actual.type, ==, expected.type);
+    munit_assert_int(actual.len, ==, expected.len);
+    munit_assert_string_n_equal(actual.start, expected.start, actual.len);
+    munit_logf(MUNIT_LOG_INFO, "Checked string %d%s\n", i, "");
+  }
+
+  tokenizer_free(&t.ok);
+  munit_logf(MUNIT_LOG_INFO, "Freed tokenizer%s\n", "");
   return MUNIT_OK;
 }
