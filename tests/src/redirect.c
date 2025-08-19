@@ -18,3 +18,12 @@ MunitResult redirect_oneline_newline(const MunitParameter *param, void *context)
   munit_assert_file_contents_equal(TEMP_FILE, "Hello world\n");
   return MUNIT_OK;
 }
+
+MunitResult redirect_oneline_no_newline(const MunitParameter *param, void *context) {
+  redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+  printf("Hello world");
+  redirect_end(STDOUT_FILENO, handle);
+
+  munit_assert_file_contents_equal(TEMP_FILE, "Hello world");
+  return MUNIT_OK;
+}
