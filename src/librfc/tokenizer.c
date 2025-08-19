@@ -125,6 +125,7 @@ result_tokenizer_create tokenizer_create_file(const char *filepath) {
     .filepath = filepath,
     .tokens = dynarray_token_create(),
     .fileContents = 0,
+    .isFileContentsMalloced = true,
   };
   match(ReadFile(filepath), read_file, t.fileContents = result_.ok;, {
       return result_err(tokenizer_create, result_.err);
@@ -138,13 +139,15 @@ result_tokenizer_create tokenizer_create_cstr(const char* str) {
     .filepath = NULL,
     .tokens = dynarray_token_create(),
     .fileContents = str,
+    .isFileContentsMalloced = false,
   };
 
   return result_ok(tokenizer_create, t);
 }
 
 void tokenizer_free(tokenizer* tok) {
-  free((void*)tok->fileContents);
+  if (tok->isFileContentsMalloced)
+    free((void*)tok->fileContents);
   dynarray_token_free(&tok->tokens);
 }
 

@@ -6,6 +6,7 @@
 typedef struct {
   const char* filepath;
   const char* fileContents;
+  bool isFileContentsMalloced;
   dynarray_token tokens;
 } tokenizer;
 
