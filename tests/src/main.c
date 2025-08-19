@@ -56,6 +56,14 @@ MunitTest result_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest redirect_tests[] = {
+  { "/redirect_empty", redirect_empty, setup, teardown, MUNIT_TEST_OPTION_NONE },
+  { "/redirect_oneline_no_newline", redirect_oneline_no_newline, setup, teardown, MUNIT_TEST_OPTION_NONE },
+  { "/redirect_oneline_newline", redirect_oneline_newline, setup, teardown, MUNIT_TEST_OPTION_NONE },
+  { "/redirect_twice", redirect_twice, setup, teardown, MUNIT_TEST_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_TEST_OPTION_NONE},
+};
+
 MunitTest parser_stack_tests[] = {
   { "/stack_check_1",                        parser_stack_check_test_1, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/stack_check_2",                        parser_stack_check_test_2, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -88,6 +96,7 @@ MunitSuite all_tests[] = {
   { "/token",          token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/variant",        variant_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/result",         result_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/redirect",       redirect_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/parser",         NULL, parser_suite, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
