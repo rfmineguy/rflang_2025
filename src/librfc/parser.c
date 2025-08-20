@@ -71,7 +71,8 @@ result_parser_run parser_run(tokenizer* t) {
        *    literal := <id>
        */
       match(stack_check(&ctx.ast_stack, check_seq({token(ID)})), stack_check, {
-        if (!lookahead || (lookahead && (lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD))) {
+        if (!lookahead || (lookahead && (lookahead->type == PLUS || lookahead->type == MINUS || lookahead->type == MUL || lookahead->type == DIV || lookahead->type == MOD || lookahead->type == LT ||
+                lookahead->type == GT || lookahead->type == LTEQ || lookahead->type == GTEQ))) {
           stack_ast_node_pop_n(&ctx.ast_stack, 1);
           variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc_);
 
@@ -182,11 +183,63 @@ result_parser_run parser_run(tokenizer* t) {
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantMathExpr, mathexpr));
         number_reduced++;
       }, {})
+      
+      /* Try to reduce a math_expression to a relational
+       *  relation := <relational> '>=' <math_expr>
+       *  relation := <relational> '<=' <math_expr>
+       *  relation := <relational> '>' <math_expr>
+       *  relation := <relational> '<' <math_expr>
+       *  relation := <relational> '==' <math_expr>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation), token(GTEQ), ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && !(lookahead->type == DAND || lookahead->type == DOR || lookahead->type == EOF_)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
+        *rel = make_variant(ast_rel, RelME, ((rel_rel_math_expr){.rel = result_.ok.nodes[2].VariantRelation, .operator = result_.ok.nodes[1].Token.t, .math_expr = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        number_reduced++;
+      }, {})
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation), token(LTEQ), ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && !(lookahead->type == DAND || lookahead->type == DOR || lookahead->type == EOF_)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
+        *rel = make_variant(ast_rel, RelME, ((rel_rel_math_expr){.rel = result_.ok.nodes[2].VariantRelation, .operator = result_.ok.nodes[1].Token.t, .math_expr = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        number_reduced++;
+      }, {})
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation), token(GT), ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && !(lookahead->type == DAND || lookahead->type == DOR || lookahead->type == EOF_)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
+        *rel = make_variant(ast_rel, RelME, ((rel_rel_math_expr){.rel = result_.ok.nodes[2].VariantRelation, .operator = result_.ok.nodes[1].Token.t, .math_expr = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        number_reduced++;
+      }, {})
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation), token(LT), ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && !(lookahead->type == DAND || lookahead->type == DOR || lookahead->type == EOF_)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
+        *rel = make_variant(ast_rel, RelME, ((rel_rel_math_expr){.rel = result_.ok.nodes[2].VariantRelation, .operator = result_.ok.nodes[1].Token.t, .math_expr = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        number_reduced++;
+      }, {})
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation), token(DEQ), ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
+        if (lookahead && !(lookahead->type == DAND || lookahead->type == DOR || lookahead->type == EOF_)) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
+        *rel = make_variant(ast_rel, RelME, ((rel_rel_math_expr){.rel = result_.ok.nodes[2].VariantRelation, .operator = result_.ok.nodes[1].Token.t, .math_expr = result_.ok.nodes[0].VariantMathExpr}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantRelation, rel));
+        number_reduced++;
+      }, {})
 
       /* Try to reduce a math_expression to a relational
        */
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr)})), stack_check, {
-        if (lookahead && (lookahead->type == LT || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == GTEQ || lookahead->type == DEQ || lookahead->type == PLUS || lookahead->type == MINUS)) continue;
+        if (lookahead && (lookahead->type == PLUS || lookahead->type == MINUS)) continue;
 
         stack_ast_node_pop_n(&ctx.ast_stack, 1);
         variant_ast_rel* rel = make_variant_alloc(ast_rel, arena_alloc_);
@@ -198,7 +251,7 @@ result_parser_run parser_run(tokenizer* t) {
       /* Try to reduce a relational to a logical conj
        */
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation)})), stack_check, {
-        if (lookahead && (lookahead->type == DAND)) continue;
+        if (lookahead && (lookahead->type == DAND || lookahead->type == GTEQ || lookahead->type == LTEQ || lookahead->type == GT || lookahead->type == LT)) continue;
 
         stack_ast_node_pop_n(&ctx.ast_stack, 1);
         variant_ast_log_conj* conj = make_variant_alloc(ast_log_conj, arena_alloc_);
@@ -206,6 +259,10 @@ result_parser_run parser_run(tokenizer* t) {
         stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLogConj, conj));
         number_reduced++;
       },{})
+
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantRelation)})), stack_check, {
+
+      }, {})
 
       /* Try to reduce a logical conj to a logical disj
        */

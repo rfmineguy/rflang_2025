@@ -44,6 +44,7 @@ MunitResult parser_run_expr_single_number(const MunitParameter *, void *);
 MunitResult parser_run_expr_simple_addition(const MunitParameter *, void *);
 MunitResult parser_run_expr_add_and_mul(const MunitParameter *, void *);
 MunitResult parser_run_expr_with_parens(const MunitParameter *, void *);
+MunitResult parser_run_expr_cmp_ops(const MunitParameter *, void *);
 MunitResult parser_run_vardecl(const MunitParameter *, void *);
 
 MunitResult redirect_empty(const MunitParameter *, void *);

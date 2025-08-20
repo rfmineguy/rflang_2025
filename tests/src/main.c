@@ -80,6 +80,7 @@ MunitTest parser_run_tests[] = {
   { "/expr_simple_addition", parser_run_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_add_and_mul", parser_run_expr_add_and_mul, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_with_parens", parser_run_expr_with_parens, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_cmp_operators", parser_run_expr_cmp_ops, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/vardecl",          parser_run_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
