@@ -68,3 +68,16 @@ void ast_rel_reconstruct(const variant_ast_rel* v) {
     })
   })
 }
+void ast_math_expr_reconstruct(const variant_ast_math_expr* v) {
+  const variant_ast_math_expr v2 = *v;
+  match_variant(v2, ast_math_expr, {
+    variant_case(ast_math_expr, METerm, {
+      ast_math_expr_reconstruct(v2.METerm.math_expr);
+      printf("%.*s", TOKEN_ARGS(v2.METerm.operator));
+      ast_term_reconstruct(v2.METerm.term);
+    })
+    variant_case(ast_math_expr, Term, {
+      ast_term_reconstruct(v2.Term.term);
+    })
+  })
+}
