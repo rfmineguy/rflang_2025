@@ -94,3 +94,16 @@ void ast_term_reconstruct(const variant_ast_term* v) {
     })
   })
 }
+void ast_factor_reconstruct(const variant_ast_factor* v) {
+  const variant_ast_factor v2 = *v;
+  match_variant(v2, ast_factor, {
+    variant_case(ast_factor, ExprParen, {
+      printf("(");
+      ast_expr_reconstruct(v.ExprParen.expr);
+      printf(")");
+    })
+    variant_case(ast_factor, Lit, {
+      ast_lit_reconstruct(v.Lit.lit);
+    })
+  });
+}
