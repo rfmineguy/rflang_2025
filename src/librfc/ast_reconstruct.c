@@ -42,3 +42,16 @@ void ast_log_disj_reconstruct(const variant_ast_log_disj* v) {
     })
   })
 }
+void ast_log_conj_reconstruct(const variant_ast_log_conj* v) {
+  const variant_ast_log_conj v2 = *v;
+  match_variant(v2, ast_log_conj, {
+    variant_case(ast_log_conj, ConjRel, {
+      ast_log_conj_reconstruct(v2.ConjRel.conj);
+      printf("&&");
+      ast_rel_reconstruct(v2.ConjRel.rel);
+    })
+    variant_case(ast_log_conj, Rel, {
+      ast_rel_reconstruct(v2.Rel.conj);
+    })
+  })
+}
