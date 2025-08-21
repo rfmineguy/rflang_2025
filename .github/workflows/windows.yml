@@ -25,9 +25,9 @@ jobs:
         run: |
           cmake -B build -G Ninja .
           cmake --build build
-        shell: pwsh
+        shell: bash
 
       - name: Run tests
         run: |
           ctest --test-dir build/tests -VV
-        shell: pwsh
+        shell: bash
