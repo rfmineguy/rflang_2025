@@ -237,10 +237,10 @@ MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
 
 #undef actual
 #define actual \
-  "Var{type: a, id: int}\n"\
+  "Var{type: int, id: a}\n"\
 
   // Test if the parsed output is correct
-  // munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVar);
 
