@@ -107,3 +107,17 @@ void ast_factor_reconstruct(const variant_ast_factor* v) {
     })
   });
 }
+void ast_reconstruct(variant_ast_node n) {
+  match_variant(n, ast_node, {
+    variant_case(ast_node, Token,           { assert(0 && "Doesn't make sense to reconstruct token directly"); })
+    variant_case(ast_node, VariantVar,      { ast_var_reconstruct(n.VariantVar); })
+    variant_case(ast_node, VariantLit,      { ast_lit_reconstruct(n.VariantLit); })
+    variant_case(ast_node, VariantLogDisj,  { ast_log_disj_reconstruct(n.VariantLogDisj); })
+    variant_case(ast_node, VariantLogConj,  { ast_log_conj_reconstruct(n.VariantLogConj); })
+    variant_case(ast_node, VariantRelation, { ast_rel_reconstruct(n.VariantRelation); })
+    variant_case(ast_node, VariantMathExpr, { ast_math_expr_reconstruct(n.VariantMathExpr); })
+    variant_case(ast_node, VariantTerm,     { ast_term_reconstruct(n.VariantTerm); })
+    variant_case(ast_node, VariantFactor,   { ast_factor_reconstruct(n.VariantFactor); })
+    variant_case(ast_node, VariantExpr,     { ast_expr_reconstruct(n.VariantExpr); })
+  })
+}
