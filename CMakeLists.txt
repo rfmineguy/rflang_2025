@@ -60,6 +60,7 @@ list(APPEND LIBRFC_THIRDPARTY_FILES
 
 set(LIBRFC_SOURCE_FILES
   "${LIBRFC_SOURCE_DIR}/ast.c"
+  "${LIBRFC_SOURCE_DIR}/ast_reconstruct.c"
   "${LIBRFC_SOURCE_DIR}/parser.c"
   "${LIBRFC_SOURCE_DIR}/token.c"
   "${LIBRFC_SOURCE_DIR}/tokenizer.c"
