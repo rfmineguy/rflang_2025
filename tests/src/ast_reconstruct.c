@@ -85,3 +85,30 @@ MunitResult ast_reconstruct_expr_addition_with_mul(const MunitParameter* params,
   });
   return MUNIT_OK;
 }
+
+MunitResult ast_reconstruct_expr_addition_with_paren(const MunitParameter* params, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("(4 + 2) * 9");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 8);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
+
+#undef TEMP_FILE
+#define TEMP_FILE "other.tmp"
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    ast_expr_reconstruct(result_.ok.VariantExpr);
+    redirect_end(STDOUT_FILENO, x);
+
+    munit_assert_file_contents_equal(TEMP_FILE, "(4+2)*9");
+  }, {
+    munit_assert(false);
+  });
+  return MUNIT_OK;
+}
