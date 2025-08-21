@@ -21,3 +21,11 @@ void ast_lit_reconstruct(const variant_ast_lit* v) {
     variant_case(ast_lit, Double, { printf("%.*s", TOKEN_ARGS(v.Int.v)); })
   });
 }
+void ast_expr_reconstruct(const variant_ast_expr* v) {
+  const variant_ast_expr v2 = *v;
+  match_variant(v2, ast_expr, {
+    variant_case(ast_expr, Disj, {
+      ast_log_disj_reconstruct(v2.Disj.disj);
+    })
+  })
+}
