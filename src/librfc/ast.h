@@ -119,6 +119,7 @@ define_variant(ast_node, ast_node_variant)
 
 void ast_node_print(variant_ast_node n, int depth);
 
+void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline);
 void ast_lit_print(const variant_ast_lit* n, int depth, bool sameline);
 void ast_expr_print(const variant_ast_expr* n, int depth, bool sameline);
 void ast_log_disj_print(const variant_ast_log_disj*, int depth, bool sameline);
