@@ -55,3 +55,16 @@ void ast_log_conj_reconstruct(const variant_ast_log_conj* v) {
     })
   })
 }
+void ast_rel_reconstruct(const variant_ast_rel* v) {
+  const variant_ast_rel v2 = *v;
+  match_variant(v2, ast_rel, {
+    variant_case(ast_rel, RelME, {
+      ast_rel_reconstruct(v2.RelME.rel);
+      printf("%.*s", TOKEN_ARGS(v2.RelME.operator));
+      ast_math_expr_reconstruct(v2.RelME.math_expr);
+    })
+    variant_case(ast_rel, MathExpr, {
+      ast_math_expr_reconstruct(v2.MathExpr.conj);
+    })
+  })
+}
