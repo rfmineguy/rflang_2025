@@ -81,3 +81,16 @@ void ast_math_expr_reconstruct(const variant_ast_math_expr* v) {
     })
   })
 }
+void ast_term_reconstruct(const variant_ast_term* v) {
+  const variant_ast_term v2 = *v;
+  match_variant(v2, ast_term, {
+    variant_case(ast_term, TermOpFactor, {
+      ast_term_reconstruct(v.TermOpFactor.term);
+      printf("%.*s", TOKEN_ARGS(v.TermOpFactor.operator));
+      ast_factor_reconstruct(v.TermOpFactor.factor);
+    })
+    variant_case(ast_term, TermFactor, {
+      ast_factor_reconstruct(v.TermFactor.factor);
+    })
+  })
+}
