@@ -75,19 +75,40 @@ MunitTest parser_stack_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
-MunitTest parser_run_tests[] = {
+MunitTest parser_run_expr_tests[] = {
   { "/expr_single_number", parser_run_expr_single_number, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_simple_addition", parser_run_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_add_and_mul", parser_run_expr_add_and_mul, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_with_parens", parser_run_expr_with_parens, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_cmp_operators", parser_run_expr_cmp_ops, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
+MunitTest parser_run_vardecl_tests[] = {
   { "/vardecl",          parser_run_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest ast_reconstruct_tests[] = {
+  { "/vardecl",          ast_reconstruct_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_add",         ast_reconstruct_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_add_w_mul",   ast_reconstruct_expr_addition_with_mul, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_add_w_paren", ast_reconstruct_expr_addition_with_paren, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_mul_div",     ast_reconstruct_expr_mul_div, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_mul_div2",    ast_reconstruct_expr_mul_div_2, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/expr_mul_div3",    ast_reconstruct_expr_mul_div_3, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
+MunitSuite parser_run_suite[] = {
+  { "/expr", parser_run_expr_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/vardecl", parser_run_vardecl_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
+};
+
 MunitSuite parser_suite[] = {
   { "/parse_stack",    parser_stack_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
-  { "/run",            parser_run_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/run",            NULL, parser_run_suite, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
@@ -99,6 +120,7 @@ MunitSuite all_tests[] = {
   { "/variant",        variant_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/result",         result_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/redirect",       redirect_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/reconstruct",    ast_reconstruct_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/parser",         NULL, parser_suite, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };

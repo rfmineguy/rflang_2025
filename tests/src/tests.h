@@ -47,6 +47,14 @@ MunitResult parser_run_expr_with_parens(const MunitParameter *, void *);
 MunitResult parser_run_expr_cmp_ops(const MunitParameter *, void *);
 MunitResult parser_run_vardecl(const MunitParameter *, void *);
 
+MunitResult ast_reconstruct_vardecl(const MunitParameter*, void *);
+MunitResult ast_reconstruct_expr_simple_addition(const MunitParameter*, void *);
+MunitResult ast_reconstruct_expr_addition_with_mul(const MunitParameter*, void *);
+MunitResult ast_reconstruct_expr_addition_with_paren(const MunitParameter*, void *);
+MunitResult ast_reconstruct_expr_mul_div(const MunitParameter* , void *);
+MunitResult ast_reconstruct_expr_mul_div_2(const MunitParameter* , void *);
+MunitResult ast_reconstruct_expr_mul_div_3(const MunitParameter* , void *);
+
 MunitResult redirect_empty(const MunitParameter *, void *);
 MunitResult redirect_oneline_newline(const MunitParameter *, void *);
 MunitResult redirect_oneline_no_newline(const MunitParameter *, void *);
