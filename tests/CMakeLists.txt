@@ -54,6 +54,7 @@ set(TEST_FILES
   "${MAIN_TEST_SOURCE_DIR}/tokenizer.c"
   "${MAIN_TEST_SOURCE_DIR}/variant.c"
   "${MAIN_TEST_SOURCE_DIR}/redirect.c"
+  "${MAIN_TEST_SOURCE_DIR}/ast_reconstruct.c"
   "${GENGEN_GENERATED_FILES}"
 )
 
