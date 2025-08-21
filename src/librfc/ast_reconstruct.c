@@ -12,3 +12,12 @@ void ast_var_reconstruct(const variant_ast_vardecl* v) {
     })
   })
 }
+
+void ast_lit_reconstruct(const variant_ast_lit* v) {
+  const variant_ast_lit v2 = *v;
+  match_variant(v2, ast_lit, {
+    variant_case(ast_lit, Int, { printf("%.*s", TOKEN_ARGS(v.Int.v)); }) // TODO: This is printed as a string right now, this should not be permanent
+    variant_case(ast_lit, Id, { printf("%.*s", TOKEN_ARGS(v.Int.v)); })
+    variant_case(ast_lit, Double, { printf("%.*s", TOKEN_ARGS(v.Int.v)); })
+  });
+}
