@@ -16,10 +16,17 @@ set(LIBRFC_THIRDPARTY_DIR "${MAIN_SOURCE_DIR}/thirdparty")
 set(LIBRFC_TPL_SUPPORT_DIR "${MAIN_SOURCE_DIR}/tpl_support")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/generated")
 
+set(LIBRFC_INCLUDE_DIRS
+  ${LIBRFC_SOURCE_DIR}
+  ${LIBRFC_THIRDPARTY_DIR}
+  ${LIBRFC_TPL_SUPPORT_DIR}
+)
+
 # ================
 # Setup prebuild
 # ================
 include(cmake/Prebuild.cmake)
+include(cmake/PreprocessBuild.cmake)
 
 set(GENGEN_TPL_FILES
   ${CMAKE_SOURCE_DIR}/tpl/stack.htpl
@@ -39,17 +46,6 @@ prebuild_setup(
   TPL_FILES "${GENGEN_TPL_FILES}"
   GENERATED_FILES "${GENGEN_GENERATED_FILES}"
 )
-
-# ==================================
-# If profiling is requested add a few things to the build
-# ==================================
-set(RFC_COMPILE_OPTIONS "")
-if (PROFILING)
-  message("Profiling enabled")
-  set(RFC_C_FLAGS -finstrument-functions -DENABLE_SPALL)
-  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/instrument.c")
-  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/spall_util.c")
-endif()
 
 # ==================================
 # Setup the files to be compiled
@@ -73,9 +69,38 @@ set(EXERFC_SOURCE_FILES
 )
 
 # ==================================
+# If profiling is requested add a few things to the build
+# ==================================
+set(RFC_COMPILE_OPTIONS "")
+if (PROFILING)
+  message("Profiling enabled")
+  set(RFC_C_FLAGS -finstrument-functions -DENABLE_SPALL)
+  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/instrument.c")
+  list(APPEND LIBRFC_THIRDPARTY_FILES "${LIBRFC_THIRDPARTY_DIR}/spall_util.c")
+  list(APPEND LIBRFC_SOURCE_FILES "${LIBRFC_THIRDPARTY_FILES}")
+endif()
+
+# ==================================
+# If preprocessing is requested add a few things to the build
+# ==================================
+if (PREPROCESS)
+  preprocess_build(
+    SOURCE_FILES ${LIBRFC_SOURCE_FILES}
+    INCLUDE_DIRS ${LIBRFC_INCLUDE_DIRS}
+    CFLAGS ${RFC_C_FLAGS}
+    MODIFY LIBRFC_SOURCE_FILES
+  )
+  set_source_files_properties(${LIBRFC_SOURCE_FILES} PROPERTIES LANGUAGE C)
+  add_custom_target(preprocess ALL DEPENDS ${LIBRFC_SOURCE_FILES})
+  add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
+  add_dependencies(librfc preprocess)
+else()
+  add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
+endif()
+
+# ==================================
 # Setup librfc
 # ==================================
-add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
 target_compile_options(librfc PRIVATE ${RFC_C_FLAGS})
 add_dependencies(librfc prebuildexe)
 target_include_directories(librfc PUBLIC
