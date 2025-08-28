@@ -92,7 +92,8 @@ MunitTest parser_run_type_tests[] = {
   { "/ptr_type",          parser_run_type_ptr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/ptr_ptr_type",      parser_run_type_ptr_ptr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/ptr_array_type",    parser_run_type_array, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/array_of_ptr",    parser_run_type_array, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/array_of_ptr",      parser_run_type_array_of_ptr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/array_of_array",    parser_run_type_array_of_array, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
