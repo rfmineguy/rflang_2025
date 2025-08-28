@@ -6,6 +6,7 @@
 #include <stdbool.h>
 forward_dec_variant(ast_expr);
 forward_dec_variant(ast_node);
+forward_dec_variant(ast_type);
 forward_dec_variant(ast_lit);
 forward_dec_variant(ast_log_disj);
 forward_dec_variant(ast_log_conj);
@@ -22,6 +23,11 @@ forward_dec_variant(ast_vardecl);
  * Variant setup
  * ==============
  */
+#define ast_type_variant(X)\
+  X(Id, ast_type, type_id)\
+  X(Ptr, ast_type, type_ptr)\
+  X(Array, ast_type, type_array)\
+
 #define ast_expr_variant(X)\
   X(Disj, ast_expr, expr_log_disj)\
 
@@ -59,6 +65,7 @@ forward_dec_variant(ast_vardecl);
 
 #define ast_node_variant(X)\
   X(Token, ast_node, ast_token)\
+  X(VariantType,   ast_node, variant_ast_type*)\
   X(VariantVar,   ast_node, variant_ast_vardecl*)\
   X(VariantLit,      ast_node, variant_ast_lit*)\
   X(VariantExpr,     ast_node, variant_ast_expr*)\
@@ -70,7 +77,11 @@ forward_dec_variant(ast_vardecl);
   X(VariantFactor,   ast_node, variant_ast_factor*)\
  
 typedef struct { token t; } ast_token;
-typedef struct { token id; token type; } vardecl;
+typedef struct { token id; } type_id;
+typedef struct { variant_ast_type* type; } type_ptr;
+typedef struct { variant_ast_type* type; variant_ast_expr* expr_opt; } type_array;
+
+typedef struct { token id; variant_ast_type* type; } vardecl;
 
 typedef struct { variant_ast_log_disj* disj; } expr_log_disj;
 
@@ -103,6 +114,7 @@ typedef struct { token v; } lit_int;
 typedef struct { token id; } lit_double;
 typedef struct { token id; } lit_id;
 
+define_variant(ast_type, ast_type_variant);
 define_variant(ast_expr, ast_expr_variant);
 define_variant(ast_log_disj, ast_log_disj_variant)
 define_variant(ast_log_conj, ast_log_conj_variant)
@@ -119,6 +131,7 @@ define_variant(ast_node, ast_node_variant)
 
 void ast_node_print(variant_ast_node n, int depth);
 
+void ast_type_print(variant_ast_type* v, int depth, bool sameline);
 void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline);
 void ast_lit_print(const variant_ast_lit* n, int depth, bool sameline);
 void ast_expr_print(const variant_ast_expr* n, int depth, bool sameline);

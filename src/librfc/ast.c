@@ -10,11 +10,35 @@ void ast_token_print(ast_token t, int depth) {
   printf(INDENT_FMT "Token(%s), '%.*s'\n", INDENT_ARGS, token_type_str(t.t.type), TOKEN_ARGS(t.t));
 }
 
+void ast_type_print(variant_ast_type* v, int depth, bool sameline) {
+  const variant_ast_type v2 = *v;
+  if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
+  match_variant(v2, ast_type, {
+    variant_case(ast_type, Id, { printf("Type{id: %.*s}\n", TOKEN_ARGS(v.Id.id)); })
+    variant_case(ast_type, Ptr, {
+      printf("Type[Ptr].");
+      ast_type_print(v.Ptr.type, depth, true);
+    });
+    variant_case(ast_type, Array, {
+      printf("Type[Array]{\n");
+      ast_type_print(v.Array.type, depth + 1, false);
+      if (v.Array.expr_opt)
+        ast_expr_print(v.Array.expr_opt, depth + 1, false);
+      printf(INDENT_FMT "}\n", INDENT_ARGS);
+    });
+  })
+}
+
 void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline) {
   const variant_ast_vardecl v2 = *v;
   if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
   match_variant(v2, ast_vardecl, {
-    variant_case(ast_vardecl, Main, { printf("Var{type: %.*s, id: %.*s}\n", TOKEN_ARGS(v.Main.type), TOKEN_ARGS(v.Main.id)); })
+    variant_case(ast_vardecl, Main, {
+      printf("Var{\n");
+      printf(INDENT_FMT "id: %.*s\n", INDENT_ARGSN(1), TOKEN_ARGS(v.Main.id));
+      ast_type_print(v.Main.type, depth + 1, false);
+      printf(INDENT_FMT "}\n", INDENT_ARGS);
+    })
   })
 }
 
@@ -141,6 +165,7 @@ void ast_factor_print(const variant_ast_factor* v, int depth, bool sameline) {
 void ast_node_print(variant_ast_node n, int depth) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,           { ast_token_print(n.Token, depth); })
+    variant_case(ast_node, VariantType,     { ast_type_print(n.VariantType, depth, false); })
     variant_case(ast_node, VariantVar,      { ast_var_print(n.VariantVar, depth, false); })
     variant_case(ast_node, VariantLit,      { ast_lit_print(n.VariantLit, depth, false); })
     variant_case(ast_node, VariantLogDisj,  { ast_log_disj_print(n.VariantLogDisj, depth, false); })
