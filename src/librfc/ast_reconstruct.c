@@ -8,7 +8,28 @@ void ast_var_reconstruct(const variant_ast_vardecl* v) {
   const variant_ast_vardecl v2 = *v;
   match_variant(v2, ast_vardecl, {
     variant_case(ast_vardecl, Main, {
-      printf("%.*s: %.*s", TOKEN_ARGS(v.Main.id), TOKEN_ARGS(v.Main.type));
+      printf("%.*s: ", TOKEN_ARGS(v.Main.id));
+      ast_type_reconstruct(v.Main.type);
+    })
+  })
+}
+
+void ast_type_reconstruct(const variant_ast_type* v) {
+  const variant_ast_type v2 = *v;
+  match_variant(v2, ast_type, {
+    variant_case(ast_type, Id, {
+      printf("%.*s", TOKEN_ARGS(v.Id.id));
+    })
+    variant_case(ast_type, Ptr, {
+    })
+    variant_case(ast_type, Array, {
+      printf("[");
+      ast_type_reconstruct(v.Array.type);
+      if (v.Array.expr_opt) {
+        printf(";");
+        ast_expr_reconstruct(v.Array.expr_opt);
+      }
+      printf("]");
     })
   })
 }
@@ -119,5 +140,6 @@ void ast_reconstruct(variant_ast_node n) {
     variant_case(ast_node, VariantTerm,     { ast_term_reconstruct(n.VariantTerm); })
     variant_case(ast_node, VariantFactor,   { ast_factor_reconstruct(n.VariantFactor); })
     variant_case(ast_node, VariantExpr,     { ast_expr_reconstruct(n.VariantExpr); })
+    variant_case(ast_node, VariantType,     { ast_type_reconstruct(n.VariantType); })
   })
 }

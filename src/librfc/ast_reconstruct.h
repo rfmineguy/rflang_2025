@@ -3,6 +3,7 @@
 #include "ast.h"
 
 void ast_var_reconstruct(const variant_ast_vardecl*);
+void ast_type_reconstruct(const variant_ast_type*);
 void ast_lit_reconstruct(const variant_ast_lit*);
 void ast_expr_reconstruct(const variant_ast_expr*);
 void ast_log_disj_reconstruct(const variant_ast_log_disj*);
