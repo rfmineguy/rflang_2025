@@ -40,5 +40,6 @@ define_result(parser_run, parser_ctx, const char*);
 
 result_stack_check stack_check(const stack_ast_node* stack, check c[], int n);
 result_parser_run parser_run(tokenizer* t);
+void               parser_free(parser_ctx* ctx);
 
 #endif

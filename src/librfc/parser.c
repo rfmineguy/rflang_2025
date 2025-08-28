@@ -350,3 +350,8 @@ result_parser_run parser_run(tokenizer* t) {
   return result_ok(parser_run, ctx);
   return result_err(parser_run, "Parser unimplemented");
 }
+
+void parser_free(parser_ctx *ctx) {
+  arena_free(&ctx->ast_arena);
+  stack_ast_node_free(&ctx->ast_stack);
+}

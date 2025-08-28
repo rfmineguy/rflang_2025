@@ -34,6 +34,8 @@ MunitResult parser_run_expr_single_number(const MunitParameter *param, void *con
     munit_assert(false);
   });
   
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -70,6 +72,8 @@ MunitResult parser_run_expr_simple_addition(const MunitParameter *param, void *c
     munit_assert(false);
   });
   
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -110,6 +114,8 @@ MunitResult parser_run_expr_add_and_mul(const MunitParameter *param, void *conte
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -157,6 +163,8 @@ MunitResult parser_run_expr_with_parens(const MunitParameter *param, void *conte
     munit_assert(false);
   });
   
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -221,6 +229,8 @@ MunitResult parser_run_expr_cmp_ops(const MunitParameter *param, void *context) 
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -255,6 +265,8 @@ MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -285,6 +297,8 @@ MunitResult parser_run_type_ptr(const MunitParameter *param, void *context) {
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -314,6 +328,8 @@ MunitResult parser_run_type_ptr_ptr(const MunitParameter *param, void *context) 
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 
@@ -345,6 +361,8 @@ MunitResult parser_run_type_array(const MunitParameter *param, void *context) {
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
 MunitResult parser_run_type_array_of_ptr(const MunitParameter *param, void *context) {
@@ -375,5 +393,7 @@ MunitResult parser_run_type_array_of_ptr(const MunitParameter *param, void *cont
     munit_assert(false);
   });
 
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
   return MUNIT_OK;
 }
