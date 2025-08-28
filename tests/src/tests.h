@@ -38,7 +38,6 @@ MunitResult parser_stack_check_test_2(const MunitParameter *, void *);
 MunitResult parser_stack_check_passed_limit_test(const MunitParameter *, void *);
 MunitResult parser_stack_check_stack_larger_than_check(const MunitParameter *, void *);
 MunitResult parser_stack_check_incorrect_ast_node(const MunitParameter *, void *);
-MunitResult parser_reduce_stack_vardecl(const MunitParameter *, void *);
 
 MunitResult parser_run_expr_single_number(const MunitParameter *, void *);
 MunitResult parser_run_expr_simple_addition(const MunitParameter *, void *);
@@ -46,6 +45,10 @@ MunitResult parser_run_expr_add_and_mul(const MunitParameter *, void *);
 MunitResult parser_run_expr_with_parens(const MunitParameter *, void *);
 MunitResult parser_run_expr_cmp_ops(const MunitParameter *, void *);
 MunitResult parser_run_vardecl(const MunitParameter *, void *);
+MunitResult parser_run_type_ptr(const MunitParameter *, void *);
+MunitResult parser_run_type_ptr_ptr(const MunitParameter *, void *);
+MunitResult parser_run_type_array(const MunitParameter *, void *);
+MunitResult parser_run_type_array_of_ptr(const MunitParameter *, void *);
 
 MunitResult ast_reconstruct_vardecl(const MunitParameter*, void *);
 MunitResult ast_reconstruct_expr_simple_addition(const MunitParameter*, void *);

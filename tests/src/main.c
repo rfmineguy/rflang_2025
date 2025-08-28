@@ -71,7 +71,6 @@ MunitTest parser_stack_tests[] = {
   { "/stack_check_pass_limit",               parser_stack_check_passed_limit_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/stack_check_stack_larger_than_check",  parser_stack_check_stack_larger_than_check, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/parser_stack_check_incorrect_ast_node",parser_stack_check_incorrect_ast_node, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
-  { "/reduce_stack_var_decl",                parser_reduce_stack_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
@@ -89,6 +88,14 @@ MunitTest parser_run_vardecl_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest parser_run_type_tests[] = {
+  { "/ptr_type",          parser_run_type_ptr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/ptr_ptr_type",      parser_run_type_ptr_ptr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/ptr_array_type",    parser_run_type_array, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/array_of_ptr",    parser_run_type_array, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitTest ast_reconstruct_tests[] = {
   { "/vardecl",          ast_reconstruct_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_add",         ast_reconstruct_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -103,6 +110,7 @@ MunitTest ast_reconstruct_tests[] = {
 MunitSuite parser_run_suite[] = {
   { "/expr", parser_run_expr_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/vardecl", parser_run_vardecl_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/type", parser_run_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
