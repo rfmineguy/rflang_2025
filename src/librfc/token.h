@@ -1,10 +1,10 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <stddef.h>
-
+#include <stdbool.h>
 typedef enum {
   KEYWORD, EOF_,
-  ID, EQ, COLON,
+  ID, EQ, COLON, SEMI,
   COMMA, SQUOT, DQUOT,
   PLUS, MINUS, MUL, DIV, MOD,
   ARROW,
@@ -28,5 +28,6 @@ typedef struct {
 void        token_print(token t); 
 const char* token_type_str(token_type tt);
 
+bool        token_is_operator(token t);
 
 #endif

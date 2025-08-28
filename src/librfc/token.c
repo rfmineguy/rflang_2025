@@ -18,6 +18,7 @@ const char* token_type_str(token_type tt) {
     case MOD:     return "MOD";
     // Separators
     case COLON:   return "COLON";
+    case SEMI:    return "SEMI";
     case COMMA:   return "COMMA";
     case SQUOT:   return "SQUOT";
     case DQUOT:   return "DQUOT";
@@ -46,4 +47,11 @@ const char* token_type_str(token_type tt) {
     default:      return "<UNDEFINED TOKEN TYPE>";
   }
   assert(0 && "Unreachable");
+}
+
+bool token_is_operator(token t) {
+  return t.type == LT || t.type == LTEQ || t.type == GT ||
+    t.type == GTEQ || t.type == DEQ || t.type == DAND ||
+    t.type == DOR || t.type == PLUS || t.type == MINUS ||
+    t.type == MUL || t.type == DIV || t.type == MOD;
 }

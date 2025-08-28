@@ -165,6 +165,7 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_seq("if",     cursor), test_reg,                { result_.ok.type = KEYWORD; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("else",   cursor), test_reg,                { result_.ok.type = KEYWORD; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("return", cursor), test_reg,                { result_.ok.type = KEYWORD; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
+    match(test_seq("func", cursor), test_reg,                  { result_.ok.type = KEYWORD; dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_seq("->",     cursor), test_reg,                { result_.ok.type = ARROW;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_strlit(cursor),    test_reg,                    { result_.ok.type = STRLIT;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_id(cursor),        test_reg,                     { result_.ok.type = ID;     dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len;}, {});
@@ -176,6 +177,7 @@ result_tokenizer_run tokenizer_run(tokenizer* tok) {
     match(test_ceq('*',  cursor), test_reg,                     { result_.ok.type = MUL;    dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('/',  cursor), test_reg,                     { result_.ok.type = DIV;    dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq(':',  cursor), test_reg,                     { result_.ok.type = COLON;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
+    match(test_ceq(';',  cursor), test_reg,                     { result_.ok.type = SEMI;   dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq(',',  cursor), test_reg,                     { result_.ok.type = COMMA;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('{',  cursor), test_reg,                     { result_.ok.type = LCBRK;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});
     match(test_ceq('}',  cursor), test_reg,                     { result_.ok.type = RCBRK;  dynarray_token_pushback(&tok->tokens, result_.ok); cursor += result_.ok.len; }, {});

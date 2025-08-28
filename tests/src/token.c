@@ -10,6 +10,7 @@ MunitResult token_type_str_test(const MunitParameter *params, void *context) {
   munit_assert_string_equal(token_type_str(DIV), "DIV");
   munit_assert_string_equal(token_type_str(MOD), "MOD");
   munit_assert_string_equal(token_type_str(COLON), "COLON");
+  munit_assert_string_equal(token_type_str(SEMI), "SEMI");
   munit_assert_string_equal(token_type_str(COMMA), "COMMA");
   munit_assert_string_equal(token_type_str(SQUOT), "SQUOT");
   munit_assert_string_equal(token_type_str(DQUOT), "DQUOT");
@@ -36,6 +37,8 @@ MunitResult token_type_str_test(const MunitParameter *params, void *context) {
   munit_assert_string_equal(token_type_str(DEQ), "DEQ");
   munit_assert_string_equal(token_type_str(DAND),"DAND");
   munit_assert_string_equal(token_type_str(DOR), "DOR");
+
+  munit_assert_string_equal(token_type_str(KEYWORD), "KEYWORD");
 
   for (int i = TOKEN_TYPE_LAST; i < TOKEN_TYPE_LAST + 50; i++)
     munit_assert_string_equal(token_type_str(i), "<UNDEFINED TOKEN TYPE>");
