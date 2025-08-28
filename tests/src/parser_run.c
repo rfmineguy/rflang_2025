@@ -237,7 +237,10 @@ MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
 
 #undef actual
 #define actual \
-  "Var{type: int, id: a}\n"\
+  "Var{\n"\
+  "  id: a\n"\
+  "  Type{id: int}\n"\
+  "}\n"
 
   // Test if the parsed output is correct
   munit_assert_int(r3.ok.ast_stack.size, ==, 2);
