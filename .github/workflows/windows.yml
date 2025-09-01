@@ -30,6 +30,7 @@ jobs:
 
       - name: Extract gengetopt
         run: |
+          mkdir -p gengetopt-install
           tar -xf gengetopt-windows-2.23.tar -C gengetopt-install
         shell: bash
 
