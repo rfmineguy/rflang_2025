@@ -36,7 +36,7 @@ jobs:
 
       - name: Add gengetopt to path
         run: |
-          echo "${{github.workspace}}\gengetopt-install" >> $GITHUB_PATH
+          echo "${{github.workspace}}\gengetopt-install\bin" >> $GITHUB_PATH
         shell: bash
 
       - name: Test gengetopt
