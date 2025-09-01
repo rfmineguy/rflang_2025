@@ -28,10 +28,18 @@ jobs:
           tag: gengetopt-2.23
           fileName: gengetopt-windows.zip
 
-      - name: Test gengetopt
+      - name: Extract gengetopt
         run: |
-          pwd
-          ls
+          tar -xf gengetopt-windows.zip -C gengetopt-install
+        shell: bash
+
+      - name: Add gengetopt to path
+        run: |
+          echo "${{github.workspace}}\gengetopt-install" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Test gengetopt
+        run: gengetopt.exe --version
         shell: bash
 
       - name: Build rfc
