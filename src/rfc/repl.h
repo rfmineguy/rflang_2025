@@ -1,6 +1,7 @@
 #ifndef REPL_H
 #define REPL_H
 #include <stdbool.h>
+#define MAX_CMD_LENGTH 255
 
 typedef enum {
   STATE_DEFAULT,
@@ -19,12 +20,13 @@ typedef enum {
 typedef struct {
   repl_command_type type;
   const char* args[20];
+  char cmdbuf[MAX_CMD_LENGTH];
   int argcount;
 } repl_command;
 
 typedef struct {
   repl_state state;
-  char repl_buffer[255];
+  char repl_buffer[MAX_CMD_LENGTH];
   bool running;
 } repl_ctx;
 

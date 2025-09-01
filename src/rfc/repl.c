@@ -13,6 +13,7 @@ const char* repl_state_str(repl_state state) {
 
 repl_command repl_parse_command(repl_ctx* ctx) {
   repl_command cmd = {};
+  strncpy(cmd.cmdbuf, ctx->repl_buffer, MAX_CMD_LENGTH);
   char* token = strtok(ctx->repl_buffer, " \n");
 
   while (token) {
@@ -32,7 +33,7 @@ repl_command repl_parse_command(repl_ctx* ctx) {
 bool repl_prompt(repl_ctx* ctx) {
   printf("[%s] >> ", repl_state_str(ctx->state));
   char* line = NULL;
-  if (fgets(ctx->repl_buffer, 255, stdin) != NULL) {
+  if (fgets(ctx->repl_buffer, MAX_CMD_LENGTH, stdin) != NULL) {
     ctx->repl_buffer[strcspn(ctx->repl_buffer, "\n")] = 0;
     return true;
   }
