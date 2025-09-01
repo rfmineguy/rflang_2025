@@ -6,3 +6,5 @@ description "<description>"
 versiontext "<versiontext>"
 
 args "<command line options>"
+
+option "repl" r "Launch rflang repl" flag off
