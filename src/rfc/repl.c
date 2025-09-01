@@ -13,13 +13,11 @@ const char* repl_state_str(repl_state state) {
 
 repl_command repl_parse_command(repl_ctx* ctx) {
   repl_command cmd = {};
-  char* token = ctx->repl_buffer;
-  char* end = ctx->repl_buffer;
+  char* token = strtok(ctx->repl_buffer, " \n");
 
   while (token) {
-    strsep(&end, " \n");
     cmd.args[cmd.argcount++] = token;
-    token = end;
+    token = strtok(NULL, " \n");
   }
 
   cmd.type = CMD_UNKNOWN;
@@ -37,6 +35,12 @@ bool repl_prompt(repl_ctx* ctx) {
   if (fgets(ctx->repl_buffer, 255, stdin) != NULL) {
     ctx->repl_buffer[strcspn(ctx->repl_buffer, "\n")] = 0;
     return true;
+  }
+  else {
+    if (feof(stdin)) {
+      ctx->running = false;
+      return false;
+    }
   }
   return false;
 }
