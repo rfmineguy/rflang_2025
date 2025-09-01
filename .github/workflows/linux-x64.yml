@@ -23,8 +23,8 @@ jobs:
 
       - name: Install gengetopt
         run: |
-          apt-get update
-          apt-get install -y gengetopt
+          sudo apt-get update
+          sudo apt-get install -y gengetopt
 
       - name: Build rfc
         run: |
