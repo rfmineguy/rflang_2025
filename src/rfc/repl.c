@@ -40,3 +40,9 @@ bool repl_prompt(repl_ctx* ctx) {
   }
   return false;
 }
+
+static void repl_help() {
+  printf("Help: repl\n");
+  printf("tokenize : enter the tokenization repl state\n");
+  printf("parse    : enter the parsing repl state\n");
+}
