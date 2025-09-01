@@ -77,6 +77,8 @@ set(LIBRFC_SOURCE_FILES
 
 set(EXERFC_SOURCE_FILES
   "${EXERFC_SOURCE_DIR}/cmdline.c"
+  "${EXERFC_SOURCE_DIR}/repl_commands.c"
+  "${EXERFC_SOURCE_DIR}/repl.c"
   "${EXERFC_SOURCE_DIR}/main.c"
   "${CMDLINE_FILES}"
 )
