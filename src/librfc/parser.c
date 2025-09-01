@@ -101,24 +101,15 @@ result_parser_run parser_run(tokenizer* t) {
         number_reduced++;
       }, {})
 
-      match(stack_check(&ctx.ast_stack, check_seq({token(LSBRK), ast(variant_ast_node_type_VariantType), token(RSBRK)})), stack_check, {
-        stack_ast_node_pop_n(&ctx.ast_stack, 2);
-
-        variant_ast_type* type = make_variant_alloc(ast_type, arena_alloc_);
-        *type = make_variant(ast_type, Id, {.id = result_.ok.nodes[0].VariantType->Id.id});
-        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantType, type));
-        number_reduced++;
-      }, {});
-
       /* Try to reduce id
        *    literal := <id>
-       *    type3   := <id>       if the lookahead is not an operator or colon
+       *    type3   := <id>       if the lookahead is not an operator or colon or rcbrk
        */
       match(stack_check(&ctx.ast_stack, check_seq({token(ID)})), stack_check, {
         if (lookahead && (lookahead->type == LPAR)) {
           continue; // expect function call
         }
-        else if (lookahead && (!token_is_operator(*lookahead) && lookahead->type != COLON)) {
+        else if (lookahead && (!token_is_operator(*lookahead) && lookahead->type != COLON && lookahead->type != RCBRK)) {
           // expect type
           stack_ast_node_pop_n(&ctx.ast_stack, 1);
           variant_ast_type* type = make_variant_alloc(ast_type, arena_alloc_);
@@ -135,6 +126,24 @@ result_parser_run parser_run(tokenizer* t) {
           number_reduced++;
           printf("Reduced id to literal\n");
         }
+      }, {});
+
+      /* Try to reduce a varlist
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantVarList), token(COMMA), ast(variant_ast_node_type_VariantVar)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_varlist* vlist = make_variant_alloc(ast_varlist, arena_alloc_);
+        *vlist = make_variant(ast_varlist, VarListDec, ((varlist_vlist_vardec){.varlist = result_.ok.nodes[2].VariantVarList, .vardec = result_.ok.nodes[0].VariantVar}));
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantVarList, vlist));
+        number_reduced++;
+      }, {});
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantVar)})), stack_check, {
+        if (!lookahead_type_check(lookahead, tok_list(COMMA))) continue;
+        stack_ast_node_pop_n(&ctx.ast_stack, 1);
+        variant_ast_varlist* vlist = make_variant_alloc(ast_varlist, arena_alloc_);
+        *vlist = make_variant(ast_varlist, VarDec, (varlist_vardec){.vardecl = result_.ok.nodes[0].VariantVar});
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantVarList, vlist));
+        number_reduced++;
       }, {});
 
       /* Try to reduce to literal
