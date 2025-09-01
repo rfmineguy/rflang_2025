@@ -21,6 +21,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install gengetopt
+        run: |
+          brew install gengetopt
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+
       - name: Build rfc
         run: |
           cmake -B build -G Ninja .
