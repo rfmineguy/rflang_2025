@@ -42,6 +42,23 @@ void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline) {
   })
 }
 
+void ast_varlist_print(variant_ast_varlist* v, int depth, bool sameline) {
+  const variant_ast_varlist v2 = *v;
+  if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
+  match_variant(v2, ast_varlist, {
+    variant_case(ast_varlist, VarListDec, {
+      printf("VarList{\n");
+      ast_var_print(v.VarListDec.vardec, depth + 1, false);
+      ast_varlist_print(v.VarListDec.varlist, depth + 1, false);
+      printf(INDENT_FMT "}\n", INDENT_ARGS);
+    })
+    variant_case(ast_varlist, VarDec, {
+      printf("VarList.");
+      ast_var_print(v.VarDec.vardecl, depth, true);
+    })
+  })
+}
+
 void ast_lit_print(const variant_ast_lit* v, int depth, bool sameline) {
   const variant_ast_lit v2 = *v;
   if (!sameline) printf(INDENT_FMT, INDENT_ARGS);
@@ -167,6 +184,7 @@ void ast_node_print(variant_ast_node n, int depth) {
     variant_case(ast_node, Token,           { ast_token_print(n.Token, depth); })
     variant_case(ast_node, VariantType,     { ast_type_print(n.VariantType, depth, false); })
     variant_case(ast_node, VariantVar,      { ast_var_print(n.VariantVar, depth, false); })
+    variant_case(ast_node, VariantVarList,  { ast_varlist_print(n.VariantVarList, depth, false); })
     variant_case(ast_node, VariantLit,      { ast_lit_print(n.VariantLit, depth, false); })
     variant_case(ast_node, VariantLogDisj,  { ast_log_disj_print(n.VariantLogDisj, depth, false); })
     variant_case(ast_node, VariantLogConj,  { ast_log_conj_print(n.VariantLogConj, depth, false); })

@@ -14,6 +14,19 @@ void ast_var_reconstruct(const variant_ast_vardecl* v) {
   })
 }
 
+void ast_varlist_reconstruct(const variant_ast_varlist* v) {
+  const variant_ast_varlist v2 = *v;
+  match_variant(v2, ast_varlist, {
+    variant_case(ast_varlist, VarListDec, {
+      ast_var_reconstruct(v.VarListDec.vardec);
+      ast_varlist_reconstruct(v.VarListDec.varlist);
+    })
+    variant_case(ast_varlist, VarDec, {
+      ast_var_reconstruct(v.VarDec.vardecl);
+    })
+  })
+}
+
 void ast_type_reconstruct(const variant_ast_type* v) {
   const variant_ast_type v2 = *v;
   match_variant(v2, ast_type, {
@@ -132,6 +145,7 @@ void ast_reconstruct(variant_ast_node n) {
   match_variant(n, ast_node, {
     variant_case(ast_node, Token,           { assert(0 && "Doesn't make sense to reconstruct token directly"); })
     variant_case(ast_node, VariantVar,      { ast_var_reconstruct(n.VariantVar); })
+    variant_case(ast_node, VariantVarList,  { ast_varlist_reconstruct(n.VariantVarList); })
     variant_case(ast_node, VariantLit,      { ast_lit_reconstruct(n.VariantLit); })
     variant_case(ast_node, VariantLogDisj,  { ast_log_disj_reconstruct(n.VariantLogDisj); })
     variant_case(ast_node, VariantLogConj,  { ast_log_conj_reconstruct(n.VariantLogConj); })
