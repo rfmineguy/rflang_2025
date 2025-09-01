@@ -46,3 +46,23 @@ static void repl_help() {
   printf("tokenize : enter the tokenization repl state\n");
   printf("parse    : enter the parsing repl state\n");
 }
+
+int repl_run() {
+  repl_ctx ctx = {.state = STATE_DEFAULT, .running = true};
+  while (ctx.running) {
+    switch (ctx.state) {
+      case STATE_DEFAULT: {
+        if (!repl_prompt(&ctx)) continue;
+        repl_command cmd = repl_parse_command(&ctx);
+        if (cmd.type == CMD_TOKENIZE) ctx.state = STATE_TOKENIZE;
+        if (cmd.type == CMD_PARSE)    ctx.state = STATE_PARSE;
+        if (cmd.type == CMD_HELP)     repl_help();
+        if (cmd.type == CMD_EXIT)     ctx.running = false;
+        break;
+      }
+      case STATE_TOKENIZE: ctx.state = repl_command_tokenize(&ctx); break;
+      case STATE_PARSE:    ctx.state = repl_command_parse(&ctx); break;
+    }
+  }
+  return 0;
+}
