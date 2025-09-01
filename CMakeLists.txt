@@ -27,6 +27,7 @@ set(LIBRFC_INCLUDE_DIRS
 # ================
 include(cmake/Prebuild.cmake)
 include(cmake/PreprocessBuild.cmake)
+include(cmake/GenGetOpt.cmake)
 
 set(GENGEN_TPL_FILES
   ${CMAKE_SOURCE_DIR}/tpl/stack.htpl
@@ -40,11 +41,21 @@ set(GENGEN_GENERATED_FILES
   ${LIBRFC_SOURCE_DIR}/dynarray_token.h
   ${LIBRFC_SOURCE_DIR}/dynarray_token.c)
 
+set(CMDLINE_FILES
+  ${EXERFC_SOURCE_DIR}/cmdline.h
+  ${EXERFC_SOURCE_DIR}/cmdline.c)
+
 prebuild_setup(
   "gengen.c"
   TARGET_NAME prebuildexe
   TPL_FILES "${GENGEN_TPL_FILES}"
   GENERATED_FILES "${GENGEN_GENERATED_FILES}"
+)
+
+gengetopt_setup(
+  "config.ggo"
+  CMDLINE_FILES "${CMDLINE_FILES}"
+  OUTPUT_DIR "${EXERFC_SOURCE_DIR}"
 )
 
 # ==================================
@@ -65,7 +76,9 @@ set(LIBRFC_SOURCE_FILES
 )
 
 set(EXERFC_SOURCE_FILES
+  "${EXERFC_SOURCE_DIR}/cmdline.c"
   "${EXERFC_SOURCE_DIR}/main.c"
+  "${CMDLINE_FILES}"
 )
 
 # ==================================

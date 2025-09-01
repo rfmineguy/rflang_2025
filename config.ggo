@@ -1,0 +1,8 @@
+package "<packname>"
+version "<version>"
+purpose "<purpose>"
+usage "<usage>"
+description "<description>"
+versiontext "<versiontext>"
+
+args "<command line options>"
