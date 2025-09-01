@@ -26,11 +26,11 @@ jobs:
         with:
           repository: rfmineguy/gengetopt-windows
           tag: gengetopt-2.23
-          fileName: gengetopt-windows.zip
+          fileName: gengetopt-windows-2.23.tar
 
       - name: Extract gengetopt
         run: |
-          tar -xf gengetopt-windows.zip -C gengetopt-install
+          tar -xf gengetopt-2.23.tar -C gengetopt-install
         shell: bash
 
       - name: Add gengetopt to path
