@@ -30,3 +30,13 @@ repl_command repl_parse_command(repl_ctx* ctx) {
 
   return cmd;
 }
+
+bool repl_prompt(repl_ctx* ctx) {
+  printf("[%s] >> ", repl_state_str(ctx->state));
+  char* line = NULL;
+  if (fgets(ctx->repl_buffer, 255, stdin) != NULL) {
+    ctx->repl_buffer[strcspn(ctx->repl_buffer, "\n")] = 0;
+    return true;
+  }
+  return false;
+}
