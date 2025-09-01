@@ -31,6 +31,8 @@ repl_command repl_parse_command(repl_ctx* ctx) {
 }
 
 bool repl_prompt(repl_ctx* ctx) {
+  for (int i = 0; i < 20; i++) printf("━");
+  printf("\n");
   printf("[%s] >> ", repl_state_str(ctx->state));
   char* line = NULL;
   if (fgets(ctx->repl_buffer, MAX_CMD_LENGTH, stdin) != NULL) {
@@ -50,6 +52,7 @@ static void repl_help() {
   printf("Help: repl\n");
   printf("tokenize : enter the tokenization repl state\n");
   printf("parse    : enter the parsing repl state\n");
+  printf("exit     : exit the repl\n");
 }
 
 int repl_run() {
