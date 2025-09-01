@@ -50,6 +50,8 @@ MunitResult parser_run_type_ptr_ptr(const MunitParameter *, void *);
 MunitResult parser_run_type_array(const MunitParameter *, void *);
 MunitResult parser_run_type_array_of_ptr(const MunitParameter *, void *);
 MunitResult parser_run_type_array_of_array(const MunitParameter *, void *);
+MunitResult parser_run_varlist_two(const MunitParameter *, void *);
+MunitResult parser_run_varlist_three(const MunitParameter *, void *);
 
 MunitResult ast_reconstruct_vardecl(const MunitParameter*, void *);
 MunitResult ast_reconstruct_expr_simple_addition(const MunitParameter*, void *);

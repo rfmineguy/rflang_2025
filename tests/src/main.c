@@ -97,6 +97,12 @@ MunitTest parser_run_type_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest parser_run_varlist_tests[] = {
+  { "/varlist_two",      parser_run_varlist_two, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/varlist_three",      parser_run_varlist_three, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitTest ast_reconstruct_tests[] = {
   { "/vardecl",          ast_reconstruct_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_add",         ast_reconstruct_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -112,6 +118,7 @@ MunitSuite parser_run_suite[] = {
   { "/expr", parser_run_expr_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/vardecl", parser_run_vardecl_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/type", parser_run_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/varlist", parser_run_varlist_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 

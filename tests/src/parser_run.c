@@ -431,3 +431,91 @@ MunitResult parser_run_type_array_of_array(const MunitParameter *param, void *co
   parser_free(&r3.ok);
   return MUNIT_OK;
 }
+MunitResult parser_run_varlist_two(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a: int, b: char");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 8);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+#undef actual
+#define actual \
+  "VarList{\n"\
+  "  Var{\n"\
+  "    id: b\n"\
+  "    Type{id: char}\n"\
+  "  }\n"\
+  "  VarList.Var{\n"\
+  "    id: a\n"\
+  "    Type{id: int}\n"\
+  "  }\n"\
+  "}\n"\
+
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVarList);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO, handle);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
+  return MUNIT_OK;
+}
+MunitResult parser_run_varlist_three(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a: int, b: char, c: [**char]");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 16);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+#undef actual
+#define actual \
+  "VarList{\n"\
+  "  Var{\n"\
+  "    id: c\n"\
+  "    Type[Array]{\n"\
+  "      Type[Ptr].Type[Ptr].Type{id: char}\n"\
+  "    }\n"\
+  "  }\n"\
+  "  VarList{\n"\
+  "    Var{\n"\
+  "      id: b\n"\
+  "      Type{id: char}\n"\
+  "    }\n"\
+  "    VarList.Var{\n"\
+  "      id: a\n"\
+  "      Type{id: int}\n"\
+  "    }\n"\
+  "  }\n"\
+  "}\n"\
+
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVarList);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO, handle);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
+
+  return MUNIT_OK;
+}
