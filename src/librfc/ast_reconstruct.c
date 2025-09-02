@@ -14,6 +14,22 @@ void ast_var_reconstruct(const variant_ast_vardecl* v) {
   })
 }
 
+void ast_assign_reconstruct(const variant_ast_assign* v) {
+  const variant_ast_assign v2 = *v;
+  match_variant(v2, ast_assign, {
+    variant_case(ast_assign, ExprExpr, {
+      ast_expr_reconstruct(v.ExprExpr.left);
+      printf(" = ");
+      ast_expr_reconstruct(v.ExprExpr.right);
+    })
+    variant_case(ast_assign, VarDecExpr, {
+      ast_var_reconstruct(v.VarDecExpr.vardec);
+      printf(" = ");
+      ast_expr_reconstruct(v.VarDecExpr.expr);
+    })
+  })
+}
+
 void ast_varlist_reconstruct(const variant_ast_varlist* v) {
   const variant_ast_varlist v2 = *v;
   match_variant(v2, ast_varlist, {
@@ -155,5 +171,6 @@ void ast_reconstruct(variant_ast_node n) {
     variant_case(ast_node, VariantFactor,   { ast_factor_reconstruct(n.VariantFactor); })
     variant_case(ast_node, VariantExpr,     { ast_expr_reconstruct(n.VariantExpr); })
     variant_case(ast_node, VariantType,     { ast_type_reconstruct(n.VariantType); })
+    variant_case(ast_node, VariantAssign,   { ast_assign_reconstruct(n.VariantAssign); })
   })
 }

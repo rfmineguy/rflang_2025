@@ -17,6 +17,7 @@ forward_dec_variant(ast_factor);
 forward_dec_variant(ast_token);
 forward_dec_variant(ast_vardecl);
 forward_dec_variant(ast_varlist);
+forward_dec_variant(ast_assign);
 
 
 /*
@@ -68,9 +69,14 @@ forward_dec_variant(ast_varlist);
   X(VarDec, ast_varlist, varlist_vardec)\
   X(VarListDec, ast_varlist, varlist_vlist_vardec)\
 
+#define ast_assign_variant(X)\
+  X(ExprExpr, ast_assign, assign_expr_expr)\
+  X(VarDecExpr, ast_assign, assign_vardec_expr)\
+
 #define ast_node_variant(X)\
   X(Token, ast_node, ast_token)\
   X(VariantType,   ast_node, variant_ast_type*)\
+  X(VariantAssign, ast_node, variant_ast_assign*)\
   X(VariantVar,   ast_node, variant_ast_vardecl*)\
   X(VariantVarList,  ast_node, variant_ast_varlist*)\
   X(VariantLit,      ast_node, variant_ast_lit*)\
@@ -88,6 +94,9 @@ typedef struct { variant_ast_type* type; } type_ptr;
 typedef struct { variant_ast_type* type; variant_ast_expr* expr_opt; } type_array;
 
 typedef struct { token id; variant_ast_type* type; } vardecl;
+
+typedef struct { variant_ast_vardecl* vardec; variant_ast_expr* expr; } assign_vardec_expr;
+typedef struct { variant_ast_expr *left, *right; } assign_expr_expr;
 
 typedef struct { variant_ast_varlist* varlist; variant_ast_vardecl* vardec; } varlist_vlist_vardec;
 typedef struct { variant_ast_vardecl* vardecl; } varlist_vardec;
@@ -124,6 +133,7 @@ typedef struct { token id; } lit_double;
 typedef struct { token id; } lit_id;
 
 define_variant(ast_type, ast_type_variant);
+define_variant(ast_assign, ast_assign_variant);
 define_variant(ast_expr, ast_expr_variant);
 define_variant(ast_log_disj, ast_log_disj_variant)
 define_variant(ast_log_conj, ast_log_conj_variant)
@@ -142,6 +152,7 @@ define_variant(ast_node, ast_node_variant)
 void ast_node_print(variant_ast_node n, int depth);
 
 void ast_type_print(variant_ast_type* v, int depth, bool sameline);
+void ast_assign_print(variant_ast_assign* v, int depth, bool sameline);
 void ast_var_print(variant_ast_vardecl* v, int depth, bool sameline);
 void ast_varlist_print(variant_ast_varlist* v, int depth, bool sameline);
 void ast_lit_print(const variant_ast_lit* n, int depth, bool sameline);
