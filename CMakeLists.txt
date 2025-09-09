@@ -4,6 +4,7 @@ project(prebuild LANGUAGES C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(PROFILING    "Turn on or off profiling" OFF)
+option(PREPROCESS   "Turn on or off preprocessing" OFF)
 
 # ================
 # Setup variables for commonly used
@@ -99,6 +100,7 @@ endif()
 # If preprocessing is requested add a few things to the build
 # ==================================
 if (PREPROCESS)
+  # Librfc
   preprocess_build(
     SOURCE_FILES ${LIBRFC_SOURCE_FILES}
     INCLUDE_DIRS ${LIBRFC_INCLUDE_DIRS}
@@ -106,11 +108,20 @@ if (PREPROCESS)
     MODIFY LIBRFC_SOURCE_FILES
   )
   set_source_files_properties(${LIBRFC_SOURCE_FILES} PROPERTIES LANGUAGE C)
-  add_custom_target(preprocess ALL DEPENDS ${LIBRFC_SOURCE_FILES})
   add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
-  add_dependencies(librfc preprocess)
+
+  # Rfcexe
+  preprocess_build(
+    SOURCE_FILES ${EXERFC_SOURCE_FILES}
+    INCLUDE_DIRS ${LIBRFC_INCLUDE_DIRS} ${MAIN_SOURCE_DIR}
+    CFLAGS ${RFC_C_FLAGS}
+    MODIFY EXERFC_SOURCE_FILES
+  )
+  set_source_files_properties(${EXERFC_SOURCE_FILES} PROPERTIES LANGUAGE C)
+  add_executable(rfc ${EXERFC_SOURCE_FILES})
 else()
   add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
+  add_executable(rfc ${EXERFC_SOURCE_FILES})
 endif()
 
 # ==================================
@@ -127,7 +138,6 @@ target_include_directories(librfc PUBLIC
 # ==================================
 # Setup rfc driver executable
 # ==================================
-add_executable(rfc ${EXERFC_SOURCE_FILES})
 target_compile_options(rfc PRIVATE ${RFC_C_FLAGS})
 target_link_libraries(rfc PRIVATE librfc)
 target_include_directories(rfc PUBLIC
