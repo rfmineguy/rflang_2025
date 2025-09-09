@@ -1,4 +1,5 @@
 #include "tests.h"
+#include "test_util.h"
 #include <unistd.h>
 #include <stdio.h>
 #ifndef RFC_PATH
@@ -26,16 +27,8 @@ MunitResult rfc_repl_test_blank_input(const MunitParameter* params, void* fixtur
   fputs(input, f);
   fclose(f);
 
-  // run executable with redirected IO
-  int ret = system(RFC_PATH " --repl" " < input.txt > output.txt 2> prompts.txt");
-  if (WIFEXITED(ret)) {
-    // int status = WEXITSTATUS(ret);
-  }
-  else {
-    printf("Child did not exit normally\n");
-    return MUNIT_ERROR;
-  }
-  if (ret == -1) return MUNIT_ERROR;
+  process_result r = run_proc_cmd(RFC_PATH " --repl" " < input.txt > output.txt 2> prompts.txt");
+  if (r.code == -1) return MUNIT_ERROR;
 
   munit_assert_file_contents_equal("output.txt", expected_output);
 
