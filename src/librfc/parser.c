@@ -132,6 +132,43 @@ result_parser_run parser_run(tokenizer* t) {
         })
       }, {});
 
+      /* Try to reduce to assign
+       *    assign := <vardecl> <eq> <expr>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantVar), token(EQ), ast(variant_ast_node_type_VariantExpr)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_assign* assign = make_variant_alloc(ast_assign, arena_alloc_);
+        *assign = make_variant(ast_assign, VarDecExpr, ((assign_vardec_expr){.vardec = result_.ok.nodes[2].VariantVar, .expr = result_.ok.nodes[0].VariantExpr}));
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantAssign, assign));
+        number_reduced++;
+      }, {})
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantExpr), token(EQ), ast(variant_ast_node_type_VariantExpr)})), stack_check, {
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_assign* assign = make_variant_alloc(ast_assign, arena_alloc_);
+        *assign = make_variant(ast_assign, ExprExpr, ((assign_expr_expr){.left = result_.ok.nodes[2].VariantExpr, .right = result_.ok.nodes[0].VariantExpr}));
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantAssign, assign));
+        number_reduced++;
+      }, {})
+
+      /* Try to reduce to assign
+       *    assign := <expr> <eq> <expr>
+       */
+      match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantExpr), token(EQ), ast(variant_ast_node_type_VariantExpr)})), stack_check, {
+        // Check to see if the lookback is a colon. if it is we probably have a type back there
+        match(stack_ast_node_top_offset(&ctx.ast_stack, 3), stack_ast_node_top, {
+          if (result_.ok.Token.t.type == COLON) continue;
+        }, {});
+
+        stack_ast_node_pop_n(&ctx.ast_stack, 3);
+        variant_ast_assign* assign = make_variant_alloc(ast_assign, arena_alloc_);
+        *assign = make_variant(ast_assign, ExprExpr, ((assign_expr_expr){.left = result_.ok.nodes[2].VariantExpr, .right = result_.ok.nodes[0].VariantExpr}));
+
+        stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantAssign, assign));
+        number_reduced++;
+      }, {})
+
       /* Try to reduce to vardecl
        *    vardecl := <id> <colon> <id>
        */
