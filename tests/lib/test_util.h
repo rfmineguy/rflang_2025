@@ -23,6 +23,10 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+typedef struct {
+  int code;
+} process_result;
+
 #ifdef _WIN32
 #include <io.h>
 #define dup _dup
@@ -56,4 +60,6 @@
     close(fd_from);              \
   } while(0)
 
+// Process exec
+process_result run_proc_cmd(const char*);
 #endif
