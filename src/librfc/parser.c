@@ -105,26 +105,42 @@ result_parser_run parser_run(tokenizer* t) {
        *    type3   := <id>       if the lookahead is not an operator or colon or rcbrk
        */
       match(stack_check(&ctx.ast_stack, check_seq({token(ID)})), stack_check, {
-        if (lookahead && (lookahead->type == LPAR)) {
-          continue; // expect function call
-        }
-        else if (lookahead && (!token_is_operator(*lookahead) && lookahead->type != COLON && lookahead->type != RCBRK)) {
-          // expect type
-          stack_ast_node_pop_n(&ctx.ast_stack, 1);
-          variant_ast_type* type = make_variant_alloc(ast_type, arena_alloc_);
-          *type = make_variant(ast_type, Id, {.id = result_.ok.nodes[0].Token.t});
-          stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantType, type));
-          number_reduced++;
-        }
-        else if (lookahead && (lookahead->type != COLON)) {
-          stack_ast_node_pop_n(&ctx.ast_stack, 1);
-          variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc_);
-
-          *lit = make_variant(ast_lit, Id, {.id = result_.ok.nodes[0].Token.t});
-          stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
-          number_reduced++;
-          printf("Reduced id to literal\n");
-        }
+        result_stack_check cached_stack_check_result = result_;
+        match(stack_ast_node_top_offset(&ctx.ast_stack, 1), stack_ast_node_top, {
+          if (result_.ok.type == variant_ast_node_type_Token) {
+            ast_token v = result_.ok.Token;
+            if (v.t.type == MUL || v.t.type == LSBRK || v.t.type == COLON) {
+              stack_ast_node_pop_n(&ctx.ast_stack, 1);
+              variant_ast_type* type = make_variant_alloc(ast_type, arena_alloc_);
+              *type = make_variant(ast_type, Id, {.id = cached_stack_check_result.ok.nodes[0].Token.t});
+              stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantType, type));
+              number_reduced++;
+            }
+            else if (v.t.type == LPAR) {
+              stack_ast_node_pop_n(&ctx.ast_stack, 1);
+              variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc_);
+              *lit = make_variant(ast_lit, Id, {.id = cached_stack_check_result.ok.nodes[0].Token.t});
+              stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
+              number_reduced++;
+            }
+            else {}
+          }
+        }, {
+          if (token_is_operator(*lookahead)) {
+            stack_ast_node_pop_n(&ctx.ast_stack, 1);
+            variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc_);
+            *lit = make_variant(ast_lit, Id, {.id = cached_stack_check_result.ok.nodes[0].Token.t});
+            stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
+            number_reduced++;
+          }
+          else if (lookahead->type == EQ) {
+            stack_ast_node_pop_n(&ctx.ast_stack, 1);
+            variant_ast_lit* lit = make_variant_alloc(ast_lit, arena_alloc_);
+            *lit = make_variant(ast_lit, Id, {.id = cached_stack_check_result.ok.nodes[0].Token.t});
+            stack_ast_node_push(&ctx.ast_stack, make_variant(ast_node, VariantLit, lit));
+            number_reduced++;
+          }
+        })
       }, {});
 
       /* Try to reduce a varlist
@@ -235,7 +251,7 @@ result_parser_run parser_run(tokenizer* t) {
       }, {});
 
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantMathExpr), token(MINUS), ast(variant_ast_node_type_VariantTerm)})), stack_check, {
-        if (lookahead_type_check(lookahead, tok_list(GTEQ, LTEQ, GT, LT, PLUS, MINUS, MUL, DIV, MOD, EOF_))) continue;
+        if (lookahead_type_check(lookahead, tok_list(GTEQ, LTEQ, GT, LT, MUL, DIV, MOD))) continue;
         stack_ast_node_pop_n(&ctx.ast_stack, 3);
         variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc_);
         *mathexpr = make_variant(ast_math_expr, METerm, ((math_expr_me_term){.math_expr = result_.ok.nodes[2].VariantMathExpr, .term = result_.ok.nodes[0].VariantTerm, .operator = result_.ok.nodes[1].Token.t}));
@@ -247,7 +263,7 @@ result_parser_run parser_run(tokenizer* t) {
        *  math_expr := <term>
        */
       match(stack_check(&ctx.ast_stack, check_seq({ast(variant_ast_node_type_VariantTerm)})), stack_check, {
-        if (!lookahead_type_check(lookahead, tok_list(GTEQ, LTEQ, GT, LT, PLUS, MINUS, RPAR, EOF_, KEYWORD, RCBRK, LCBRK, RSBRK))) continue;
+        if (!lookahead_type_check(lookahead, tok_list(EQ, GTEQ, LTEQ, GT, LT, PLUS, MINUS, RPAR, EOF_, KEYWORD, RCBRK, LCBRK, RSBRK))) continue;
         stack_ast_node_pop_n(&ctx.ast_stack, 1);
         variant_ast_math_expr* mathexpr = make_variant_alloc(ast_math_expr, arena_alloc_);
         *mathexpr = make_variant(ast_math_expr, Term, ((math_expr_term){.term = result_.ok.nodes[0].VariantTerm}));
