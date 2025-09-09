@@ -1,7 +1,7 @@
 #include "munit.h"
 
-#include "tests.h"
-
+#include "unit/tests.h"
+#include "integration/tests.h"
 
 void* setup(const MunitParameter params[], void* userdata) {
   return NULL;
@@ -9,6 +9,10 @@ void* setup(const MunitParameter params[], void* userdata) {
 
 void teardown(void* fixture) {}
 
+/*  ========================================
+ *     Begin librfc test definitions
+ *  ========================================
+ */
 MunitTest stack_test_type_tests[] = {
   { "/create",     stack_test_type_create_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/push",       stack_test_type_push_test, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -103,6 +107,13 @@ MunitTest parser_run_varlist_tests[] = {
   { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 };
 
+MunitTest parser_run_assign_tests[] = {
+  { "/assign_simple_type_simple_expr",      parser_run_assign_simple_type_simple_expr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/assign_simple_type_complex_expr",     parser_run_assign_simple_type_complex_expr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { "/assign_expr_complex_expr",      parser_run_assign_expr_complex_expr, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
+  { NULL, NULL,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+};
+
 MunitTest ast_reconstruct_tests[] = {
   { "/vardecl",          ast_reconstruct_vardecl, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
   { "/expr_add",         ast_reconstruct_expr_simple_addition, setup, teardown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -119,6 +130,7 @@ MunitSuite parser_run_suite[] = {
   { "/vardecl", parser_run_vardecl_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/type", parser_run_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/varlist", parser_run_varlist_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/assign", parser_run_assign_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
@@ -128,7 +140,7 @@ MunitSuite parser_suite[] = {
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
-MunitSuite all_tests[] = {
+MunitSuite librfc_tests[] = {
   { "/stack_test_type",stack_test_type_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/dynarray_token", dynarray_token_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
   { "/tokenizer",      tokenizer_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
@@ -141,10 +153,34 @@ MunitSuite all_tests[] = {
   {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
 };
 
+/*  ========================================
+ *     Begin rfc test definitions
+ *  ========================================
+ */
+MunitTest rfc_repl_tests[] = {
+  { "/blank_input", rfc_repl_test_blank_input, setup, teardown, MUNIT_TEST_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_TEST_OPTION_NONE},
+};
+
+MunitSuite rfc_tests[] = {
+  { "/repl", rfc_repl_tests, NULL, 1, MUNIT_SUITE_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
+};
+
+/*  ========================================
+ *     Setup main test runner
+ *  ========================================
+ */
+MunitSuite rflang_tests[] = {
+  { "/librfc_unit", NULL, librfc_tests, 1, MUNIT_SUITE_OPTION_NONE },
+  { "/  rfc_integ", NULL, rfc_tests, 1, MUNIT_SUITE_OPTION_NONE },
+  {NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE},
+};
+
 static const MunitSuite main_suite = {
   "rflang",
   NULL,
-  all_tests,
+  rflang_tests,
   1,
   MUNIT_SUITE_OPTION_NONE
 };
