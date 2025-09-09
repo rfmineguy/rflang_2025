@@ -1,5 +1,5 @@
-#ifndef TESTS_H
-#define TESTS_H
+#ifndef UNIT_TESTS_H
+#define UNIT_TESTS_H
 #include "munit.h"
 #include "munit_ext.h"
 
@@ -52,6 +52,9 @@ MunitResult parser_run_type_array_of_ptr(const MunitParameter *, void *);
 MunitResult parser_run_type_array_of_array(const MunitParameter *, void *);
 MunitResult parser_run_varlist_two(const MunitParameter *, void *);
 MunitResult parser_run_varlist_three(const MunitParameter *, void *);
+MunitResult parser_run_assign_simple_type_simple_expr(const MunitParameter *, void *);
+MunitResult parser_run_assign_simple_type_complex_expr(const MunitParameter *, void *);
+MunitResult parser_run_assign_expr_complex_expr(const MunitParameter *, void *);
 
 MunitResult ast_reconstruct_vardecl(const MunitParameter*, void *);
 MunitResult ast_reconstruct_expr_simple_addition(const MunitParameter*, void *);

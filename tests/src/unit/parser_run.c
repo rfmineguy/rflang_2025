@@ -519,3 +519,151 @@ MunitResult parser_run_varlist_three(const MunitParameter *param, void *context)
 
   return MUNIT_OK;
 }
+MunitResult parser_run_assign_simple_type_simple_expr(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a: int = 4");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 6);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+#undef actual
+#define actual \
+  "Assign{\n"\
+  "  Var{\n"\
+  "    id: a\n"\
+  "    Type{id: int}\n"\
+  "  }\n"\
+  "  Expr.Disj.Conj.Rel.MathExpr.Term.Factor.Lit{int: 4}\n"\
+  "}\n"\
+
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO, handle);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
+
+  return MUNIT_OK;
+}
+MunitResult parser_run_assign_simple_type_complex_expr(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a: int = 4 * (3 + 2 - 5) /4");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 16);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+#undef actual
+#define actual \
+  "Assign{\n"\
+  "  Var{\n"\
+  "    id: a\n"\
+  "    Type{id: int}\n"\
+  "  }\n"\
+  "  Expr.Disj.Conj.Rel.MathExpr.Term {\n"\
+  "    Operator: /\n"\
+  "    Term {\n"\
+  "      Operator: *\n"\
+  "      Term.Factor.Lit{int: 4}\n"\
+  "      Factor {\n"\
+  "        Expr.Disj.Conj.Rel.MathExpr {\n"\
+  "          Operator: -\n"\
+  "          MathExpr {\n"\
+  "            Operator: +\n"\
+  "            MathExpr.Term.Factor.Lit{int: 3}\n"\
+  "            Term.Factor.Lit{int: 2}\n"\
+  "          }\n"\
+  "          Term.Factor.Lit{int: 5}\n"\
+  "        }\n"\
+  "      }\n"\
+  "    }\n"\
+  "    Factor.Lit{int: 4}\n"\
+  "  }\n"\
+  "}\n"\
+
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO, handle);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
+
+  return MUNIT_OK;
+}
+
+MunitResult parser_run_assign_expr_complex_expr(const MunitParameter *param, void *context) {
+  result_tokenizer_create r = tokenizer_create_cstr("a = 4 * (3 + 2 - 5) /4");
+  munit_assert_true(r.isok);
+  result_tokenizer_run r2 = tokenizer_run(&r.ok);
+  munit_assert_true(r2.isok);
+  munit_assert_int(r.ok.tokens.size, ==, 14);
+
+  // Test parser run
+  result_parser_run r3 = parser_run(&r.ok);
+  munit_assert_true(r3.isok);
+
+#undef actual
+#define actual\
+  "Assign{\n"\
+  "  Expr.Disj.Conj.Rel.MathExpr.Term.Factor.Lit{id: a}\n"\
+  "  Expr.Disj.Conj.Rel.MathExpr.Term {\n"\
+  "    Operator: /\n"\
+  "    Term {\n"\
+  "      Operator: *\n"\
+  "      Term.Factor.Lit{int: 4}\n"\
+  "      Factor {\n"\
+  "        Expr.Disj.Conj.Rel.MathExpr {\n"\
+  "          Operator: -\n"\
+  "          MathExpr {\n"\
+  "            Operator: +\n"\
+  "            MathExpr.Term.Factor.Lit{int: 3}\n"\
+  "            Term.Factor.Lit{int: 2}\n"\
+  "          }\n"\
+  "          Term.Factor.Lit{int: 5}\n"\
+  "        }\n"\
+  "      }\n"\
+  "    }\n"\
+  "    Factor.Lit{int: 4}\n"\
+  "  }\n"\
+  "}\n"\
+
+  munit_assert_int(r3.ok.ast_stack.size, ==, 2);
+  match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
+    munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
+
+    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    ast_node_print(result_.ok, 0);
+    redirect_end(STDOUT_FILENO, handle);
+    munit_assert_file_contents_equal(TEMP_FILE, actual);
+  }, {
+    munit_assert(false);
+  });
+
+  tokenizer_free(&r.ok);
+  parser_free(&r3.ok);
+
+  return MUNIT_OK;
+}
