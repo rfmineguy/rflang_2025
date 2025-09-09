@@ -43,18 +43,19 @@ prebuild_setup(
 # Setup the files to be compiled
 # ==================================
 set(TEST_FILES
-  "${MAIN_TEST_SOURCE_DIR}/dynarray_token.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/dynarray_token.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/parser_run.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/parser_stack.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/result.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/stack_test_type.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/tests.h"
+  "${MAIN_TEST_SOURCE_DIR}/unit/token.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/tokenizer.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/variant.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/redirect.c"
+  "${MAIN_TEST_SOURCE_DIR}/unit/ast_reconstruct.c"
+  "${MAIN_TEST_SOURCE_DIR}/integration/repl.c"
   "${MAIN_TEST_SOURCE_DIR}/main.c"
-  "${MAIN_TEST_SOURCE_DIR}/parser_run.c"
-  "${MAIN_TEST_SOURCE_DIR}/parser_stack.c"
-  "${MAIN_TEST_SOURCE_DIR}/result.c"
-  "${MAIN_TEST_SOURCE_DIR}/stack_test_type.c"
-  "${MAIN_TEST_SOURCE_DIR}/tests.h"
-  "${MAIN_TEST_SOURCE_DIR}/token.c"
-  "${MAIN_TEST_SOURCE_DIR}/tokenizer.c"
-  "${MAIN_TEST_SOURCE_DIR}/variant.c"
-  "${MAIN_TEST_SOURCE_DIR}/redirect.c"
-  "${MAIN_TEST_SOURCE_DIR}/ast_reconstruct.c"
   "${GENGEN_GENERATED_FILES}"
 )
 
@@ -69,6 +70,7 @@ target_link_libraries(librfc-test PRIVATE librfc)
 add_dependencies(librfc-test prebuildexe2)
 target_include_directories(librfc-test PUBLIC support support/tpl lib/ generated ${munit_SOURCE_DIR})
 target_compile_options(librfc-test PUBLIC "-DMUNIT_TEST_NAME_LEN=80")
+target_compile_options(librfc-test PUBLIC "-DRFC_PATH=\"${CMAKE_BINARY_DIR}/rfc\"")
 
 add_test(
   NAME MyExecutableTest
