@@ -31,9 +31,9 @@ repl_command repl_parse_command(repl_ctx* ctx) {
 }
 
 bool repl_prompt(repl_ctx* ctx) {
-  for (int i = 0; i < 20; i++) printf("━");
-  printf("\n");
-  printf("[%s] >> ", repl_state_str(ctx->state));
+  for (int i = 0; i < 20; i++) fprintf(stderr, "━");
+  fprintf(stderr, "\n");
+  fprintf(stderr, "[%s] >> ", repl_state_str(ctx->state));
   char* line = NULL;
   if (fgets(ctx->repl_buffer, MAX_CMD_LENGTH, stdin) != NULL) {
     ctx->repl_buffer[strcspn(ctx->repl_buffer, "\n")] = 0;
@@ -72,5 +72,6 @@ int repl_run() {
       case STATE_PARSE:    ctx.state = repl_command_parse(&ctx); break;
     }
   }
+  fflush(stdout);
   return 0;
 }
