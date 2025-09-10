@@ -2,7 +2,7 @@
 #include "librfc/parser.h"
 #include "spall_util.h"
 #include "cmdline.h"
-#include "repl.h"
+#include "repl/repl.h"
 #include <stdio.h>
 
 int main(int argc, char** argv) {
