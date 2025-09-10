@@ -63,9 +63,9 @@ static void repl_help() {
 
 int repl_run_internal(FILE* stdin_, FILE* stdout_, FILE* stderr_) {
 #ifdef _WIN32
-  _dup2(fileno(inFile), 0);
-  _dup2(fileno(outFile), 1);
-  _dup2(fileno(errFile), 2);
+  _dup2(fileno(stdin_), 0);
+  _dup2(fileno(stdout_), 1);
+  _dup2(fileno(stderr_), 2);
 #else
   stdin = stdin_;
   stdout = stdout_;
