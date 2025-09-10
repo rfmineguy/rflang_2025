@@ -55,7 +55,10 @@ static void repl_help() {
   printf("exit     : exit the repl\n");
 }
 
-int repl_run() {
+int repl_run_internal(FILE* stdin_, FILE* stdout_, FILE* stderr_) {
+  stdin = stdin_;
+  stdout = stdout_;
+  stderr = stderr_;
   repl_ctx ctx = {.state = STATE_DEFAULT, .running = true};
   while (ctx.running) {
     switch (ctx.state) {
@@ -74,4 +77,8 @@ int repl_run() {
   }
   fflush(stdout);
   return 0;
+}
+
+int repl_run() {
+  return repl_run_internal(stdin, stdout, stderr);
 }

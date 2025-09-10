@@ -1,6 +1,7 @@
 #ifndef REPL_H
 #define REPL_H
 #include <stdbool.h>
+#include <stdio.h>
 #define MAX_CMD_LENGTH 255
 
 typedef enum {
@@ -32,6 +33,7 @@ typedef struct {
 
 bool repl_prompt(repl_ctx* ctx);
 repl_command repl_parse_command(repl_ctx* ctx);
+int repl_run_internal(FILE* stdin_, FILE* stdout_, FILE* stderr_);
 int repl_run();
 
 #endif

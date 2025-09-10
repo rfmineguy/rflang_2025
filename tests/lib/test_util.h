@@ -62,6 +62,4 @@ typedef struct {
     close(fd_from);              \
   } while(0)
 
-// Process exec
-process_result run_proc_cmd(const char*);
 #endif
