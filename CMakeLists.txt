@@ -141,7 +141,7 @@ else()
 endif()
 
 target_compile_options(librfcrepl PRIVATE ${RFC_C_FLAGS})
-target_include_directories(librfcrepl PUBLIC "${MAIN_SOURCE_DIR}")
+target_include_directories(librfcrepl PUBLIC ${MAIN_SOURCE_DIR} ${LIBRFC_THIRDPARTY_DIR} ${LIBRFC_TPL_SUPPORT_DIR} ${LIBRFC_SOURCE_DIR})
 
 # ==================================
 # Setup librfc
