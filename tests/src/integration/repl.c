@@ -24,7 +24,7 @@ MunitResult rfc_repl_test_blank_input(const MunitParameter* params, void* fixtur
   "Token(EOF_), ''\n"\
 
   // setup input file
-  FILE* in = fopen("input.txt", "w+");
+  FILE* in = fopen("input.txt", "w+b");
   fputs(input, in);
   fclose(in);
 
