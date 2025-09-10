@@ -1,6 +1,6 @@
 #include "tests.h"
 #include "test_util.h"
-#include "../../src/rfc/repl.h"
+#include "repl/repl.h"
 #include <unistd.h>
 #include <stdio.h>
 #ifndef RFC_PATH
