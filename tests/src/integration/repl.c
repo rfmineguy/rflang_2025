@@ -16,25 +16,21 @@ MunitResult rfc_repl_test_blank_input(const MunitParameter* params, void* fixtur
   "a + 3\n"\
 
 #define expected_output\
-  line("Expr.Disj.Conj.Rel.MathExpr {")\
-  line("  Operator: +")\
-  line("  MathExpr.Term.Factor.Lit{id: a}")\
-  line("  Term.Factor.Lit{int: 3}")\
-  line("}")\
-  line("Token(EOF_), ''")\
+  "Expr.Disj.Conj.Rel.MathExpr {\n"\
+  "  Operator: +\n"\
+  "  MathExpr.Term.Factor.Lit{id: a}\n"\
+  "  Term.Factor.Lit{int: 3}\n"\
+  "}\n"\
+  "Token(EOF_), ''\n"\
 
   // setup input file
   FILE* in = fopen("input.txt", "w+");
-  FILE* out = fopen("output.txt", "w+");
-  FILE* err = fopen("error.txt", "w+");
   fputs(input, in);
-  rewind(in);
-
-  repl_run_internal(in, out, err);
-
   fclose(in);
-  fclose(out);
-  fclose(err);
+
+  redirect_to_filename_begin("input.txt", "output.txt", "error.txt");
+  repl_run();
+  redirect_to_filename_end()
 
   munit_assert_file_contents_equal("output.txt", expected_output);
 

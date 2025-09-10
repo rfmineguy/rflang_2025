@@ -16,7 +16,7 @@ void redirect_begin_(FILE* in, FILE* out, FILE* err, stdio_ctx* save) {
   // so the windows CRT knows about them
 #ifdef _WIN32
   if (out) {
-      FILE *newOut = _fdopen(dup(1), "w");
+      FILE *newOut = _fdopen(dup(1), "wb");
       if (newOut) {
           *stdout = *newOut;           // copy FILE internals
           setvbuf(stdout, NULL, _IONBF, 0); 
@@ -44,10 +44,4 @@ void redirect_end_(stdio_ctx* save) {
   close(save->saved_in);
   close(save->saved_out);
   close(save->saved_err);
-
-#ifdef _WIN32
-  _flushall();
-#else
-  fflush(NULL);
-#endif
 }
