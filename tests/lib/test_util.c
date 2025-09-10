@@ -44,4 +44,6 @@ void redirect_end_(stdio_ctx* save) {
   close(save->saved_in);
   close(save->saved_out);
   close(save->saved_err);
+  
+  fflush(NULL); // flush all open streams for extra safety
 }
