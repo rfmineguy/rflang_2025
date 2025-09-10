@@ -42,4 +42,9 @@ function(prebuild_setup GEN)
     COMMAND $<TARGET_FILE:${PREBUILD_TARGET_NAME}>
     COMMENT "Running prebuild built from ${GEN}"
   )
+
+  add_custom_target(
+    ${PREBUILD_TARGET_NAME}_run
+    DEPENDS ${PREBUILD_GENERATED_FILES}
+  )
 endfunction()
