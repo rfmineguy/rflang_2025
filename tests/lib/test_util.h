@@ -34,10 +34,12 @@ typedef struct {
 #define STDOUT_FILENO _fileno(stdout)
 #define flush_fd(fd) _commit(fd)
 #define OPEN_FLAGS O_WRONLY | O_CREAT | O_TRUNC | O_BINARY
+#define line(out) out "\r\n"
 #else
 #include <unistd.h>
 #define flush_fd(fd) fsync(fd)
 #define OPEN_FLAGS O_WRONLY | O_CREAT | O_TRUNC
+#define line(out) out "\n"
 #endif
 
 // Begin redirect macro
