@@ -68,10 +68,10 @@ void redirect_end_(stdio_ctx* save);
 
 #define redirect_to_filename_end()\
   redirect_end_(&ctx);\
-  fclose(stdin_);\
-  fclose(stdout_);\
-  fclose(stderr_);\
 }
+  // fclose(stdin_);\
+  // fclose(stdout_);\
+  // fclose(stderr_);\
 
 
 #endif

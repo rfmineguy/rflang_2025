@@ -1,0 +1,6 @@
+Expr.Disj.Conj.Rel.MathExpr {
+  Operator: +
+  MathExpr.Term.Factor.Lit{id: a}
+  Term.Factor.Lit{int: 3}
+}
+Token(EOF_), ''
