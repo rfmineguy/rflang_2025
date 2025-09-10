@@ -25,9 +25,9 @@ MunitResult parser_run_expr_single_number(const MunitParameter *param, void *con
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
@@ -64,9 +64,9 @@ MunitResult parser_run_expr_simple_addition(const MunitParameter *param, void *c
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -106,9 +106,9 @@ MunitResult parser_run_expr_add_and_mul(const MunitParameter *param, void *conte
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -155,9 +155,9 @@ MunitResult parser_run_expr_with_parens(const MunitParameter *param, void *conte
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -221,9 +221,9 @@ MunitResult parser_run_expr_cmp_ops(const MunitParameter *param, void *context) 
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantExpr);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -257,9 +257,9 @@ MunitResult parser_run_vardecl(const MunitParameter *param, void *context) {
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVar);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -289,9 +289,9 @@ MunitResult parser_run_type_ptr(const MunitParameter *param, void *context) {
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantType);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -320,9 +320,9 @@ MunitResult parser_run_type_ptr_ptr(const MunitParameter *param, void *context) 
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantType);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -353,9 +353,9 @@ MunitResult parser_run_type_array(const MunitParameter *param, void *context) {
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantType);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -385,9 +385,9 @@ MunitResult parser_run_type_array_of_ptr(const MunitParameter *param, void *cont
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantType);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -419,9 +419,9 @@ MunitResult parser_run_type_array_of_array(const MunitParameter *param, void *co
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantType);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -458,9 +458,9 @@ MunitResult parser_run_varlist_two(const MunitParameter *param, void *context) {
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVarList);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -506,9 +506,9 @@ MunitResult parser_run_varlist_three(const MunitParameter *param, void *context)
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVarList);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -544,9 +544,9 @@ MunitResult parser_run_assign_simple_type_simple_expr(const MunitParameter *para
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -600,9 +600,9 @@ MunitResult parser_run_assign_simple_type_complex_expr(const MunitParameter *par
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);
@@ -654,9 +654,9 @@ MunitResult parser_run_assign_expr_complex_expr(const MunitParameter *param, voi
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantAssign);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, handle);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_node_print(result_.ok, 0);
-    redirect_end(STDOUT_FILENO, handle);
+    redirect_to_filename_end()
     munit_assert_file_contents_equal(TEMP_FILE, actual);
   }, {
     munit_assert(false);

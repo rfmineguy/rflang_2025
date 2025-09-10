@@ -61,6 +61,7 @@ set(TEST_FILES
 
 set(LIB_FILES
   "${munit_SOURCE_DIR}/munit.c"
+  "${LIB_SOURCE_DIR}/test_util.c"
 )
 
 message("${munit_SOURCE_DIR}")

@@ -42,24 +42,36 @@ typedef struct {
 #define line(out) out "\n"
 #endif
 
-// Begin redirect macro
-#define redirect_begin(fd_from, filename_to, handle)         \
-  int handle = dup(fd_from);                                 \
-  do {                                                       \
-    fflush(stdout);                                          \
-    flush_fd(fd_from);                                       \
-    int __redirect_fd = open(filename_to, OPEN_FLAGS, 0644); \
-    dup2(__redirect_fd, fd_from);                            \
-    close(__redirect_fd);                                    \
-  } while (0)
+typedef struct {
+  int saved_in, saved_out, saved_err;
+} stdio_ctx;
 
-// End redirect macro
-#define redirect_end(fd_from, handle)    \
-  do {                                   \
-    fflush(stdout);                      \
-    flush_fd(fd_from);                   \
-    dup2(handle, fd_from);      \
-    close(fd_from);              \
-  } while(0)
+void redirect_begin_(FILE* in, FILE* out, FILE* err, stdio_ctx* save);
+void redirect_end_(stdio_ctx* save);
+
+#define redirect_to_file_begin(stdin_, stdout_, stderr_)\
+{\
+  stdio_ctx ctx = {0};\
+  redirect_begin_(stdin_, stdout_, stderr_, &ctx);\
+
+#define redirect_to_file_end()\
+  redirect_end_(&ctx);\
+}
+
+#define redirect_to_filename_begin(stdin_fn_, stdout_fn_, stderr_fn_)\
+{\
+  stdio_ctx ctx = {0};\
+  FILE* stdin_  = stdin_fn_ ? fopen(stdin_fn_, "r") : NULL;\
+  FILE* stdout_ = stdout_fn_ ? fopen(stdout_fn_, "w") : NULL;\
+  FILE* stderr_ = stderr_fn_ ? fopen(stderr_fn_, "w") : NULL;\
+  redirect_begin_(stdin_, stdout_, stderr_, &ctx);\
+
+#define redirect_to_filename_end()\
+  redirect_end_(&ctx);\
+  fclose(stdin_);\
+  fclose(stdout_);\
+  fclose(stderr_);\
+}
+
 
 #endif

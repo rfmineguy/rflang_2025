@@ -19,9 +19,9 @@ MunitResult ast_reconstruct_vardecl(const MunitParameter* params, void *context)
   match(stack_ast_node_top_offset(&r3.ok.ast_stack, 1), stack_ast_node_top, {
     munit_assert_int(result_.ok.type, ==, variant_ast_node_type_VariantVar);
 
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_var_reconstruct(result_.ok.VariantVar);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "a: int");
   }, {
@@ -48,9 +48,9 @@ MunitResult ast_reconstruct_expr_simple_addition(const MunitParameter* params, v
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "4+2");
   }, {
@@ -75,9 +75,9 @@ MunitResult ast_reconstruct_expr_addition_with_mul(const MunitParameter* params,
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "4+2*9");
   }, {
@@ -102,9 +102,9 @@ MunitResult ast_reconstruct_expr_addition_with_paren(const MunitParameter* param
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "(4+2)*9");
   }, {
@@ -129,9 +129,9 @@ MunitResult ast_reconstruct_expr_mul_div(const MunitParameter* params, void *con
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "(4*5)/4");
   }, {
@@ -156,9 +156,9 @@ MunitResult ast_reconstruct_expr_mul_div_2(const MunitParameter* params, void *c
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "4*5/4");
   }, {
@@ -183,9 +183,9 @@ MunitResult ast_reconstruct_expr_mul_div_3(const MunitParameter* params, void *c
 
 #undef TEMP_FILE
 #define TEMP_FILE "other.tmp"
-    redirect_begin(STDOUT_FILENO, TEMP_FILE, x);
+    redirect_to_filename_begin(NULL, TEMP_FILE, NULL);
     ast_expr_reconstruct(result_.ok.VariantExpr);
-    redirect_end(STDOUT_FILENO, x);
+    redirect_to_filename_end();
 
     munit_assert_file_contents_equal(TEMP_FILE, "4*(5/4)");
   }, {
