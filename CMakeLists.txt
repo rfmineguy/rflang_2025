@@ -17,8 +17,6 @@ set(REPLRFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/repl")
 set(LIBRFC_THIRDPARTY_DIR "${MAIN_SOURCE_DIR}/thirdparty")
 set(LIBRFC_TPL_SUPPORT_DIR "${MAIN_SOURCE_DIR}/tpl_support")
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/generated")
-
 set(LIBRFC_INCLUDE_DIRS
   ${LIBRFC_SOURCE_DIR}
   ${LIBRFC_THIRDPARTY_DIR}
@@ -81,6 +79,7 @@ set(LIBRFC_SOURCE_FILES
 set(REPL_SOURCE_FILES
   "${REPLRFC_SOURCE_DIR}/repl_commands.c"
   "${REPLRFC_SOURCE_DIR}/repl.c"
+  "${GENGEN_GENERATED_FILES}"
 )
 
 set(EXERFC_SOURCE_FILES
@@ -141,6 +140,7 @@ else()
 endif()
 
 target_compile_options(librfcrepl PRIVATE ${RFC_C_FLAGS})
+add_dependencies(librfcrepl prebuildexe)
 target_include_directories(librfcrepl PUBLIC ${MAIN_SOURCE_DIR} ${LIBRFC_THIRDPARTY_DIR} ${LIBRFC_TPL_SUPPORT_DIR} ${LIBRFC_SOURCE_DIR})
 
 # ==================================
