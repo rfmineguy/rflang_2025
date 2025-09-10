@@ -2,6 +2,12 @@
 #include "repl_commands.h"
 #include <stdio.h>
 #include <string.h>
+#ifdef _WIN32
+#include <io.h>
+#define dup _dup
+#define dup2 _dup2
+#else
+#endif
 
 const char* repl_state_str(repl_state state) {
   switch (state) {
@@ -56,9 +62,15 @@ static void repl_help() {
 }
 
 int repl_run_internal(FILE* stdin_, FILE* stdout_, FILE* stderr_) {
+#ifdef _WIN32
+  _dup2(fileno(inFile), 0);
+  _dup2(fileno(outFile), 1);
+  _dup2(fileno(errFile), 2);
+#else
   stdin = stdin_;
   stdout = stdout_;
   stderr = stderr_;
+#endif
   repl_ctx ctx = {.state = STATE_DEFAULT, .running = true};
   while (ctx.running) {
     switch (ctx.state) {
