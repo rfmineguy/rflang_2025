@@ -1,7 +1,7 @@
 #include "repl_commands.h"
-#include "tokenizer.h"
-#include "parser.h"
-#include "result.h"
+#include "librfc/tokenizer.h"
+#include "librfc/parser.h"
+#include "librfc/result.h"
 #include <stdio.h>
 
 static void repl_help_tokenize() {

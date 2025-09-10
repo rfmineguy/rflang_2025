@@ -13,8 +13,10 @@ option(PREPROCESS   "Turn on or off preprocessing" OFF)
 set(MAIN_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(EXERFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/rfc")
 set(LIBRFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/librfc")
+set(REPLRFC_SOURCE_DIR "${MAIN_SOURCE_DIR}/repl")
 set(LIBRFC_THIRDPARTY_DIR "${MAIN_SOURCE_DIR}/thirdparty")
 set(LIBRFC_TPL_SUPPORT_DIR "${MAIN_SOURCE_DIR}/tpl_support")
+
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/generated")
 
 set(LIBRFC_INCLUDE_DIRS
@@ -72,10 +74,13 @@ set(LIBRFC_SOURCE_FILES
   "${LIBRFC_SOURCE_DIR}/parser.c"
   "${LIBRFC_SOURCE_DIR}/token.c"
   "${LIBRFC_SOURCE_DIR}/tokenizer.c"
-  "${EXERFC_SOURCE_DIR}/repl_commands.c"
-  "${EXERFC_SOURCE_DIR}/repl.c"
   "${LIBRFC_THIRDPARTY_FILES}"
   "${GENGEN_GENERATED_FILES}"
+)
+
+set(REPL_SOURCE_FILES
+  "${REPLRFC_SOURCE_DIR}/repl_commands.c"
+  "${REPLRFC_SOURCE_DIR}/repl.c"
 )
 
 set(EXERFC_SOURCE_FILES
@@ -100,6 +105,16 @@ endif()
 # If preprocessing is requested add a few things to the build
 # ==================================
 if (PREPROCESS)
+  # Librfcrepl
+  preprocess_build(
+    SOURCE_FILES ${REPL_SOURCE_FILES}
+    INCLUDE_DIRS ${LIBRFC_INCLUDE_DIRS}
+    CFLAGS ${RFC_C_FLAGS}
+    MODIFY REPL_SOURCE_FILES
+  )
+  set_source_files_properties(${REPL_SOURCE_FILES} PROPERTIES LANGUAGE C)
+  add_library(librfcrepl STATIC ${REPL_SOURCE_FILES})
+
   # Librfc
   preprocess_build(
     SOURCE_FILES ${LIBRFC_SOURCE_FILES}
@@ -120,31 +135,28 @@ if (PREPROCESS)
   set_source_files_properties(${EXERFC_SOURCE_FILES} PROPERTIES LANGUAGE C)
   add_executable(rfc ${EXERFC_SOURCE_FILES})
 else()
+  add_library(librfcrepl STATIC ${REPL_SOURCE_FILES})
   add_library(librfc STATIC ${LIBRFC_SOURCE_FILES})
   add_executable(rfc ${EXERFC_SOURCE_FILES})
 endif()
+
+target_compile_options(librfcrepl PRIVATE ${RFC_C_FLAGS})
+target_include_directories(librfcrepl PUBLIC "${MAIN_SOURCE_DIR}")
 
 # ==================================
 # Setup librfc
 # ==================================
 target_compile_options(librfc PRIVATE ${RFC_C_FLAGS})
 add_dependencies(librfc prebuildexe)
-target_include_directories(librfc PUBLIC
-  "${LIBRFC_SOURCE_DIR}"
-  "${LIBRFC_THIRDPARTY_DIR}"
-  "${LIBRFC_TPL_SUPPORT_DIR}"
-)
+target_link_libraries(librfc PRIVATE librfcrepl)
+message(STATUS "${LIBRFC_THIRDPARTY_DIR}")
+target_include_directories(librfc PUBLIC ${MAIN_SOURCE_DIR} ${LIBRFC_THIRDPARTY_DIR} ${LIBRFC_TPL_SUPPORT_DIR} ${LIBRFC_SOURCE_DIR})
 
 # ==================================
 # Setup rfc driver executable
 # ==================================
 target_compile_options(rfc PRIVATE ${RFC_C_FLAGS})
 target_link_libraries(rfc PRIVATE librfc)
-target_include_directories(rfc PUBLIC
-  "${MAIN_SOURCE_DIR}"
-  "${LIBRFC_SOURCE_DIR}"
-  "${LIBRFC_THIRDPARTY_DIR}"
-  "${LIBRFC_TPL_SUPPORT_DIR}"
-)
+target_include_directories(rfc PUBLIC ${MAIN_SOURCE_DIR})
 
 add_subdirectory(tests)
