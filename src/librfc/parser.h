@@ -4,7 +4,7 @@
 #include "result.h"
 #include "ast.h"
 #include "stack_ast_node.h"
-#include "arena.h"
+#include "thirdparty/arena.h"
 
 typedef struct {
   variant_ast_node root;
